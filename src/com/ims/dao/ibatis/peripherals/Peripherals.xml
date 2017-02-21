@@ -28,5 +28,6 @@
 <!-- 	OFFSET #rowStart# ROWS -->
 <!-- 	FETCH NEXT 5 ROWS ONLY; --> 
 </select>
+<insert id="insertPeripherals" parameterClass="java.util.Map"
 
 </sqlMap>
