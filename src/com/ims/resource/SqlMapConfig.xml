@@ -4,4 +4,4 @@
 
 <sqlMapConfig>
 	<sqlMap resource="com/ims/dao/ibatis/peripherals/Peripherals.xml" />
-</sqlMapConfig>
+</sqlMapConfig> 

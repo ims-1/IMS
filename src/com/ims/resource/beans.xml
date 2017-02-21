@@ -14,7 +14,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 			<value>/com/ims/resource/SqlMapConfig.xml</value>
 		</property>
 		<property name="dataSource" ref="dataSource"/>
-	</bean>
+	</bean> 
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
