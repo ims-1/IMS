@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<sqlMap namespace="Users">
+	<typeAlias alias="UserClass" type="com.ims.model.usermaintenance.Users" />
+	
+	<resultMap id="getUserMap" class="UserClass">
+		<result column="user_id"			property="userId" />
+		<result column="first_name"			property="firstName" />
+		<result column="middle_initial"		property="middleInitial" />
+		<result column="last_name"			property="lastName" />
+		<result column="email"				property="email" />
+		<result column="password"			property="password" />
+		<result column="active_tag"			property="activeTag" />
+		<result column="user_access"		property="userAccess" />
+		<result column="entry_date"			property="entryDate" />
+		<result column="remarks"			property="remarks" />
+		<result column="last_user_id"		property="lastUserId" />
+		<result column="last_update"		property="lastUpdate" />
+	</resultMap>
+	
+	<select id="getUsers" resultMap="getUserMap">
+		SELECT user_id
+			   ,first_name
+			   ,middle_initial
+			   ,last_name
+			   ,email
+			   ,password
+			   ,active_tag
+			   ,user_access
+			   ,entry_date
+			   ,remarks
+			   ,last_user_id
+			   ,last_update
+		  FROM ims_users_1
+	</select>
+	
+	<insert id="insertNewUser" parameterClass="java.util.Map">
+		BEGIN
+			INSERT INTO ims_users_1
+						(user_id
+			   				,first_name
+			   				,middle_initial
+			   				,last_name
+			   				,email
+			   				,active_tag
+			   				,password
+			   				,user_access
+			   				,entry_date
+			   				,last_user_id
+			   				,last_update
+			   			,remarks)
+			VALUES (#userId#, #firstName#, #middleInitial#, #lastName#, #email#, #activeTag#, #password#, #userAccess#, SYSDATE, SYSDATE, SYSDATE, #remarks#);
+		COMMIT;
+		END;
+	</insert>
+
+</sqlMap>
