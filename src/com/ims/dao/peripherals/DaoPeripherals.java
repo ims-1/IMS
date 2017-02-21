@@ -8,3 +8,4 @@ import com.ims.model.peripherals.Peripherals;
 public interface DaoPeripherals {
 	List<Peripherals> getPeripherals(int rowStart)throws SQLException ;
 }
+ 

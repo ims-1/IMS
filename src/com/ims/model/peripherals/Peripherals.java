@@ -14,7 +14,7 @@ public class Peripherals {
 	private String model;
 	private String color;
 	private String remarks;
-	private String userId;
+	private String userId; 
 	private String lastUpdate;
 	
 	public Integer getUnitNo() {

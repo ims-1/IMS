@@ -24,3 +24,4 @@ private DaoPeripheralsImpl dao;
 		return this.getDao().getPeripherals(rowStart);
 	}
 }
+ 

@@ -7,5 +7,5 @@ import com.ims.model.peripherals.Peripherals;
 
 public interface PeripheralsService {
 	List<Peripherals> getPeripherals(int rowStart) throws SQLException;
-	
+	 
 }

@@ -16,7 +16,7 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 
 	public void setSqlMapClient(SqlMapClient sqlMapClient) {
 		this.sqlMapClient = sqlMapClient;
-	}
+	} 
 
 	@SuppressWarnings("unchecked")
 	@Override

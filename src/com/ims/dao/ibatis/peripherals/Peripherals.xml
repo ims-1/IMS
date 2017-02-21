@@ -26,7 +26,7 @@
 	last_update
 	FROM ims_peripherals_1
 <!-- 	OFFSET #rowStart# ROWS -->
-<!-- 	FETCH NEXT 5 ROWS ONLY; -->
+<!-- 	FETCH NEXT 5 ROWS ONLY; --> 
 </select>
 
 </sqlMap>

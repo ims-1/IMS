@@ -43,7 +43,7 @@ public class PeripheralsController extends HttpServlet {
 
 		try {
 			List<Peripherals> peripherals = service.getPeripherals(1);
-			for (Peripherals p : peripherals) {
+			for (Peripherals p : peripherals) { 
 				System.out.print(p.getUnitNo());
 				System.out.print(" ");
 				System.out.println(p.getPeripheralType());
