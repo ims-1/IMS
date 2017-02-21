@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+
+table.borderless td, table.borderless th {
+	border: none !important;
+}
+.table thead tr {
+	background-color: #008EBD;
+}
+.table thead tr th {
+	text-align: center;
+	color: white;
+}
+
+td.label-right{
+	text-align: right;
+}
+
+.error-required{
+	border-color: red;
+}
+
+.error-integer{
+	border-color: blue;
+}
