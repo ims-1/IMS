@@ -12,10 +12,10 @@
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
 <div align=center>
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered" id="tableRecord">
 <thead>
 	<tr>
-		<th>NO</th>
+		<th>No</th>
 		<th>Peripheral Type</th>
 		<th>Tag Number</th>
 		<th>Brand / Model</th>
@@ -24,44 +24,46 @@
 		<th>Description</th>
 	</tr>
 </thead>
-<tbody>
-	<tr class="recordper">
-		<td>1</td> 
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-	</tr>
-	<tr class="record">
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-	</tr>
-	<tr class="record">
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-	</tr>
-	<tr class="record">
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-		<td>1</td>
-	</tr>
+<tbody id="body">
+<!-- 	<tr class="record"> -->
+<!-- 		<td>1</td>  -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr class="record"> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr class="record"> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr class="record"> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 		<td>1</td> -->
+<!-- 	</tr> -->
+	</tbody>
 </table>
+<div id="pagination"></div>
 <table class="table borderless" id="tableInput">
 	<tr>
 		<td class="label-right">Peripheral No.</td>

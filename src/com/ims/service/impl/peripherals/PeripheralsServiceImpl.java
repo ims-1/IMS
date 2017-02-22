@@ -18,10 +18,15 @@ private DaoPeripheralsImpl dao;
 	public void setDao(DaoPeripheralsImpl dao) {
 		this.dao = dao;
 	}	
+	
+	@Override
+	public List<Peripherals> getPeripherals(int page, int pageLimit) throws SQLException {
+		return this.getDao().getPeripherals(page, pageLimit);
+	}
 
 	@Override
-	public List<Peripherals> getPeripherals(int rowStart) throws SQLException {
-		return this.getDao().getPeripherals(rowStart);
+	public List<Integer> getTotalPeripherals() throws SQLException {
+		return this.getDao().getTotalPeripherals();
 	}
 }
  

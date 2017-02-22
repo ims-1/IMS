@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -27,33 +28,47 @@ import com.ims.service.peripherals.PeripheralsService;
 public class PeripheralsController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public PeripheralsController() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	List<Peripherals> peripherals = null;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
 
-		try {
-			List<Peripherals> peripherals = service.getPeripherals(1);
-			for (Peripherals p : peripherals) { 
-				System.out.print(p.getUnitNo());
-				System.out.print(" ");
-				System.out.println(p.getPeripheralType());
+		String action = request.getParameter("action");
+		if (action.equals("pagination")) {
+			System.out.println("here1");
+			int pageLimit = 5;
+			int page = Integer.parseInt(request.getParameter("page"));
+			try {
+				List<Peripherals> returnPeripherals = new LinkedList<>();
+				peripherals = service.getPeripherals(page, pageLimit);
+
+				if (!peripherals.isEmpty()) {
+
+					for (int start = 0; start < 5; start++) {
+						returnPeripherals.add(peripherals.get(start));
+					}
+					Gson gson = new Gson();
+					String json = gson.toJson(returnPeripherals);
+					response.getWriter().write(json);
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} else if (action.equals("getSize")) {
+			List<GetSize> getSize = new ArrayList<>();
+			getSize.add(new GetSize(peripherals.size()));
+			System.out.println(peripherals.size());
+
+			Gson gson = new Gson();
+			String json = gson.toJson(getSize);
+			System.out.println(json);
+			response.getWriter().write(json);
 		}
+
 	}
 
 	/**
@@ -66,13 +81,14 @@ public class PeripheralsController extends HttpServlet {
 		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
 
 		String action = request.getParameter("action");
-		if(action.equals("save")){
+		if (action.equals("save")) {
 			Gson gson = new Gson();
 			String json = request.getParameter("peripherals");
-			Type collectionType = new TypeToken<ArrayList<Peripherals>>() {}.getType();
+			Type collectionType = new TypeToken<ArrayList<Peripherals>>() {
+			}.getType();
 			List<Peripherals> peripherals = new Gson().fromJson(json, collectionType);
-			
-			for(Peripherals p : peripherals){
+
+			for (Peripherals p : peripherals) {
 				System.out.println(p.getUnitNo());
 				System.out.println(p.getPeripheralNo());
 				System.out.println(p.getPeripheralType());
@@ -87,7 +103,27 @@ public class PeripheralsController extends HttpServlet {
 				System.out.println(p.getUserId());
 				System.out.println(p.getLastUpdate());
 			}
+		} else if (action.equals("pagination")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+
+			int pageLimit = 5;
+
+			try {
+				List<Peripherals> peripherals = service.getPeripherals(page, pageLimit);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+
+}
+
+class GetSize {
+	public int listSize;
+
+	public GetSize(int listSize) {
+		this.listSize = listSize;
 	}
 
 }

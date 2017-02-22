@@ -6,6 +6,6 @@ import java.util.List;
 import com.ims.model.peripherals.Peripherals;
 
 public interface DaoPeripherals {
-	List<Peripherals> getPeripherals(int rowStart)throws SQLException ;
+	List<Peripherals> getPeripherals(int page, int pageLimit) throws SQLException;
+	List<Integer> getTotalPeripherals() throws SQLException;
 }
- 

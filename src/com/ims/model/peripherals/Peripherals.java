@@ -16,7 +16,14 @@ public class Peripherals {
 	private String remarks;
 	private String userId; 
 	private String lastUpdate;
+	private Integer total;	
 	
+	public Integer getTotal() {
+		return total;
+	}
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 	public Integer getUnitNo() {
 		return unitNo;
 	}

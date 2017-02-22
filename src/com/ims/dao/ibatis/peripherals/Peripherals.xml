@@ -19,15 +19,35 @@
 		<result column="user_id"         property="userId" />
 		<result column="last_update"     property="lastUpdate" />
 	</resultMap>
+	
+	<resultMap id="getTotalPeripheralsMap" class="PeripheralClass">
+		<result column="total"         property="total" />
+	</resultMap>
+	
+	
 
-	<select id="getPeripherals" resultMap="getPeripheralsMap" parameterClass="java.lang.Integer">
-	SELECT unit_no, peripheral_no, peripheral_type, tag_number, acquired_date,
-	description, serial_no, brand, model, color, remarks, user_id,
+	<select id="getPeripherals" resultMap="getPeripheralsMap" parameterClass="java.util.Map">
+	SELECT unit_no, peripheral_no, peripheral_type, tag_number,
+	acquired_date,
+	description, serial_no, brand, model, color, remarks,
+	user_id,
 	last_update
 	FROM ims_peripherals_1
-<!-- 	OFFSET #rowStart# ROWS -->
-<!-- 	FETCH NEXT 5 ROWS ONLY; --> 
+	
+<!-- 	SELECT unit_no, peripheral_no, peripheral_type, tag_number, -->
+<!-- 	acquired_date, -->
+<!-- 	description, serial_no, brand, model, color, remarks, -->
+<!-- 	user_id, -->
+<!-- 	last_update -->
+<!-- 	FROM (SELECT ROWNUM rnum -->
+<!-- 	,a.* -->
+<!-- 	FROM (SELECT * -->
+<!-- 	FROM ims_peripherals_1) a) -->
+<!-- 	WHERE rnum BETWEEN #rowStart# AND #rowEnd# -->
 </select>
-<insert id="insertPeripherals" parameterClass="java.util.Map"
 
+<select id="getTotalPeripherals" resultMap="getTotalPeripheralsMap">
+	select count(*) as total
+	from ims_peripherals
+</select>
 </sqlMap>
