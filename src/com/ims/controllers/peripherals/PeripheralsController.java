@@ -32,55 +32,60 @@ public class PeripheralsController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try {
+			ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
+			PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
-		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
+			int pageLimit = 5;
+			String action = request.getParameter("action");
+			if (action.equals("pagination")) {
+				System.out.println("here1");
+				int page = Integer.parseInt(request.getParameter("page"));
+				try {
+					List<Peripherals> returnPeripherals = new LinkedList<>();
+					peripherals = service.getPeripherals();
 
-		int pageLimit = 5;
-		String action = request.getParameter("action");
-		if (action.equals("pagination")) {
-			System.out.println("here1");
-			int page = Integer.parseInt(request.getParameter("page"));
-			try {
+					if (!peripherals.isEmpty()) {
+
+						for (int start = 0; start < pageLimit; start++) {
+							returnPeripherals.add(peripherals.get(start));
+						}
+						Gson gson = new Gson();
+						String json = gson.toJson(returnPeripherals);
+						response.getWriter().write(json);
+					}
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} else if (action.equals("getSize")) {
+				List<GetSize> getSize = new ArrayList<>();
+				getSize.add(new GetSize(peripherals.size()));
+				System.out.println(peripherals.size());
+
+				Gson gson = new Gson();
+				String json = gson.toJson(getSize);
+				System.out.println(json);
+				response.getWriter().write(json);
+			} else if (action.equals("getRecordPage")) {
+				int page = Integer.parseInt(request.getParameter("page"));
 				List<Peripherals> returnPeripherals = new LinkedList<>();
-				peripherals = service.getPeripherals();
-
 				if (!peripherals.isEmpty()) {
-
-					for (int start = 0; start < pageLimit; start++) {
+					System.out.println((page * pageLimit) + "  " + ((page * pageLimit) - pageLimit));
+					int endRow = page * pageLimit;
+					endRow = endRow > peripherals.size() ? peripherals.size() : endRow;
+					for (int start = (page * pageLimit) - pageLimit; start < endRow; start++) {
 						returnPeripherals.add(peripherals.get(start));
 					}
+
 					Gson gson = new Gson();
 					String json = gson.toJson(returnPeripherals);
 					response.getWriter().write(json);
 				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
-		} else if (action.equals("getSize")) {
-			List<GetSize> getSize = new ArrayList<>();
-			getSize.add(new GetSize(peripherals.size()));
-			System.out.println(peripherals.size());
-
-			Gson gson = new Gson();
-			String json = gson.toJson(getSize);
-			System.out.println(json);
-			response.getWriter().write(json);
-		} else if (action.equals("getRecordPage")) {
-			int page = Integer.parseInt(request.getParameter("page"));
-			List<Peripherals> returnPeripherals = new LinkedList<>();
-			if (!peripherals.isEmpty()) {
-				System.out.println((page * pageLimit) + "  " + ((page * pageLimit) - pageLimit));
-
-				for (int start = (page * pageLimit) - pageLimit; start < (page * pageLimit); start++) {
-					returnPeripherals.add(peripherals.get(start));
-				}
-
-				Gson gson = new Gson();
-				String json = gson.toJson(returnPeripherals);
-				response.getWriter().write(json);
-			}
+		} catch (Exception e) {
+			response.sendError(410);
+			return;
 		}
 
 	}
@@ -118,9 +123,8 @@ public class PeripheralsController extends HttpServlet {
 				System.out.println(p.getLastUpdate());
 			}
 		} else if (action.equals("insert")) {
-			
-		}
-		else if(action.equals("getPeripheralRecord")){
+
+		} else if (action.equals("getPeripheralRecord")) {
 			response.sendError(400);
 		}
 	}

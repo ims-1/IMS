@@ -41,6 +41,7 @@ function getPeripherals() {
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
 			var parent = $('body');
+			$('body').hide();
 
 			p.each(function(peripherals) {
 				var content = "";
@@ -60,8 +61,13 @@ function getPeripherals() {
 					bottom : newTr
 				});
 			});
+			$('body').show();
 			getSize();
 			recordEvents();
+		},
+		onFailure: function(response){
+			console.log("There is something wrong. Please check connection");
+			alert("There is something wrong. Please check connection");
 		}
 	});
 	function getSize() {
