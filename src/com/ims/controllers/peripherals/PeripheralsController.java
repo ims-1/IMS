@@ -120,6 +120,9 @@ public class PeripheralsController extends HttpServlet {
 		} else if (action.equals("insert")) {
 			
 		}
+		else if(action.equals("getPeripheralRecord")){
+			response.sendError(400);
+		}
 	}
 
 }

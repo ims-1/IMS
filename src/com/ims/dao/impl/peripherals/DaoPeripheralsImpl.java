@@ -26,4 +26,27 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 		return this.getSqlMapClient().queryForList("getPeripherals");
 	}
 
+	@Override
+	public void insertNewPeripherals(Map<String, Object> params) throws SQLException {
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			this.getSqlMapClient().insert("insertNewPeripheral", params);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			System.out.println("in catch");
+			e.printStackTrace();
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Peripherals> getPeripheralRecord(int id) throws SQLException{
+		return this.getSqlMapClient().queryForList("getPeripheralRecord", id);
+	}
 }

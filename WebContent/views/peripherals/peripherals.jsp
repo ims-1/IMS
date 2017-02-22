@@ -12,6 +12,44 @@
 <body>
 <jsp:include page="../header.jsp"></jsp:include>
 <div align=center>
+<table class="table borderless" id="tableCompUnit">
+	<tr>
+		<td class="label-right">Unit No.</td>
+		<td><input type="text" id="txtUnitNo"/></td>
+		<td class="label-right">Serial No.</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+	<tr>
+		<td class="label-right">Unit Name</td>
+		<td><input type="text" id=""/></td>
+		<td class="label-right">Brand</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+	<tr>
+		<td class="label-right">Tag Number</td>
+		<td><input type="text" id=""/></td>
+		<td class="label-right">Model</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+	<tr>
+		<td class="label-right">Type</td>
+		<td><input type="text" id=""/></td>
+		<td class="label-right">Color</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+	<tr>
+		<td class="label-right">IP Address</td>
+		<td><input type="text" id=""/></td>
+		<td class="label-right">Location</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+	<tr>
+		<td class="label-right">Assignee</td>
+		<td><input type="text" id=""/></td>
+		<td class="label-right">Status</td>
+		<td><input type="text" id=""/></td>
+	</tr>
+</table>
 <table class="table table-striped table-bordered" id="tableRecord">
 <thead>
 	<tr>
@@ -25,42 +63,6 @@
 	</tr>
 </thead>
 <tbody id="body">
-<!-- 	<tr class="record"> -->
-<!-- 		<td>1</td>  -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 	</tr> -->
-<!-- 	<tr class="record"> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 	</tr> -->
-<!-- 	<tr class="record"> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 	</tr> -->
-<!-- 	<tr class="record"> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 		<td>1</td> -->
-<!-- 	</tr> -->
 	</tbody>
 </table>
 <div id="pagination"></div>

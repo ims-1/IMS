@@ -20,34 +20,37 @@
 		<result column="last_update"     property="lastUpdate" />
 	</resultMap>
 	
-	<resultMap id="getTotalPeripheralsMap" class="PeripheralClass">
-		<result column="total"         property="total" />
-	</resultMap>
-	
-	
 
 	<select id="getPeripherals" resultMap="getPeripheralsMap">
-	SELECT unit_no, peripheral_no, peripheral_type, tag_number,
-	acquired_date,
-	description, serial_no, brand, model, color, remarks,
-	user_id,
-	last_update
-	FROM ims_peripherals_1
+		SELECT unit_no, peripheral_no, peripheral_type, tag_number,
+		acquired_date,
+		description, serial_no, brand, model, color, remarks,
+		user_id,
+		last_update
+		FROM ims_peripherals_1
+	</select>
 	
-<!-- 	SELECT unit_no, peripheral_no, peripheral_type, tag_number, -->
-<!-- 	acquired_date, -->
-<!-- 	description, serial_no, brand, model, color, remarks, -->
-<!-- 	user_id, -->
-<!-- 	last_update -->
-<!-- 	FROM (SELECT ROWNUM rnum -->
-<!-- 	,a.* -->
-<!-- 	FROM (SELECT * -->
-<!-- 	FROM ims_peripherals_1) a) -->
-<!-- 	WHERE rnum BETWEEN #rowStart# AND #rowEnd# -->
-</select>
+	<select id="getPeripheralRecord" resultMap="getPeripheralsMap" parameterClass="java.lang.Integer">
+		SELECT unit_no,
+		peripheral_no, peripheral_type, tag_number,
+		acquired_date,
+		description,
+		serial_no, brand, model, color, remarks,
+		user_id,
+		last_update
+		FROM
+		ims_peripherals_1
+		WHERE peripheral_no = #peripheralNo#
+	</select>
 
-<select id="getTotalPeripherals" resultMap="getTotalPeripheralsMap">
-	select count(*) as total
-	from ims_peripherals
-</select>
+<insert id="insertNewPeripheral" parameterClass="java.util.Map">
+	BEGIN
+		INSERT INTO ims_peripherals_1
+		(unit_no, peripheral_no, peripheral_type, tag_number, acquired_date,
+			description, serial_no, brand, model, color, remarks, user_id,
+			last_update)
+			VALUES(#unitNo#, #peripheralNo#, #peripheralType#, #tagNumber#, #acquiredDate#, 
+			#description#, #serialNo#, #brand#, #model#, #color#, #remarks#, #user_id#, sysdate);	
+	END;
+</insert>
 </sqlMap>

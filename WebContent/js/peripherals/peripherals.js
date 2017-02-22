@@ -5,34 +5,25 @@ var pageSize = 0;
 
 function addPeripherals() {
 	if (validate()) {
-		delete Array.prototype.toJSON;
-		var content = [];
-		var obj = {};
-
-		obj.peripheralNo = $F('txtPeripheralNo');
-		obj.serialNo = $F('txtSerialNo');
-		obj.peripheralType = $F('txtPeripheralType');
-		obj.brand = $F('txtBrand');
-		obj.tagNumber = $F('txtTagNumber');
-		obj.model = $F('txtModel');
-		obj.acquiredDate = $F('dtAcquiredDate');
-		obj.color = $F('txtColor');
-		obj.description = $F('txtDescription');
-		obj.userId = $F('txtUserId');
-		obj.remarks = $F('txtRemarks');
-		obj.lastUpdate = $F('dtLastUpdate');
-
-		content.push(obj);
-		var json = JSON.stringify(content);
-
 		new Ajax.Request(context + "/PeripheralsController", {
 			method : "post",
 			parameters : {
 				action : "insert",
-				record : json
+				unitNo : $F('txtUnitNo'),
+				peripheralNo : $F('txtPeripheralNo'),
+				serialNo : $F('txtSerialNo'),
+				peripheralType : $F('txtPeripheralType'),
+				brand : $F('txtBrand'),
+				tagNumber : $F('txtTagNumber'),
+				model : $F('txtModel'),
+				acquiredDate : $F('dtAcquiredDate'),
+				color : $F('txtColor'),
+				description : $F('txtDescription'),
+				userId : $F('txtUserId'),
+				remarks : $F('txtRemarks')
 			},
 			onSuccess : function(response) {
-				
+
 			}
 		});
 	} else {
@@ -86,7 +77,7 @@ function getPeripherals() {
 				p.each(function(sizes) {
 					pageSize = sizes.listSize;
 				});
-				var btnCount = parseInt(pageSize / 5);
+				var btnCount = (pageSize / 5);
 				for (var a = 1; a <= btnCount; a++) {
 					var newBtn = new Element('button');
 					newBtn.setAttribute("class", "btn-nav");
@@ -143,3 +134,19 @@ function getRecordPage(a) {
 }
 
 getPeripherals();
+
+function getRecord(record) {
+	new Ajax.Request(context + "/PeripheralsController", {
+		method : "post",
+		parameters : {
+			peripheralNo : $(record).down('td', 0).innerHTML,
+			action : "getPeripheralRecord"
+		},
+		onSuccess : function(response) {
+			alert("response");
+		},
+		onFailed: function(response){
+			
+		}
+	});
+}
