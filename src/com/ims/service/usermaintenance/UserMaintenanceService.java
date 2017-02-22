@@ -11,5 +11,5 @@ public interface UserMaintenanceService {
 
 	List<Users> getUsers() throws SQLException;
 	void insertNewUser(HttpServletRequest request) throws SQLException;
-	
+	String getUserId(String id) throws SQLException;
 }

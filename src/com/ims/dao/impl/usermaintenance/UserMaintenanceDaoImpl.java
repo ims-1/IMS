@@ -8,10 +8,10 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ims.dao.usermaintenance.UserMaintenanceDao;
 import com.ims.model.usermaintenance.Users;
 
-public class UserMaintenanceDaoImpl implements UserMaintenanceDao{
+public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 
 	private SqlMapClient sqlMapClient;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Users> getUsers() throws SQLException {
@@ -19,18 +19,38 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao{
 	}
 	
 	@Override
-	public void insertNewUser(Map<String, Object> params) throws SQLException {
-		this.getSqlMapClient().insert("insertNewUser", params);		
+	public String getUserId(String id) throws SQLException {
+		return (String) this.getSqlMapClient().queryForObject("getUserId", id);
 	}
-	
+
+	@Override
+	public void insertNewUser(Map<String, Object> params) throws SQLException {
+
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+
+			this.getSqlMapClient().insert("insertNewUser", params);
+			this.getSqlMapClient().executeBatch();
+
+			this.getSqlMapClient().getCurrentConnection().commit();
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			System.out.println("in catch");
+			e.printStackTrace();
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+
+	}
+
 	public SqlMapClient getSqlMapClient() {
 		return sqlMapClient;
 	}
-	
+
 	public void setSqlMapClient(SqlMapClient sqlMapClient) {
 		this.sqlMapClient = sqlMapClient;
 	}
-
-	
 
 }

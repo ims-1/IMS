@@ -35,6 +35,12 @@
 		  FROM ims_users_1
 	</select>
 	
+	<select id="getUserId" resultClass = "java.lang.String">
+		SELECT user_id
+		  FROM ims_users_1
+		  WHERE #userId# = user_id
+	</select>
+	
 	<insert id="insertNewUser" parameterClass="java.util.Map">
 		BEGIN
 			INSERT INTO ims_users_1
@@ -51,7 +57,6 @@
 			   				,last_update
 			   			,remarks)
 			VALUES (#userId#, #firstName#, #middleInitial#, #lastName#, #email#, #activeTag#, #password#, #userAccess#, SYSDATE, SYSDATE, SYSDATE, #remarks#);
-		COMMIT;
 		END;
 	</insert>
 

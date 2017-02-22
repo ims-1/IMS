@@ -16,50 +16,41 @@ function backToUserListingPage(){
 }
 
 //SAVE BUTTON - save user
-$("btnSaveUser").observe("click", function() {
-	if (nullFieldValidation()) {
-		alert("Please fill out all fields.");
-	} else if (validCharFieldValidation()) {
-		alert("Invalid character.");
-	}
-	else {
-		alert("User added.");
-		saveUser();
-	}
-});
-
-function nullFieldValidation() {
-	if ($F("txtFirstName") == '' || $F("txtMiddleInitial") == ''
-		|| $F("txtLastName") == '' || $F("txtEmail") == '' || $F("txtRemarks") == '') {
-		return true;
-	}
-}
-
-function validCharFieldValidation() {
-	if (!isNaN($("txtFirstName").value) || !isNaN($("txtMiddleInitial").value) 
-			|| !isNaN($("txtLastName").value) || !isNaN($("txtEmail").value) || !isNaN($("txtRemarks").value)) {
-		return true;
-	}
-}
-
 function saveUser(){
-	new Ajax.Request(contextPath +"/UserMaintenanceController", {
-		method : "post",
-		parameters : {
-			action : "saveUser",
-			userId : $F("txtUserId"),
-			firstName : $F("txtFirstName"),
-			middleInitial : $F("txtMiddleInitial"),
-			lastName : $F("txtLastName"),
-			email : $F("txtEmail"),
-			activeTag : 'A',
-			userAccess : "Hello",
-			remarks : $F("txtRemarks"),
-		},
-		onComplete : function(response) {
-			$("mainContents").update(response.responseText);
+	if(validate()){
+		var activeUser = "Y";
+
+		if (rdActive.checked) {
+			activeUser = 'Y';
+		} 
+		if (rdInactive.checked) {
+			activeUser = 'N';
 		}
-	});
+
+		new Ajax.Request(contextPath +"/UserMaintenanceController", {
+			method : "post",
+			parameters : {
+				action 			: "saveUser",
+				userId 			: $F("txtUserId"),	
+				firstName 		: $F("txtFirstName"),
+				middleInitial 	: $F("txtMiddleInitial"),
+				lastName 		: $F("txtLastName"),
+				email 			: $F("txtEmail"),
+				activeTag 		: activeUser,
+				userAccess 		: $F("selUserAccess"),
+				remarks 		: $F("txtRemarks"),
+			},
+			onComplete : function(response) {
+				$("mainContents").update(response.responseText);
+			},
+			onSuccess : function(response) {
+				alert("Saved successfully!");
+			},
+			onFailure : function(response) {
+				alert("User ID already in use.");
+			}
+		});
+	}
 }
 
 //CHANGE PASSWORD BUTTON - change password of user

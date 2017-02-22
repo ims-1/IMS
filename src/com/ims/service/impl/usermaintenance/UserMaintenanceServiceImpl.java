@@ -21,8 +21,14 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	}
 	
 	@Override
+	public String getUserId(String id) throws SQLException {
+		return this.getDao().getUserId(id);
+	}
+	
+	@Override
 	public void insertNewUser(HttpServletRequest request) throws SQLException {
 		System.out.println("START INSERT");
+		
 		Integer userId = Integer.parseInt(request.getParameter("userId"));
 		String firstName = request.getParameter("firstName");
 		String middleInitial = request.getParameter("middleInitial");
@@ -31,8 +37,11 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		String activeTag = request.getParameter("activeTag");
 		String userAccess = request.getParameter("userAccess");
 		String remarks = request.getParameter("remarks");
+
+		String generatedPassword = (new Integer(userId)).toString();
 		
 		Map<String, Object> params = new HashMap<>();
+		
 		params.put("userId", userId);
 		params.put("firstName", firstName);
 		params.put("middleInitial", middleInitial);
@@ -41,9 +50,10 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		params.put("activeTag", activeTag);
 		params.put("userAccess", userAccess);
 		params.put("remarks", remarks);
-		params.put("password", "12345");
-		
-		this.getDao().insertNewUser(params);	
+		params.put("password", generatedPassword);
+
+		System.out.println("added2");
+		this.getDao().insertNewUser(params);
 		
 		System.out.println("added");
 	}
@@ -55,7 +65,5 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	public void setDao(UserMaintenanceDaoImpl dao) {
 		this.dao = dao;
 	}
-
-	
 
 }
