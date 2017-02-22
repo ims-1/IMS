@@ -12,7 +12,7 @@ function addPeripherals() {
 		new Ajax.Request(context + "/PeripheralsController", {
 			method : "post",
 			parameters : {
-
+ 
 			},
 			onSuccess : function(response) {
 

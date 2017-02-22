@@ -25,8 +25,8 @@
 	</tr>
 </thead>
 <tbody>
-	<tr class="record">
-		<td>1</td>
+	<tr class="recordper">
+		<td>1</td> 
 		<td>1</td>
 		<td>1</td>
 		<td>1</td>
