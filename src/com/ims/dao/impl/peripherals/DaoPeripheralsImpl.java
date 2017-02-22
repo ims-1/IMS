@@ -22,19 +22,8 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Peripherals> getPeripherals(int page, int pageLimit) throws SQLException {
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("rowEnd", page * pageLimit);
-		params.put("rowStart", (page * pageLimit) - (pageLimit - 1));
-
-		return this.getSqlMapClient().queryForList("getPeripherals", params);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Integer> getTotalPeripherals() throws SQLException {
-		return this.getSqlMapClient().queryForList("getTotalPeripherals");
+	public List<Peripherals> getPeripherals() throws SQLException {
+		return this.getSqlMapClient().queryForList("getPeripherals");
 	}
 
 }

@@ -20,13 +20,8 @@ private DaoPeripheralsImpl dao;
 	}	
 	
 	@Override
-	public List<Peripherals> getPeripherals(int page, int pageLimit) throws SQLException {
-		return this.getDao().getPeripherals(page, pageLimit);
-	}
-
-	@Override
-	public List<Integer> getTotalPeripherals() throws SQLException {
-		return this.getDao().getTotalPeripherals();
+	public List<Peripherals> getPeripherals() throws SQLException {
+		return this.getDao().getPeripherals();
 	}
 }
  

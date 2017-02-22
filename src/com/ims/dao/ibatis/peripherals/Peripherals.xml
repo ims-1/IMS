@@ -26,7 +26,7 @@
 	
 	
 
-	<select id="getPeripherals" resultMap="getPeripheralsMap" parameterClass="java.util.Map">
+	<select id="getPeripherals" resultMap="getPeripheralsMap">
 	SELECT unit_no, peripheral_no, peripheral_type, tag_number,
 	acquired_date,
 	description, serial_no, brand, model, color, remarks,

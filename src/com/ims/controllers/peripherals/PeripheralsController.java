@@ -36,18 +36,18 @@ public class PeripheralsController extends HttpServlet {
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
 
+		int pageLimit = 5;
 		String action = request.getParameter("action");
 		if (action.equals("pagination")) {
 			System.out.println("here1");
-			int pageLimit = 5;
 			int page = Integer.parseInt(request.getParameter("page"));
 			try {
 				List<Peripherals> returnPeripherals = new LinkedList<>();
-				peripherals = service.getPeripherals(page, pageLimit);
+				peripherals = service.getPeripherals();
 
 				if (!peripherals.isEmpty()) {
 
-					for (int start = 0; start < 5; start++) {
+					for (int start = 0; start < pageLimit; start++) {
 						returnPeripherals.add(peripherals.get(start));
 					}
 					Gson gson = new Gson();
@@ -67,6 +67,20 @@ public class PeripheralsController extends HttpServlet {
 			String json = gson.toJson(getSize);
 			System.out.println(json);
 			response.getWriter().write(json);
+		} else if (action.equals("getRecordPage")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			List<Peripherals> returnPeripherals = new LinkedList<>();
+			if (!peripherals.isEmpty()) {
+				System.out.println((page * pageLimit) + "  " + ((page * pageLimit) - pageLimit));
+
+				for (int start = (page * pageLimit) - pageLimit; start < (page * pageLimit); start++) {
+					returnPeripherals.add(peripherals.get(start));
+				}
+
+				Gson gson = new Gson();
+				String json = gson.toJson(returnPeripherals);
+				response.getWriter().write(json);
+			}
 		}
 
 	}
@@ -103,17 +117,8 @@ public class PeripheralsController extends HttpServlet {
 				System.out.println(p.getUserId());
 				System.out.println(p.getLastUpdate());
 			}
-		} else if (action.equals("pagination")) {
-			int page = Integer.parseInt(request.getParameter("page"));
-
-			int pageLimit = 5;
-
-			try {
-				List<Peripherals> peripherals = service.getPeripherals(page, pageLimit);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} else if (action.equals("insert")) {
+			
 		}
 	}
 
