@@ -1,24 +1,98 @@
 @CHARSET "UTF-8";
 
+body {
+	background-color: #1F2739;
+}
+
+div.header {
+	font-size: 50px;
+	text-align: center;
+	color: #4DC3FA;
+	margin-top: 10px;
+	margin-bottom: 40px;
+}
+
+#nav {
+	font-size: 20px;
+}
+
+#nav a {
+	text-decoration: none;
+	cursor: pointer;
+	color: #FB667A;
+/* 	font-size: 1em; */
+	font-weight: 300;
+/* 	text-align: center; */
+/* 	display: block; */
+/* 	line-height: 1em; */
+/* 	-webkit-margin-before: 0.83em; */
+/* 	-webkit-margin-after: 0.83em; */
+/* 	-webkit-margin-start: 0px; */
+/* 	-webkit-margin-end: 0px; */
+	font-family: 'Open Sans', sans-serif;
+}
+
+div.header span {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	color: #FFF842;
+}
+
 table.borderless td, table.borderless th {
 	border: none !important;
+	/* 	border-color: ##1F2739; */
 }
+
 .table thead tr {
-	background-color: #008EBD;
+	background-color: #1F2739;
 }
+
 .table thead tr th {
 	text-align: center;
+	font-size: 1.2em;
+	color: #185875;
+}
+
+td.label-right {
 	color: white;
-}
-
-td.label-right{
 	text-align: right;
+	width: 120px;
 }
 
-.error-required{
+#tableInput {
+	width: 80%;
+}
+
+.error-required {
 	border-color: red;
 }
 
-.error-integer{
+.error-integer {
 	border-color: blue;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+	color: #A7A1AE;
+	background-color: #3D465C;
+}
+
+.table-striped>tbody>tr:nth-of-type(even) {
+	color: #A7A1AE;
+	background-color: #30384A;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd):hover {
+	background-color: #59594C;
+}
+
+.table-striped>tbody>tr:nth-of-type(even):hover {
+	background-color: #59594C;
+}
+
+.table-striped>tbody>tr.hoverRow:nth-of-type(odd) {
+	background-color: #59594C;
+}
+
+.table-striped>tbody>tr.hoverRow:nth-of-type(even) {
+	background-color: #59594C;
 }

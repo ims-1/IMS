@@ -10,7 +10,9 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/prototype.js"></script>
 </head>
 <body>
-<table class="table table-striped">
+<jsp:include page="../header.jsp"></jsp:include>
+<div align=center>
+<table class="table table-striped table-bordered">
 <thead>
 	<tr>
 		<th>NO</th>
@@ -22,7 +24,8 @@
 		<th>Description</th>
 	</tr>
 </thead>
-	<tr>
+<tbody>
+	<tr class="record">
 		<td>1</td>
 		<td>1</td>
 		<td>1</td>
@@ -31,7 +34,7 @@
 		<td>1</td>
 		<td>1</td>
 	</tr>
-	<tr>
+	<tr class="record">
 		<td>1</td>
 		<td>1</td>
 		<td>1</td>
@@ -40,7 +43,7 @@
 		<td>1</td>
 		<td>1</td>
 	</tr>
-	<tr>
+	<tr class="record">
 		<td>1</td>
 		<td>1</td>
 		<td>1</td>
@@ -49,7 +52,7 @@
 		<td>1</td>
 		<td>1</td>
 	</tr>
-	<tr>
+	<tr class="record">
 		<td>1</td>
 		<td>1</td>
 		<td>1</td>
@@ -59,7 +62,7 @@
 		<td>1</td>
 	</tr>
 </table>
-<table class="table borderless">
+<table class="table borderless" id="tableInput">
 	<tr>
 		<td class="label-right">Peripheral No.</td>
 		<td><input type="text" id="txtPeripheralNo" class="form-control"></td>
@@ -96,17 +99,19 @@
 		<td class="label-right">Last Update</td>
 		<td><input type="datetime-local" id="dtLastUpdate" class="required form-control"></td>
 	</tr>
+	</tbody>
 </table>
 <table class="table borderless">
 	<tr>
-		<td><input type="button" id="btnAdd" value="Add" class="btn btn-primary" onclick="addPeripherals()"></td>
+		<td align="right"><input type="button" id="btnAdd" value="Add" class="btn btn-primary" onclick="addPeripherals()"></td>
 		<td><input type="button" id="btnDelete" value="Delete" class="btn btn-primary"></td>
 	</tr>
 	<tr>
-		<td><input type="button" id="btnSave" value="Save" class="btn btn-primary"></td>
+		<td align="right"><input type="button" id="btnSave" value="Save" class="btn btn-primary"></td>
 		<td><input type="button" id="btnCancel" value="Cancel" class="btn btn-primary"></td>
 	</tr>
 </table>
+</div>
 	</body>
 	<script>
 		var context = "${pageContext.request.contextPath}";

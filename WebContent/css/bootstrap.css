@@ -2298,15 +2298,16 @@ th {
   padding: 5px;
 }
 .table-bordered {
-  border: 1px solid #ddd;
+  border: 2px solid #1F2739;
 }
+
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid #ddd;
+  border: 2px solid #1F2739;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -2544,7 +2545,7 @@ output {
 }
 .form-control {
   display: block;
-  width: 100%;
+  width: 80%;
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;

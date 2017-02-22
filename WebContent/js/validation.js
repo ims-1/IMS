@@ -1,7 +1,7 @@
 /**
  * 
  */
-function validate() {
+function validate() { // use on your own js file
 	var hasError = false;
 
 	$$('.form-control').each(function(field) {
@@ -25,3 +25,26 @@ function validate() {
 
 	return !hasError;
 }
+
+function recordEvents() { // call on your own js file
+	$$('.record').each(function(record) {
+		$(record).observe("click", function() {
+			// assign class to selected row
+			if ($(record).hasClassName("hoverRow")) {
+				$(record).toggleClassName("hoverRow");
+				clearFields();
+				// clear fields
+			} else {
+				// clear selected row - remove class
+				$$('.record').each(function(record) {
+					$(record).removeClassName("hoverRow");
+				});
+				
+				$(record).toggleClassName("hoverRow");
+				getRecord();// populate fields
+			}
+		});
+	});
+}
+
+recordEvents(); // use

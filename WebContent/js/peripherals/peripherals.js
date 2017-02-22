@@ -3,7 +3,12 @@
  */
 function addPeripherals() {
 	if (validate()) {
+		
+		delete Array.prototype.toJSON;
+		
 		alert("pass validation");
+		
+		
 		new Ajax.Request(context + "/PeripheralsController", {
 			method : "post",
 			parameters : {
