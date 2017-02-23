@@ -73,7 +73,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
 	<bean id="serviceUnitAssignmentHistBean"
 		class="com.ims.service.impl.unitassignmenthist.UnitAssignmentHistServiceImpl"
-		depends-on="daoUnitAssignmentHistBean">
+		depends-on="daoUnitAssignmentHistBean"> 
 		<property name="dao" ref="daoUnitAssignmentHistBean"></property>
 	</bean>
 
