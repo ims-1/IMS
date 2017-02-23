@@ -82,4 +82,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		depends-on="sqlMapClient">
 		<property name="sqlMapClient" ref="sqlMapClient"></property>
 	</bean>
+	<bean id="serviceLoginBean" class="com.ims.service.impl.homeandlogin.LoginServiceImpl"
+			depends-on="daoLoginBean" >
+		<property name="dao" ref="daoLoginBean"></property>
+	</bean>
+	
+	<bean id="daoLoginBean" class="com.ims.dao.impl.homeandlogin.LoginDaoImpl" depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
 </beans>
