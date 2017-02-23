@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/prototype.js"></script>
 </head>
 <body>
 	Username:
