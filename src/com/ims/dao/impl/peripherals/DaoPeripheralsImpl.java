@@ -49,4 +49,22 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 	public List<Peripherals> getPeripheralRecord(int id) throws SQLException{
 		return this.getSqlMapClient().queryForList("getPeripheralRecord", id);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Peripherals> getPeripherals(String no) throws SQLException {
+		System.out.println(no);
+		return this.getSqlMapClient().queryForList("getPeripheralForUnit", no);
+	}
+
+	@Override
+	public Integer getPeripheralNo() throws SQLException {
+		return (Integer) this.getSqlMapClient().queryForObject("getPeripheralNo");
+	}
+
+	@Override
+	public void updatePeripheral(Map<String, Object> params) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
 }

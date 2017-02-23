@@ -7,7 +7,7 @@ public class Peripherals {
 	private Integer peripheralNo;
 	private String peripheralType;
 	private String tagNumber;
-	private String acquiredDate;
+	private Date acquiredDate;
 	private String description;
 	private String serialNo;
 	private String brand;
@@ -15,14 +15,14 @@ public class Peripherals {
 	private String color;
 	private String remarks;
 	private String userId; 
-	private String lastUpdate;
-	private Integer total;	
+	private Date lastUpdate;
+	private String status;	
 	
-	public Integer getTotal() {
-		return total;
+	public String getStatus() {
+		return status;
 	}
-	public void setTotal(Integer total) {
-		this.total = total;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public Integer getUnitNo() {
 		return unitNo;
@@ -48,10 +48,10 @@ public class Peripherals {
 	public void setTagNumber(String tagNumber) {
 		this.tagNumber = tagNumber;
 	}
-	public String getAcquiredDate() {
+	public Date getAcquiredDate() {
 		return acquiredDate;
 	}
-	public void setAcquiredDate(String acquiredDate) {
+	public void setAcquiredDate(Date acquiredDate) {
 		this.acquiredDate = acquiredDate;
 	}
 	public String getDescription() {
@@ -96,12 +96,11 @@ public class Peripherals {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getLastUpdate() {
+	public Date getLastUpdate() {
 		return lastUpdate;
 	}
-	public void setLastUpdate(String lastUpdate) {
+	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
-	
 	
 }

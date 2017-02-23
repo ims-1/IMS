@@ -2,28 +2,59 @@
  * 
  */
 var pageSize = 0;
+$('txtUnitNo').observe("change", function() {
+	getPeripherals();
+});
 
 function addPeripherals() {
 	if (validate()) {
+		delete Array.prototype.toJSON;
+
+		var content = [];
+		var object = {};
+		object.unitNo = $F('txtUnitNo');
+		object.peripheralNo = $F('txtPeripheralNo') == '' ? null : $F('txtPeripheralNo');
+		object.serialNo = $F('txtSerialNo');
+		object.peripheralType = $F('txtPeripheralType');
+		object.brand = $F('txtBrand');
+		object.tagNumber = $F('txtTagNumber');
+		object.model = $F('txtModel');
+		object.acquiredDate = $F('dtAcquiredDate');
+		object.color = $F('txtColor');
+		object.description = $F('txtDescription');
+		object.remarks = $F('txtRemarks');
+		content.push(object);
+		var json = JSON.stringify(content);
+
 		new Ajax.Request(context + "/PeripheralsController", {
 			method : "post",
+			encoding : "UTF-8",
 			parameters : {
-				action : "insert",
-				unitNo : $F('txtUnitNo'),
-				peripheralNo : $F('txtPeripheralNo'),
-				serialNo : $F('txtSerialNo'),
-				peripheralType : $F('txtPeripheralType'),
-				brand : $F('txtBrand'),
-				tagNumber : $F('txtTagNumber'),
-				model : $F('txtModel'),
-				acquiredDate : $F('dtAcquiredDate'),
-				color : $F('txtColor'),
-				description : $F('txtDescription'),
-				userId : $F('txtUserId'),
-				remarks : $F('txtRemarks')
+				content : json,
+				action : "add",
+				status : $F(btnAdd)
 			},
 			onSuccess : function(response) {
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
+				p.each(function(peripheral) {
+					var content = "";
+					content += "<td>" + peripheral.peripheralNo + "</td>";
+					content += "<td>" + peripheral.peripheralType + "</td>";
+					content += "<td>" + peripheral.tagNumber + "</td>";
+					content += "<td>" + peripheral.brand + " "
+							+ peripheral.model + " </td>";
+					content += "<td>" + peripheral.serialNo + "</td>";
+					content += "<td>" + peripheral.acquiredDate + "</td>";
+					content += "<td>" + peripheral.description + "</td>";
 
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+				});
 			}
 		});
 	} else {
@@ -34,18 +65,25 @@ function addPeripherals() {
 function getPeripherals() {
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "get",
+		contentType : "application/json",
 		parameters : {
 			action : "pagination",
-			page : "1"
+			page : "1",
+			num : $F('txtUnitNo')
 		},
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
 			var parent = $('body');
+
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+
 			$('body').hide();
 
 			p.each(function(peripherals) {
 				var content = "";
-				content += "<td>" + peripherals.unitNo + "</td>";
+				content += "<td>" + peripherals.peripheralNo + "</td>";
 				content += "<td>" + peripherals.peripheralType + "</td>";
 				content += "<td>" + peripherals.tagNumber + "</td>";
 				content += "<td>" + peripherals.brand + " " + peripherals.model
@@ -73,12 +111,14 @@ function getPeripherals() {
 	function getSize() {
 		new Ajax.Request(context + "/PeripheralsController", {
 			method : "get",
+			contentType : "application/json",
 			parameters : {
 				action : "getSize"
 			},
 			onSuccess : function(response) {
 				var p = response.responseText.evalJSON();
 				var parent = $('pagination');
+				$('pagination').innerHTML = '';
 
 				p.each(function(sizes) {
 					pageSize = sizes.listSize;
@@ -105,6 +145,7 @@ function getPeripherals() {
 function getRecordPage(a) {
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "get",
+		contentType : "application/json",
 		parameters : {
 			action : "getRecordPage",
 			page : a
@@ -119,7 +160,7 @@ function getRecordPage(a) {
 
 			p.each(function(peripherals) {
 				var content = "";
-				content += "<td>" + peripherals.unitNo + "</td>";
+				content += "<td>" + peripherals.peripheralNo + "</td>";
 				content += "<td>" + peripherals.peripheralType + "</td>";
 				content += "<td>" + peripherals.tagNumber + "</td>";
 				content += "<td>" + peripherals.brand + " " + peripherals.model
@@ -151,7 +192,7 @@ function getRecord(record) {
 		},
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
-			p.each(function(peripheral){
+			p.each(function(peripheral) {
 				$('txtPeripheralNo').value = peripheral.peripheralNo;
 				$('txtSerialNo').value = peripheral.serialNo;
 				$('txtPeripheralType').value = peripheral.peripheralType;
@@ -163,10 +204,34 @@ function getRecord(record) {
 				$('txtDescription').value = peripheral.description;
 				$('txtUserId').value = peripheral.userId;
 				$('txtRemarks').value = peripheral.remarks;
-			});		
+				$('dtLastUpdate').value = peripheral.lastUpdate;
+			});
+			$('btnAdd').value = "Update";
 		},
 		onFailed : function(response) {
 
 		}
 	});
+}
+
+function insertPeripherals() {
+	new Ajax.Request(context + "/PeripheralsController", {
+		method : "post",
+		parameters : {
+			action : "saveRecord"
+		},
+		onSuccess : function(response) {
+
+		},
+		onFailed : function(response) {
+
+		}
+	});
+}
+
+function clearFields(record) {
+	$('btnAdd').value = "Add";
+	$$('.form-control').each(function(field) {
+		$(field).value = "";
+	})
 }

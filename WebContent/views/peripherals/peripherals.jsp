@@ -51,25 +51,24 @@
 	</tr>
 </table>
 <table class="table table-striped table-bordered" id="tableRecord">
-<thead>
-	<tr>
-		<th>No</th>
-		<th>Peripheral Type</th>
-		<th>Tag Number</th>
-		<th>Brand / Model</th>
-		<th>Serial No.</th>
-		<th>Acquired Date</th>
-		<th>Description</th>
-	</tr>
-</thead>
-<tbody id="body">
-	</tbody>
+	<thead>
+		<tr>
+			<th>No</th>
+			<th>Peripheral Type</th>
+			<th>Tag Number</th>
+			<th>Brand / Model</th>
+			<th>Serial No.</th>
+			<th>Acquired Date</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody id="body"></tbody>
 </table>
 <div id="pagination"></div>
 <table class="table borderless" id="tableInput">
 	<tr>
 		<td class="label-right">Peripheral No.</td>
-		<td><input type="text" id="txtPeripheralNo" class="form-control"></td>
+		<td><input type="text" id="txtPeripheralNo" class="form-control" readonly="readonly"></td>
 		<td class="label-right">Serial No.</td>
 		<td><input type="text" id="txtSerialNo" class="form-control"></td>
 	</tr>
@@ -87,7 +86,7 @@
 	</tr>
 	<tr>
 		<td class="label-right">Acquired Date</td>
-		<td><input type="datetime-local" id="dtAcquiredDate" class="form-control"></td>
+		<td><input type="datetime-local" id="dtAcquiredDate" class="form-control date" placeholder="MM/DD/YYYY"></td>
 		<td class="label-right">Color</td>
 		<td><input type="text" id="txtColor" class="form-control"></td>
 	</tr>
@@ -95,13 +94,13 @@
 		<td class="label-right">Description</td>
 		<td><input type="text" id="txtDescription" class="form-control"></td>
 		<td class="label-right">User ID</td>
-		<td><input type="text" id="txtUserId" class="number required form-control"></td>
+		<td><input type="text" id="txtUserId" class="required form-control"></td>
 	</tr>
 	<tr>
 		<td class="label-right">Remarks</td>
 		<td><input type="text" id="txtRemarks" class="form-control"></td>
 		<td class="label-right">Last Update</td>
-		<td><input type="datetime-local" id="dtLastUpdate" class="required form-control"></td>
+		<td><input type="datetime-local" id="dtLastUpdate" class="date form-control" placeholder="MM/DD/YYYY"></td>
 	</tr>
 	</tbody>
 </table>
@@ -111,7 +110,7 @@
 		<td><input type="button" id="btnDelete" value="Delete" class="btn btn-primary"></td>
 	</tr>
 	<tr>
-		<td align="right"><input type="button" id="btnSave" value="Save" class="btn btn-primary"></td>
+		<td align="right"><input type="button" id="btnSave" value="Save" class="btn btn-primary"onclick="insertPeripherals()"></td>
 		<td><input type="button" id="btnCancel" value="Cancel" class="btn btn-primary"></td>
 	</tr>
 </table>
