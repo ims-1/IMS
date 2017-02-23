@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+
+<sqlMap namespace="UnitAssignmentHist">
+
+<typeAlias alias="UnitAssignmentHistClass" type="com.ims.model.unitassignmenthist.UnitAssignmentHist" />
+
+	
+	<resultMap id="getUnitAssignmentHistMap" class="UnitAssignmentHistClass">
+		<result column="hist_no" 				property="histNo"/>	
+		<result column="unit_no" 				property="unitNo"/>
+		<result column="unit_name" 				property="unitName"/>
+		<result column="assignee_no"  			property="assigneeNo"/>
+		<result column="location" 				property="location"/>
+		<result column="status"					property="status"/>
+		<result column="ip_address" 			property="ipAddress"/>
+		<result column="assigned_by"  			property="assignedBy"/>
+		<result column="assigned_date" 			property="assignedDate"/>
+		<result column="assign_tag" 			property="assignTag"/>
+		<result column="return_date" 			property="returnDate"/>
+		<result column="user_id" 				property="userId"/>
+		<result column="last_update" 			property="lastUpdate"/>
+	</resultMap>
+	
+	<select id="getUnitAssignmentHist" resultMap="getUnitAssignmentHistMap">
+		SELECT hist_no, unit_no, unit_name, assignee_no, location, status, ip_address, assigned_by, assigned_date,
+				assign_tag, return_date, user_id, last_update
+		FROM ims_assignment_hist_1
+	</select>
+	
+</sqlMap>
