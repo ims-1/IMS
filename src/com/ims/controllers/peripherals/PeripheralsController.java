@@ -46,8 +46,9 @@ public class PeripheralsController extends HttpServlet {
 					peripherals = service.getPeripherals();
 
 					if (!peripherals.isEmpty()) {
-
-						for (int start = 0; start < pageLimit; start++) {
+						int endRow = pageLimit;
+						endRow = pageLimit > peripherals.size() ? peripherals.size() : endRow;
+						for (int start = 0; start < endRow; start++) {
 							returnPeripherals.add(peripherals.get(start));
 						}
 						Gson gson = new Gson();
@@ -125,7 +126,17 @@ public class PeripheralsController extends HttpServlet {
 		} else if (action.equals("insert")) {
 
 		} else if (action.equals("getPeripheralRecord")) {
-			response.sendError(400);
+			try {
+				List<Peripherals> peripherals = service.getPeripheralRecord(request);
+				if (!peripherals.isEmpty()) {
+					Gson gson = new Gson();
+					String json = gson.toJson(peripherals);
+					response.getWriter().write(json);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
