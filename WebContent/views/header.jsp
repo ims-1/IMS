@@ -1,10 +1,10 @@
 <div class="header">
 	&lt;<span>IMS</span>&gt;
 	<div id="nav">
-		<a>Home |</a>
-		<a>Users |</a>
-		<a>Computer Unit Inventory |</a>
-		<a>Unit Assignment |</a>
-		<a>Peripherals</a>
+		<a href="${pageContext.request.contextPath }/home">Home |</a>
+		<a href="${pageContext.request.contextPath }/userlisting">Users |</a>
+		<a href="${pageContext.request.contextPath }/inventory">Computer Unit Inventory |</a>
+		<a href="${pageContext.request.contextPath }/unitassignment">Unit Assignment |</a>
+		<a href="${pageContext.request.contextPath }/peripherals">Peripherals</a>
 	</div>
 </div>

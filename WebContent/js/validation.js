@@ -41,10 +41,10 @@ function recordEvents() { // call on your own js file
 				});
 				
 				$(record).toggleClassName("hoverRow");
-				getRecord();// populate fields
+				getRecord($(record));// populate fields
 			}
 		});
 	});
 }
 
-recordEvents(); // use
+ // use
