@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ims.dao.impl.computerunitsinventory.ComputerUnitsInventoryImpl;
+import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
 
@@ -115,6 +116,11 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 	@Override
 	public List<ComputerUnits> getComputerUnitByUnitNo(Integer unitNo) throws SQLException {
 		return this.getDao().getComputerUnitsByUnitNo(unitNo);
+	}
+
+	@Override
+	public List<ComputerType> getComputerType() throws SQLException {
+		return this.getDao().getComputerType();
 	}
 
 }

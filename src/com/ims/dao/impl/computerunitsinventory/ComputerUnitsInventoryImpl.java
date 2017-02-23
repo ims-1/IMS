@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ims.dao.computerunitsinventory.ComputerUnitsInventoryDao;
+import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
 
 public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
@@ -45,6 +46,12 @@ public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
 	@Override
 	public List<ComputerUnits> getComputerUnitsByUnitNo(Integer unitNo) throws SQLException {
 		return this.getSqlMapClient().queryForList("getComputerUnitByUnitNo", unitNo);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ComputerType> getComputerType() throws SQLException {
+		return this.getSqlMapClient().queryForList("getComputerType");
 	}
 
 }

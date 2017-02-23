@@ -102,4 +102,20 @@
 		END;
 	</update>
 
+
+	<typeAlias alias="ComputerTypeClass"
+		type="com.ims.entity.computerunitsinventory.ComputerType" />
+	<resultMap id="getComputerTypeMap" class="ComputerTypeClass">
+		<result column="gir_value" property="girValue" />
+		<result column="gir_meaning" property="girMeaning" />
+	</resultMap>
+
+	<select id="getComputerType" resultMap="getComputerTypeMap">
+		SELECT gir_value,
+		gir_meaning
+		FROM ims_gen_info_ref_1
+		WHERE gir_key =
+		'IMS_COMP_UNITS.COMPUTER_TYPE'
+	</select>
+
 </sqlMap>

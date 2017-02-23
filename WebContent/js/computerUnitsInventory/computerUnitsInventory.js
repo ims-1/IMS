@@ -3,6 +3,7 @@ var tablerowCounter = 0;
 var unitCounter = 16;
 var pageSize = 0;
 populateTable();
+getComputerType();
 
 $('btnAddUpdate').observe('click', function() {
 	if ($F('btnAddUpdate') == "ADD") {
@@ -232,25 +233,135 @@ function getRecordPage(x) {
 
 }
 
-function searchFunc() {
-	// Declare variables
-	var input, filter, table, tr, td, i;
-	input = document.getElementById("txtSearchBox");
-	filter = input.value.toUpperCase();
-	table = document.getElementById("tblComputerUnits");
-	tr = table.getElementsByTagName("tr");
+function filterTable() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredRecord",
+			filterText : $F('txtSearchBox')
+		},
+		onSuccess : function(response) {
+			var p = response.responseText.evalJSON();
+			var parent = $('body');
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+			p.each(function(computerUnits) {
+				var content = "";
+				content += "<td>" + computerUnits.unitNo + "</td>";
+				content += "<td>" + computerUnits.unitName + "</td>";
+				content += "<td>" + computerUnits.tagNumber + "</td>";
+				content += "<td>" + computerUnits.ipAddress + "</td>";
+				content += "<td>" + computerUnits.type + "</td>";
+				content += "<td>" + computerUnits.brand + " "
+						+ computerUnits.model
+				"</td>";
+				content += "<td>" + computerUnits.serialNo + "</td>";
+				content += "<td>" + computerUnits.acquiredDate + "</td>";
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
 
-	// Loop through all table rows, and hide those who don't match the search
-	// query
+			recordEvents();
+			$$('.btn-nav').each(function(record) {
+				$(record).remove();
+			});
+			getFilteredSize();
 
-	for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[0];
-		if (td) {
-			if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
+		}
+	})
+}
+
+function getFilteredSize() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredSize"
+		},
+		onComplete : function(response) {
+			var p = response.responseText.evalJSON();
+			var parent = $('pagination');
+			p.each(function(sizes) {
+				pageSize = sizes.listSize;
+			});
+			if (pageSize < 10) {
+
 			} else {
-				tr[i].style.display = "none";
+
+				var btnCount = parseInt(pageSize / 10);
+				if (pageSize % 10 != 0) {
+					btnCount += 1;
+					for (var a = 1; a <= btnCount; a++) {
+						var newBtn = new Element('button');
+						newBtn.setAttribute("class", "btn-nav");
+						newBtn.update(a);
+						newBtn.setAttribute("onclick",
+								"getFilteredRecordPage(this.innerHTML)");
+						parent.insert({
+							bottom : newBtn
+						});
+					}
+				}
 			}
 		}
-	}
+	})
+}
+
+function getFilteredRecordPage(x) {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredRecordPage",
+			page : x
+		},
+		onSuccess : function(response) {
+			var p = response.responseText.evalJSON();
+			var parent = $('body');
+
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+
+			p.each(function(computerUnits) {
+				var content = "";
+				content += "<td>" + computerUnits.unitNo + "</td>";
+				content += "<td>" + computerUnits.unitName + "</td>";
+				content += "<td>" + computerUnits.tagNumber + "</td>";
+				content += "<td>" + computerUnits.ipAddress + "</td>";
+				content += "<td>" + computerUnits.type + "</td>";
+				content += "<td>" + computerUnits.brand + " "
+						+ computerUnits.model
+				"</td>";
+				content += "<td>" + computerUnits.serialNo + "</td>";
+				content += "<td>" + computerUnits.acquiredDate + "</td>";
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+
+			recordEvents();
+		}
+	})
+}
+
+function getComputerType() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "getComputerType"
+		},
+		onSuccess : function(response) {
+			var p = response.responseText.evalJSON();
+			p.each(function(TypeList) {
+				alert(TypeList.girValue);
+			})
+		}
+	})
 }

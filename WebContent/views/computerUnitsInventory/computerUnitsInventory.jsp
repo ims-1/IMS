@@ -13,8 +13,8 @@
 </head>
 <body>
 	<div id="mainContents">
-		<jsp:include page="../header.jsp"></jsp:include>
-		<input type="text" id="txtSearchBox" onkeyup="searchFunc()"
+		<jsp:include page="/views/header.jsp"></jsp:include>
+		<input type="text" id="txtSearchBox" onkeyup="filterTable()"
 			placeholder="Enter Words to Search"> <br>
 		<table id="tblComputerUnits"
 			class="table table-striped table-bordered">

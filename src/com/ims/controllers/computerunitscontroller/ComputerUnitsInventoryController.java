@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
+import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
 
@@ -25,6 +26,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	List<ComputerUnits> computerUnits = null;
 
+	List<ComputerUnits> filteredList = new LinkedList<>();
+
 	@SuppressWarnings("resource")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -32,6 +35,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 		ComputerUnitsInventoryService computerUnitService = (ComputerUnitsInventoryService) context
 				.getBean("serviceComputerUnitsInventoryBean");
 		String action = request.getParameter("action");
+
 		int pageLimit = 10;
 		if (action.equals("pagination")) {
 			try {
@@ -84,7 +88,83 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else if (action.equals("getFilteredRecord")) {
+
+			filteredList.removeAll(computerUnits);
+
+			String words = request.getParameter("filterText");
+			List<ComputerUnits> compUnitList = new LinkedList<>();
+			words = words.toUpperCase();
+			if (!computerUnits.isEmpty()) {
+
+				for (int x = 0; x < computerUnits.size(); x++) {
+					if (computerUnits.get(x).getUnitName().toUpperCase().contains(words)
+							|| computerUnits.get(x).getModel().toUpperCase().contains(words)
+							|| computerUnits.get(x).getAcquiredDate().toString().toUpperCase().contains(words)
+							|| computerUnits.get(x).getBrand().toUpperCase().contains(words)
+							|| computerUnits.get(x).getColor().toUpperCase().contains(words)
+							|| computerUnits.get(x).getDescription().toUpperCase().contains(words)
+							|| computerUnits.get(x).getIpAddress().toUpperCase().contains(words)
+							|| computerUnits.get(x).getLastUpdate().toString().toUpperCase().contains(words)
+							|| computerUnits.get(x).getModel().toUpperCase().contains(words)
+							|| computerUnits.get(x).getUserId().toUpperCase().contains(words)
+							|| computerUnits.get(x).getUnitNo().toString().toUpperCase().contains(words)
+							|| computerUnits.get(x).getTagNumber().toUpperCase().contains(words)
+							|| computerUnits.get(x).getSerialNo().toUpperCase().contains(words)
+							|| computerUnits.get(x).getRemarks().toUpperCase().contains(words)) {
+
+						filteredList.add(computerUnits.get(x));
+					}
+				}
+
+			}
+
+			if (!filteredList.isEmpty()) {
+				int endRow = pageLimit;
+				endRow = pageLimit > filteredList.size() ? filteredList.size() : endRow;
+				for (int start = 0; start < endRow; start++) {
+					compUnitList.add(filteredList.get(start));
+				}
+			}
+			Gson gson = new Gson();
+			String json = gson.toJson(compUnitList);
+			response.getWriter().write(json);
+		} else if (action.equals("getFilteredSize")) {
+			List<GetSize> getSize = new ArrayList<>();
+			getSize.add(new GetSize(filteredList.size()));
+
+			Gson gson = new Gson();
+			String json = gson.toJson(getSize);
+			response.getWriter().write(json);
+		} else if (action.equals("getFilteredRecordPage")) {
+			int page = Integer.parseInt(request.getParameter("page"));
+			List<ComputerUnits> compUnitList = new LinkedList<>();
+			if (!filteredList.isEmpty()) {
+				int endRow = page * pageLimit;
+				endRow = endRow > filteredList.size() ? filteredList.size() : endRow;
+				for (int start = (page * pageLimit) - pageLimit; start < (endRow); start++) {
+					compUnitList.add(filteredList.get(start));
+				}
+				Gson gson = new Gson();
+				String json = gson.toJson(compUnitList);
+				response.getWriter().write(json);
+			}
+		} else if (action.equals("getComputerType")) {
+			try {
+				List<ComputerType> compTypeList = computerUnitService.getComputerType();
+
+				for (int x = 0; x < compTypeList.size(); x++) {
+					System.out.println(compTypeList.get(x).getGirValue());
+				}
+
+				Gson gson = new Gson();
+				String json = gson.toJson(compTypeList);
+				response.getWriter().write(json);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 
 	@SuppressWarnings("resource")
