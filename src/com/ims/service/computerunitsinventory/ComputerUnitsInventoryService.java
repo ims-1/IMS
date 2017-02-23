@@ -13,7 +13,9 @@ public interface ComputerUnitsInventoryService {
 
 	List<ComputerUnits> getComputerUnitByUnitNo(Integer unitNo) throws SQLException;
 
+	List<ComputerUnits> getMaxUnitNumber() throws SQLException;
 	List<ComputerType> getComputerType() throws SQLException;
+	
 
 	void insertComputerUnits(HttpServletRequest request) throws SQLException;
 

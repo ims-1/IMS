@@ -10,6 +10,8 @@ import com.ims.entity.computerunitsinventory.ComputerUnits;
 public interface ComputerUnitsInventoryDao {
 	List<ComputerUnits> getComputerUnits() throws SQLException;
 
+	List<ComputerUnits> getMaxUnitNumber() throws SQLException;
+
 	List<ComputerUnits> getComputerUnitsByUnitNo(Integer unitNo) throws SQLException;
 
 	List<ComputerType> getComputerType() throws SQLException;
@@ -19,5 +21,5 @@ public interface ComputerUnitsInventoryDao {
 	void deleteComputerUnit(Map<String, Object> params) throws SQLException;
 
 	void updateComputerUnit(Map<String, Object> params) throws SQLException;
-
+	
 }

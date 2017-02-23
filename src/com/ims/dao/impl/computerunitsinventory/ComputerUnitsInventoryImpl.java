@@ -54,4 +54,10 @@ public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
 		return this.getSqlMapClient().queryForList("getComputerType");
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ComputerUnits> getMaxUnitNumber() throws SQLException {
+		return this.getSqlMapClient().queryForList("getMaxUnitNo");
+	}
+
 }

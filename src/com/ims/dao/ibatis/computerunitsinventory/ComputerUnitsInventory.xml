@@ -25,9 +25,11 @@
 
 	<select id="getComputerUnits" resultMap="getComputerUnitsMap">
 		SELECT unit_no,
-		unit_name, tag_number, ip_address, type,
+		unit_name, tag_number, ip_address, DECODE(type, 'LT' , 'Laptop',
+		'Desktop') type,
 		acquired_date, description,
-		serial_no, brand, model, color, remarks,
+		serial_no, brand, model,
+		color, remarks,
 		delete_tag, user_id,
 		last_update
 		FROM ims_comp_units_1
@@ -60,13 +62,14 @@
 		remarks,
 		delete_tag, user_id, last_update)
 		VALUES
-		(#unitNo#, #unitName#,
+		(unit_seq_1.nextval,
+		#unitName#,
 		#tagNumber#,#ipAddress#, #type#, #acquiredDate#,
 		#description#,
 		#serialNo#, #brand#, #model#, #color#, #remarks#,
 		#deleteTag#,
 		#userId#, #lastUpdate#);
-		Commit;
+		commit;
 		END;
 	</insert>
 
@@ -117,5 +120,23 @@
 		WHERE gir_key =
 		'IMS_COMP_UNITS.COMPUTER_TYPE'
 	</select>
+
+	<select id="getMaxUnitNo" resultMap="getComputerUnitsMap">
+		SELECT a.unit_no,
+		unit_name,
+		tag_number, ip_address, type,
+		acquired_date, description,
+		serial_no,
+		brand, model, color, remarks,
+		delete_tag, user_id,
+		last_update
+		FROM
+		ims_comp_units_1 a, (
+		SELECT MAX(Unit_NO) unit_no
+		FROM ims_comp_units_1)
+		b
+		WHERE a.unit_no = b.unit_no
+	</select>
+
 
 </sqlMap>

@@ -20,7 +20,7 @@
 			class="table table-striped table-bordered">
 			<thead>
 				<tr>
-					<th>NO.</th>
+					<th class="label-right">NO.</th>
 					<th>UNIT NAME</th>
 					<th>TAG NUMBER</th>
 					<th>IP ADDRESS</th>
@@ -60,7 +60,7 @@
 			<tr>
 				<td class="label-right">UNIT NO.</td>
 				<td><input type="text" id="txtUnitNo"
-					class="number form-control"></td>
+					class="number form-control" disabled="disabled"></td>
 
 				<td class="label-right">SERIAL NO.</td>
 				<td><input type="text" id="txtSerialNo"
@@ -91,35 +91,26 @@
 
 			<tr>
 				<td class="label-right">TYPE</td>
-				<td><input type="text" id="txtType" class="form-control"></td>
+				<td><div id="divSelectType"></div></td>
 				<td class="label-right">USER ID</td>
 				<td><input type="text" id="txtUserId"
 					class=" required form-control"></td>
 			</tr>
 			<tr>
 				<td class="label-right">ACQUIRED DATE</td>
-				<td><input type="date" id="txtAcquiredDate"
-					class="form-control"></td>
+				<td><input type="datetime-local" id="txtAcquiredDate"
+					class="form-control" placeholder="dd-MMM-yy"></td>
 				<td class="label-right">LAST UPDATE</td>
-				<td>
-					<div class='input-group date' id="txtLastUpdate1">
-						<input type='text' class="form-control" id="txtLastUpdate" /> <span
-							class="input-group-addon"> <span
-							class="glyphicon glyphicon-calendar"></span>`
-						</span>
-					</div>
-				</td>
+
+				<td><input type="datetime-local" id="txtLastUpdate"
+					class="form-control" placeholder="dd-MMM-yy"></td>
 			</tr>
 
 			<tr>
 				<td class="label-right">DESCRIPTION</td>
 				<td><input type="text" id="txtDescription" class="form-control"></td>
 				<td class="label-right">REMARKS</td>
-				<td><div class="input-group">
-						<input type="text" id="txtRemarks" class="form-control"> <span
-							class="input-group-addon" id="txtRemarks"><span
-							class="glyphicon glyphicon-pencil"></span></span>
-					</div></td>
+				<td><input type="text" id="txtRemarks" class="form-control"></td>
 			</tr>
 		</table>
 		<div align="center">
@@ -164,7 +155,8 @@
 					$('txtUnitName').value = compUnit.unitName;
 					$('txtTagNumber').value = compUnit.tagNumber;
 					$('txtIpAddress').value = compUnit.ipAddress;
-					$('txtType').value = compUnit.type;
+					$('txtType').value = compUnit.type == "LT" ? "Laptop"
+							: "Desktop";
 					$('txtBrand').value = compUnit.brand;
 					$('txtSerialNo').value = compUnit.serialNo;
 					$('txtAcquiredDate').value = compUnit.acquiredDate;

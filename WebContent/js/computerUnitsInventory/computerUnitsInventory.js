@@ -1,12 +1,15 @@
+var today = new Date().toLocaleDateString();
+
+$('txtLastUpdate').value = today;
 var tblComputerUnits = $('tblComputerUnits');
 var tablerowCounter = 0;
-var unitCounter = 16;
 var pageSize = 0;
-populateTable();
 getComputerType();
+populateTable();
 
 $('btnAddUpdate').observe('click', function() {
 	if ($F('btnAddUpdate') == "ADD") {
+
 		addUnitsToTable();
 		addUnitsToDatabase();
 	} else if ($F('btnAddUpdate') == "UPDATE") {
@@ -23,40 +26,37 @@ $('btnDelete').observe('click', function() {
 			unitNo : $F('txtUnitNo')
 		},
 		onComplete : function(response) {
+			populateTable();
 			clearFields();
 		}
 	})
 });
 
 function addUnitsToTable() {
-	tablerowCounter = tablerowCounter + 1;
-	unitCounter = unitCounter + 1;
 	if (validate()) {
-		// create row
-		var row = tblComputerUnits.insertRow(tablerowCounter);
-		var rwUnitNo = row.insertCell(0);
-		var rwUnitName = row.insertCell(1);
-		var rwTagNo = row.insertCell(2);
-		var rwIp = row.insertCell(3);
-		var rwType = row.insertCell(4);
-		var rwBrandModel = row.insertCell(5);
-		var rwSerialNo = row.insertCell(6);
-		var rwAcquiredDate = row.insertCell(7);
+		tablerowCounter = tablerowCounter + 1;
+		if (validate()) {
+			// create row
+			var row = tblComputerUnits.insertRow(tablerowCounter);
+			var rwUnitNo = row.insertCell(0);
+			var rwUnitName = row.insertCell(1);
+			var rwTagNo = row.insertCell(2);
+			var rwIp = row.insertCell(3);
+			var rwType = row.insertCell(4);
+			var rwBrandModel = row.insertCell(5);
+			var rwSerialNo = row.insertCell(6);
+			var rwAcquiredDate = row.insertCell(7);
 
-		// set attributes
-		row.setAttribute('class', 'tblUnitsRow');
-		row.setAttribute('onclick', 'selectedRow(this)');
-		row.addClassName('record');
+			// set attributes
+			row.setAttribute('class', 'tblUnitsRow');
+			row.setAttribute('onclick', 'selectedRow(this)');
+			row.addClassName('record');
 
-		// table values
-		rwUnitNo.innerHTML = unitCounter;
-		rwUnitName.innerHTML = $F('txtUnitName');
-		rwTagNo.innerHTML = $F('txtTagNumber');
-		rwIp.innerHTML = $F('txtIpAddress');
-		rwType.innerHTML = $F('txtType');
-		rwBrandModel.innerHTML = $F('txtBrand') + ' ' + $F('txtModel');
-		rwSerialNo.innerHTML = $F('txtSerialNo');
-		rwAcquiredDate.innerHTML = $F('txtAcquiredDate');
+			populateTable();
+
+		}
+	} else {
+		alert("Please check fields. Red fields are required while blue fields only accepts integer.");
 	}
 }
 
@@ -65,11 +65,10 @@ function addUnitsToDatabase() {
 		method : "post",
 		parameters : {
 			action : "insertNewComputerUnit",
-			unitNo : unitCounter,
 			unitName : $F('txtUnitName'),
 			tagNumber : $F('txtTagNumber'),
 			ipAddress : $F('txtIpAddress'),
-			type : $F('txtType'),
+			type : $F('txtType') == "Desktop" ? "DT" : "LT",
 			acquiredDate : $F('txtAcquiredDate'),
 			description : $F('txtDescription'),
 			serialNo : $F('txtSerialNo'),
@@ -94,7 +93,7 @@ function updateComputerUnit() {
 			unitName : $F('txtUnitName'),
 			tagNumber : $F('txtTagNumber'),
 			ipAddress : $F('txtIpAddress'),
-			type : $F('txtType'),
+			type : $F('txtType') == "Desktop" ? "DT" : "LT",
 			acquiredDate : $F('txtAcquiredDate'),
 			description : $F('txtDescription'),
 			serialNo : $F('txtSerialNo'),
@@ -108,6 +107,7 @@ function updateComputerUnit() {
 		onComplete : function(response) {
 		}
 	})
+	populateTable();
 }
 
 function selectedRow(row) {
@@ -135,6 +135,9 @@ function populateTable() {
 		onComplete : function(response) {
 			var p = response.responseText.evalJSON();
 			var parent = $('body');
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
 
 			p.each(function(computerUnits) {
 				var content = "";
@@ -171,6 +174,9 @@ function getSize() {
 		onComplete : function(response) {
 			var p = response.responseText.evalJSON();
 			var parent = $('pagination');
+			$$('.btn-nav').each(function(record) {
+				$(record).remove();
+			});
 			p.each(function(sizes) {
 				pageSize = sizes.listSize;
 			});
@@ -359,9 +365,32 @@ function getComputerType() {
 		},
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
+			var parent = $('divSelectType');
+			var content = "";
+			content += "<option> </option>";
 			p.each(function(TypeList) {
-				alert(TypeList.girValue);
+				content += "<option>" + TypeList.girMeaning + "</option>";
+			})
+
+			var newSelect = new Element("select");
+			newSelect.setAttribute("id", "txtType");
+			newSelect.setAttribute("class", "form-control");
+			newSelect.update(content);
+			parent.insert({
+				bottom : newSelect
 			})
 		}
 	})
 }
+
+$('btnSave').observe('click', function() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "saveCompList"
+		},
+		onSuccess : function(response) {
+
+		}
+	})
+})

@@ -12,11 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
@@ -35,10 +38,11 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 		ComputerUnitsInventoryService computerUnitService = (ComputerUnitsInventoryService) context
 				.getBean("serviceComputerUnitsInventoryBean");
 		String action = request.getParameter("action");
-
+		String dateFormat = "dd-MMM-yy";
 		int pageLimit = 10;
 		if (action.equals("pagination")) {
 			try {
+				computerUnits = new LinkedList<>();
 				List<ComputerUnits> compUnitList = new LinkedList<>();
 				computerUnits = computerUnitService.getComputerUnits();
 				if (!computerUnits.isEmpty()) {
@@ -47,7 +51,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 					for (int start = 0; start < endRow; start++) {
 						compUnitList.add(computerUnits.get(start));
 					}
-					Gson gson = new Gson();
+					Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 					String json = gson.toJson(compUnitList);
 					response.getWriter().write(json);
 				}
@@ -59,7 +63,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(computerUnits.size()));
 
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 			String json = gson.toJson(getSize);
 			response.getWriter().write(json);
 		} else if (action.equals("getRecordPage")) {
@@ -71,7 +75,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				for (int start = (page * pageLimit) - pageLimit; start < (endRow); start++) {
 					compUnitList.add(computerUnits.get(start));
 				}
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			}
@@ -82,7 +86,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				List<ComputerUnits> compUnitList = new LinkedList<>();
 				compUnitList = computerUnitService.getComputerUnitByUnitNo(unitNo);
 
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			} catch (SQLException e) {
@@ -98,6 +102,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			if (!computerUnits.isEmpty()) {
 
 				for (int x = 0; x < computerUnits.size(); x++) {
+					String type = (computerUnits.get(x).getType() == "LT" ? "Laptop" : "Desktop");
 					if (computerUnits.get(x).getUnitName().toUpperCase().contains(words)
 							|| computerUnits.get(x).getModel().toUpperCase().contains(words)
 							|| computerUnits.get(x).getAcquiredDate().toString().toUpperCase().contains(words)
@@ -111,7 +116,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 							|| computerUnits.get(x).getUnitNo().toString().toUpperCase().contains(words)
 							|| computerUnits.get(x).getTagNumber().toUpperCase().contains(words)
 							|| computerUnits.get(x).getSerialNo().toUpperCase().contains(words)
-							|| computerUnits.get(x).getRemarks().toUpperCase().contains(words)) {
+							|| computerUnits.get(x).getRemarks().toUpperCase().contains(words)
+							|| type.toUpperCase().contains(words)) {
 
 						filteredList.add(computerUnits.get(x));
 					}
@@ -126,14 +132,14 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 					compUnitList.add(filteredList.get(start));
 				}
 			}
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 			String json = gson.toJson(compUnitList);
 			response.getWriter().write(json);
 		} else if (action.equals("getFilteredSize")) {
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(filteredList.size()));
 
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 			String json = gson.toJson(getSize);
 			response.getWriter().write(json);
 		} else if (action.equals("getFilteredRecordPage")) {
@@ -145,7 +151,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				for (int start = (page * pageLimit) - pageLimit; start < (endRow); start++) {
 					compUnitList.add(filteredList.get(start));
 				}
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			}
@@ -157,8 +163,19 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 					System.out.println(compTypeList.get(x).getGirValue());
 				}
 
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
 				String json = gson.toJson(compTypeList);
+				response.getWriter().write(json);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} else if (action.equals("getMaxUnitNo")) {
+			List<ComputerUnits> compUnitList = new LinkedList<>();
+			try {
+				compUnitList = computerUnitService.getMaxUnitNumber();
+				System.out.println(compUnitList.get(0).getUnitNo());
+				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
+				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -167,7 +184,6 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 	}
 
-	@SuppressWarnings("resource")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
@@ -176,7 +192,11 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 		try {
 			String action = request.getParameter("action");
 			if (action.equals("insertNewComputerUnit")) {
-				System.out.println("insert");
+
+				HttpSession session = request.getSession();
+				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+
+				
 				computerUnitService.insertComputerUnits(request);
 			} else if (action.equals("deleteComputerUnit")) {
 				computerUnitService.deleteComputerUnit(request);

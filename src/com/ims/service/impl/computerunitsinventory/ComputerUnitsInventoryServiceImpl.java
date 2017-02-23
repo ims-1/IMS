@@ -27,7 +27,7 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 
 	@Override
 	public void insertComputerUnits(HttpServletRequest request) throws SQLException {
-		Integer unitNo = Integer.parseInt(request.getParameter("unitNo"));
+
 		String unitName = request.getParameter("unitName");
 		String tagNumber = request.getParameter("tagNumber");
 		String ipAddress = request.getParameter("ipAddress");
@@ -43,7 +43,6 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 		String remarks = request.getParameter("remarks");
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("unitNo", unitNo);
 		params.put("unitName", unitName);
 		params.put("tagNumber", tagNumber);
 		params.put("ipAddress", ipAddress);
@@ -104,6 +103,7 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 		params.put("userId", userId);
 		params.put("lastUpdate", lastUpdate);
 		params.put("remarks", remarks);
+
 		this.getDao().updateComputerUnit(params);
 
 	}
@@ -122,5 +122,11 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 	public List<ComputerType> getComputerType() throws SQLException {
 		return this.getDao().getComputerType();
 	}
+
+	@Override
+	public List<ComputerUnits> getMaxUnitNumber() throws SQLException {
+		return this.getDao().getMaxUnitNumber();
+	}
+
 
 }
