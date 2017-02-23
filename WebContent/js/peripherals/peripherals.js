@@ -41,6 +41,7 @@ function getPeripherals() {
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
 			var parent = $('body');
+			$('body').hide();
 
 			p.each(function(peripherals) {
 				var content = "";
@@ -60,8 +61,13 @@ function getPeripherals() {
 					bottom : newTr
 				});
 			});
+			$('body').show();
 			getSize();
 			recordEvents();
+		},
+		onFailure : function(response) {
+			console.log("There is something wrong. Please check connection");
+			alert("There is something wrong. Please check connection");
 		}
 	});
 	function getSize() {
@@ -78,6 +84,7 @@ function getPeripherals() {
 					pageSize = sizes.listSize;
 				});
 				var btnCount = (pageSize / 5);
+				btnCount = pageSize % 5 === 0 ? btnCount : btnCount + 1;
 				for (var a = 1; a <= btnCount; a++) {
 					var newBtn = new Element('button');
 					newBtn.setAttribute("class", "btn-nav");
@@ -139,14 +146,28 @@ function getRecord(record) {
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "post",
 		parameters : {
-			peripheralNo : $(record).down('td', 0).innerHTML,
+			peripheralId : $(record).down('td', 0).innerHTML,
 			action : "getPeripheralRecord"
 		},
 		onSuccess : function(response) {
-			alert("response");
+			var p = response.responseText.evalJSON();
+			p.each(function(peripheral){
+				$('txtPeripheralNo').value = peripheral.peripheralNo;
+				$('txtSerialNo').value = peripheral.serialNo;
+				$('txtPeripheralType').value = peripheral.peripheralType;
+				$('txtBrand').value = peripheral.brand;
+				$('txtTagNumber').value = peripheral.tagNumber;
+				$('txtModel').value = peripheral.model;
+				$('dtAcquiredDate').value = peripheral.acquiredDate;
+				$('txtColor').value = peripheral.color;
+				$('txtDescription').value = peripheral.description;
+				$('txtUserId').value = peripheral.userId;
+				$('txtRemarks').value = peripheral.remarks;
+				$('txtLastUpdate').value = peripheral.lastUpdate;
+			});		
 		},
-		onFailed: function(response){
-			
+		onFailed : function(response) {
+
 		}
 	});
 }
