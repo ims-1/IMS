@@ -163,7 +163,6 @@ function getRecord(record) {
 				$('txtDescription').value = peripheral.description;
 				$('txtUserId').value = peripheral.userId;
 				$('txtRemarks').value = peripheral.remarks;
-				$('txtLastUpdate').value = peripheral.lastUpdate;
 			});		
 		},
 		onFailed : function(response) {
