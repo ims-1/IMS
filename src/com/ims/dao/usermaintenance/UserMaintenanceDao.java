@@ -11,4 +11,6 @@ public interface UserMaintenanceDao {
 	List<Users> getUsers() throws SQLException;
 	void insertNewUser(Map<String, Object> params) throws SQLException;
 	String getUserId(String id) throws SQLException;
+	List<Users> getUser(String uId) throws SQLException;
+	void updateUser(Map<String, Object> params) throws SQLException;
 }

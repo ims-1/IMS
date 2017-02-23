@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,9 +11,9 @@
 	<title>User Listing Page</title>
 </head>
 <body>
+<div id="mainContents">
 <jsp:include page="../header.jsp"></jsp:include>
 	<h1 align="center" style="color: yellow;">User Listing Page</h1>
-		<div id="mainContents">
 			<div id="usersMainTable" align=center>
 				<table id="usersMainBodyList" class="table table-striped table-bordered">
 					<thead>
@@ -33,39 +34,6 @@
 					  </tr>
 					</thead>
 					<tbody align="center" id="body">
-						<!-- <tr class="record">
-							<td>1</td> 
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></button>
-							</td>
-						</tr>
-						<tr class="record">
-							<td>1</td> 
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></button></td>
-						</tr>
-						<tr class="record">
-							<td>1</td> 
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></button></td>
-						</tr>
-						<tr class="record">
-							<td>1</td> 
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td>1</td>
-							<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></button></td>
-						</tr> -->
 					</tbody>
 				</table>
 				<div id="pagination"></div>
@@ -75,4 +43,5 @@
 <script type="text/javascript">var contextPath = "${pageContext.request.contextPath}"</script>
 <script src="${pageContext.request.contextPath}/js/validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/userMaintenance/userListingPage.js"></script>
+<script src="${pageContext.request.contextPath}/js/userMaintenance/userMaintenanceScreen.js"></script>
 </html>

@@ -17,10 +17,22 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 	public List<Users> getUsers() throws SQLException {
 		return this.getSqlMapClient().queryForList("getUsers");
 	}
-	
+
 	@Override
 	public String getUserId(String id) throws SQLException {
 		return (String) this.getSqlMapClient().queryForObject("getUserId", id);
+	}
+	
+	@Override
+	public void updateUser(Map<String, Object> params) throws SQLException {
+		this.getSqlMapClient().update("updateUser", params);
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Users> getUser(String uId) throws SQLException {
+		return this.getSqlMapClient().queryForList("getUser", uId);
 	}
 
 	@Override
