@@ -25,11 +25,28 @@
 
 	<select id="getComputerUnits" resultMap="getComputerUnitsMap">
 		SELECT unit_no,
-		unit_name, tag_number, ip_address, type, acquired_date, description,
-		serial_no, brand, model, color, remarks, delete_tag, user_id,
+		unit_name, tag_number, ip_address, type,
+		acquired_date, description,
+		serial_no, brand, model, color, remarks,
+		delete_tag, user_id,
 		last_update
-		FROM
-		ims_comp_units_1
+		FROM ims_comp_units_1
+		WHERE delete_tag
+		!= 'Y'
+		ORDER BY unit_No
+	</select>
+
+	<select id="getComputerUnitByUnitNo" resultMap="getComputerUnitsMap"
+		parameterClass="java.lang.Integer">
+		SELECT unit_no,
+		unit_name, tag_number, ip_address, type,
+		acquired_date, description,
+		serial_no, brand, model, color, remarks,
+		delete_tag, user_id,
+		last_update
+		FROM ims_comp_units_1
+		WHERE delete_tag
+		!= 'Y' AND unit_no = #unitNo#
 	</select>
 
 	<insert id="insertComputerUnits" parameterClass="java.util.Map">
@@ -48,9 +65,57 @@
 		#description#,
 		#serialNo#, #brand#, #model#, #color#, #remarks#,
 		#deleteTag#,
-		#userID#, #lastUpdate# );
+		#userId#, #lastUpdate#);
 		Commit;
 		END;
 	</insert>
+
+	<update id="deleteComputerUnit" parameterClass="java.util.Map">
+		BEGIN
+		UPDATE
+		ims_comp_units_1 SET delete_tag = 'Y'
+		WHERE unit_no = #unitNo#;
+		END;
+	</update>
+
+	<update id="updateComputerUnit" parameterClass="java.util.Map">
+		BEGIN
+		UPDATE
+		ims_comp_units_1
+		SET unit_name = #unitName#,
+		tag_number = #tagNumber#,
+		type = #type#,
+		ip_address = #ipAddress#,
+		acquired_date = #acquiredDate#,
+		description = #description#,
+		serial_no = #serialNo#,
+		brand = #brand#,
+		model = #model#,
+		color = #color#,
+		remarks = #remarks#,
+		user_id =
+		#userId#,
+		last_update = #lastUpdate#
+		WHERE unit_no = #unitNo#
+		and
+		delete_tag != 'Y';
+		END;
+	</update>
+
+
+	<typeAlias alias="ComputerTypeClass"
+		type="com.ims.entity.computerunitsinventory.ComputerType" />
+	<resultMap id="getComputerTypeMap" class="ComputerTypeClass">
+		<result column="gir_value" property="girValue" />
+		<result column="gir_meaning" property="girMeaning" />
+	</resultMap>
+
+	<select id="getComputerType" resultMap="getComputerTypeMap">
+		SELECT gir_value,
+		gir_meaning
+		FROM ims_gen_info_ref_1
+		WHERE gir_key =
+		'IMS_COMP_UNITS.COMPUTER_TYPE'
+	</select>
 
 </sqlMap>

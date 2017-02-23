@@ -1,7 +1,18 @@
 onLoadUserListPage(); 
 
+$("txtSearch").observe("onchange", function() {
+	new Ajax.Request(contextPath + "/UserMaintenanceController", {
+		method : "post",
+		parameters : {
+			action : "search"
+		},
+		onComplete : function(response) {
+			$("mainContents").update(response.responseText);
+		}
+	});
+});
+
 function onLoadUserListPage() {
-	alert("hello usreload");
 	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "get",
 		parameters : {
@@ -14,6 +25,7 @@ function onLoadUserListPage() {
 			u.each(function(users) {
 				var content = "";
 				var uAccess = "";
+				var isActive = "";
 				
 				if (users.userAccess == "A") {
 					uAccess = "Admin";
@@ -21,13 +33,19 @@ function onLoadUserListPage() {
 				if (users.userAccess == "U") {
 					uAccess = "Regular User";
 				}
-				
+				if (users.activeTag == "Y") {
+					isActive = '<span class="glyphicon glyphicon-ok"></span>';
+				}
+				if (users.activeTag == "N") {
+					isActive = "<span class='glyphicon glyphicon-remove'></span>";
+				}
+	
 				content = "<td>"+ users.userId +"</td>" 
 							+ "<td>"+ users.firstName + " " + users.middleInitial + ". " + users.lastName +"</td>"
 							+ "<td>"+ uAccess +"</td>"
-							+ "<td>"+ users.activeTag +"</td>"
+							+ "<td>"+ isActive +"</td>"
 							+ "<td>"+ users.entryDate +"</td>"
-							+ '<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></td>';
+							+ '<td><button onclick="getRecord(this.parentNode)" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></td>';
 				
 				var newTr = new Element("tr");
 				newTr.setAttribute("class", "record");
@@ -52,9 +70,7 @@ function getSize() {
 		onSuccess : function(response) {
 			var u = response.responseText.evalJSON();
 			var parent = $("pagination");
-			
-			
-			
+
 			u.each(function(sizes){
 				pageSize = sizes.listSize;
 			});
@@ -63,6 +79,7 @@ function getSize() {
 			for (var a = 1; a <= btnCount; a++) {
 				var newBtn = new Element("button");
 				newBtn.setAttribute("class", "btn-nav");
+				newBtn.setAttribute("class", "btn btn-primary");
 				newBtn.update(a);
 				newBtn.setAttribute("onclick", "getRecordPage(this.innerHTML)");
 				parent.insert({
@@ -74,7 +91,6 @@ function getSize() {
 }
 
 function getRecordPage(a) {
-	alert(a);
 	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "get",
 		parameters : {
@@ -92,6 +108,7 @@ function getRecordPage(a) {
 			u.each(function(users) {
 				var content = "";
 				var uAccess = "";
+				var isActive = "";
 				
 				if (users.userAccess == "A") {
 					uAccess = "Admin";
@@ -99,13 +116,19 @@ function getRecordPage(a) {
 				if (users.userAccess == "U") {
 					uAccess = "Regular User";
 				}
+				if (users.activeTag == "Y") {
+					isActive = '<span class="glyphicon glyphicon-ok"></span>';
+				}
+				if (users.activeTag == "N") {
+					isActive = "<span class='glyphicon glyphicon-remove'></span>";
+				}
 				
 				content = "<td>"+ users.userId +"</td>" 
 							+ "<td>"+ users.firstName + " " + users.middleInitial + ". " + users.lastName +"</td>"
 							+ "<td>"+ uAccess +"</td>"
-							+ "<td>"+ users.activeTag +"</td>"
+							+ "<td>"+ isActive +"</td>"
 							+ "<td>"+ users.entryDate +"</td>"
-							+ '<td><button onclick="editUser()" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></td>';
+							+ '<td><button onclick="getRecord(this.parentNode)" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></td>';
 				
 				var newTr = new Element("tr");
 				newTr.setAttribute("class", "record");
@@ -128,7 +151,8 @@ function addUser(){
 	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "post",
 		parameters : {
-			action : "goToUserMaintenanceScreen"
+			action : "goToUserMaintenanceScreen",
+			hidden : "",
 		},
 		onComplete : function(response) {
 			$("mainContents").update(response.responseText);
@@ -136,13 +160,20 @@ function addUser(){
 	});
 }
 
-//EDIT USER
+var userId = "";
+function getRecord(record) {
+	userId = $(record).down("td",0).innerHTML;
+	editUser();
+}
 
+//EDIT USER
 function editUser(){
 	new Ajax.Request(contextPath +"/UserMaintenanceController", {
 		method : "post",
 		parameters : {
-			action 			: "editUser"
+			action 	 : "editUser",
+			hidden : "edit",
+			userId	 : userId
 		},
 		onComplete : function(response) {
 			$("mainContents").update(response.responseText);

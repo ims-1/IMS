@@ -2,7 +2,7 @@ package com.ims.model.usermaintenance;
 
 public class Users {
 
-	private Integer userId;
+	private String userId;
 	private String firstName;
 	private String middleInitial;
 	private String lastName;
@@ -16,10 +16,10 @@ public class Users {
 	private String lastUserId;
 	private String lastUpdate;
 	
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getFirstName() {

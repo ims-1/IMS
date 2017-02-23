@@ -26,11 +26,11 @@ function saveUser(){
 		if (rdInactive.checked) {
 			activeUser = 'N';
 		}
-
 		new Ajax.Request(contextPath +"/UserMaintenanceController", {
 			method : "post",
 			parameters : {
 				action 			: "saveUser",
+				hidden 			: $F("txtHidden"),
 				userId 			: $F("txtUserId"),	
 				firstName 		: $F("txtFirstName"),
 				middleInitial 	: $F("txtMiddleInitial"),

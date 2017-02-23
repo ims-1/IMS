@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+"http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<sqlMap namespace="Login">
+	<typeAlias alias="LoginClass" type="com.ims.model.homeandlogin.Login" />
+	
+	<resultMap id="getLoginMap" class="LoginClass">
+		<result column="user_id"			property="userId" />
+		<result column="first_name"			property="firstName" />
+		<result column="middle_initial"		property="middleInitial" />
+		<result column="last_name"			property="lastName" />
+		<result column="email"				property="email" />
+		<result column="password"			property="password" />
+		<result column="active_tag"			property="activeTag" />
+		<result column="user_access"		property="userAccess" />
+		<result column="entry_date"			property="entryDate" />
+		<result column="remarks"			property="remarks" />
+		<result column="last_user_id"		property="lastUserId" />
+		<result column="last_update"		property="lastUpdate" />
+	</resultMap>
+		
+	<select id="getLoginId" resultClass = "java.lang.String">
+		SELECT user_id, password
+		  FROM ims_users_1
+		  WHERE #userId# = user_id
+	</select>
+	
+</sqlMap>
