@@ -1,11 +1,19 @@
 package com.ims.service.computerunitsinventory;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface ComputerUnitsInventoryService {
-	void getComputerUnits() throws SQLException;
+import com.ims.entity.computerunitsinventory.ComputerUnits;
 
+public interface ComputerUnitsInventoryService {
+	List<ComputerUnits> getComputerUnits() throws SQLException;
+
+	List<ComputerUnits> getComputerUnitByUnitNo(Integer unitNo) throws SQLException;
 	void insertComputerUnits(HttpServletRequest request) throws SQLException;
+
+	void deleteComputerUnit(HttpServletRequest request) throws SQLException;
+
+	void updateComputerUnit(HttpServletRequest request) throws SQLException;
 }
