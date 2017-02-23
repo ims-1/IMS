@@ -13,10 +13,11 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="configLocation">
 			<value>/com/ims/resource/SqlMapConfig.xml</value>
 		</property>
-		<property name="dataSource" ref="dataSource"/>
-	</bean>  
-	
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@192.10.10.201:1521:TRNG" />
 		<property name="username" value="HR" />
@@ -24,12 +25,61 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 	</bean>
 
 	<bean id="servicePeripheralsBean" class="com.ims.service.impl.peripherals.PeripheralsServiceImpl"
-			depends-on="daoPeripheralsBean" >
+		depends-on="daoPeripheralsBean">
 		<property name="dao" ref="daoPeripheralsBean"></property>
 	</bean>
-	
-	<bean id="daoPeripheralsBean" class="com.ims.dao.impl.peripherals.DaoPeripheralsImpl" depends-on="sqlMapClient">
+
+	<bean id="daoPeripheralsBean" class="com.ims.dao.impl.peripherals.DaoPeripheralsImpl"
+		depends-on="sqlMapClient">
 		<property name="sqlMapClient" ref="sqlMapClient"></property>
-	</bean>	
-	
+	</bean>
+
+	<bean id="serviceComputerUnitsInventoryBean"
+		class="com.ims.service.impl.computerunitsinventory.ComputerUnitsInventoryServiceImpl"
+		depends-on="daoComputerUnitsInventoryBean">
+		<property name="dao" ref="daoComputerUnitsInventoryBean">
+		</property>
+	</bean>
+
+	<bean id="daoComputerUnitsInventoryBean"
+		class="com.ims.dao.impl.computerunitsinventory.ComputerUnitsInventoryImpl"
+		depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient">
+		</property>
+	</bean>
+
+	<bean id="serviceUsersBean"
+		class="com.ims.service.impl.usermaintenance.UserMaintenanceServiceImpl"
+		depends-on="daoUsersBean">
+		<property name="dao" ref="daoUsersBean"></property>
+	</bean>
+
+	<bean id="daoUsersBean" class="com.ims.dao.impl.usermaintenance.UserMaintenanceDaoImpl"
+		depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+
+
+	<bean id="serviceUnitAssignmentBean"
+		class="com.ims.service.impl.unitassignment.UnitAssignmentServiceImpl"
+		depends-on="daoUnitAssignmentBean">
+		<property name="dao" ref="daoUnitAssignmentBean"></property>
+	</bean>
+
+	<bean id="daoUnitAssignmentBean" class="com.ims.dao.impl.unitassignment.DaoUnitAssignmentImpl"
+		depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+
+	<bean id="serviceUnitAssignmentHistBean"
+		class="com.ims.service.impl.unitassignmenthist.UnitAssignmentHistServiceImpl"
+		depends-on="daoUnitAssignmentHistBean">
+		<property name="dao" ref="daoUnitAssignmentHistBean"></property>
+	</bean>
+
+	<bean id="daoUnitAssignmentHistBean"
+		class="com.ims.dao.impl.unitassignmenthist.DaoUnitAssignmentHistImpl"
+		depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
 </beans>

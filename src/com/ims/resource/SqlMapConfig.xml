@@ -4,4 +4,8 @@
 
 <sqlMapConfig>
 	<sqlMap resource="com/ims/dao/ibatis/peripherals/Peripherals.xml" />
+	<sqlMap resource="com/ims/dao/ibatis/computerunitsinventory/ComputerUnitsInventory.xml" />
+	<sqlMap resource="com/ims/dao/ibatis/usermaintenance/Users.xml" />
+	<sqlMap resource="com/ims/dao/ibatis/unitassignment/UnitAssignment.xml" />
+	<sqlMap resource="com/ims/dao/ibatis/unitassignmenthist/UnitAssignmentHist.xml" />
 </sqlMapConfig>  
