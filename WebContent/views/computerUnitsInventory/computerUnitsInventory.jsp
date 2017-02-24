@@ -60,33 +60,36 @@
 			<tr>
 				<td class="label-right">UNIT NO.</td>
 				<td><input type="text" id="txtUnitNo"
-					class="number form-control" disabled="disabled"></td>
+					class="number form-control" disabled="disabled" maxlength="4"></td>
 
 				<td class="label-right">SERIAL NO.</td>
 				<td><input type="text" id="txtSerialNo"
-					class="required form-control"></td>
+					class="required form-control" maxlength="150"></td>
 			</tr>
 			<tr>
 				<td class="label-right">UNIT NAME</td>
 				<td><input type="text" id="txtUnitName"
-					class="required form-control"></td>
+					class="required form-control" maxlength="150"></td>
 
 				<td class="label-right">BRAND</td>
 				<td><input type="text" id="txtBrand"
-					class="required form-control"></td>
+					class="required form-control" maxlength="200"></td>
 			</tr>
 			<tr>
 				<td class="label-right">TAG NUMBER</td>
 				<td><input type="text" id="txtTagNumber"
-					class="required form-control"></td>
+					class="required form-control" maxlength="100"></td>
 				<td class="label-right">MODEL</td>
-				<td><input type="text" id="txtModel" class="form-control"></td>
+				<td><input type="text" id="txtModel" class="form-control"
+					maxlength="200"></td>
 			</tr>
 			<tr>
 				<td class="label-right">IP ADDRESS</td>
-				<td><input type="text" id="txtIpAddress" class="form-control"></td>
+				<td><input type="text" id="txtIpAddress" class="form-control"
+					maxlength="250"></td>
 				<td class="label-right">COLOR</td>
-				<td><input type="text" id="txtColor" class="form-control"></td>
+				<td><input type="text" id="txtColor" class="form-control"
+					maxlength="100"></td>
 			</tr>
 
 			<tr>
@@ -94,23 +97,24 @@
 				<td><div id="divSelectType"></div></td>
 				<td class="label-right">USER ID</td>
 				<td><input type="text" id="txtUserId"
-					class=" required form-control"></td>
+					class=" required form-control" maxlength="100" disabled="disabled"></td>
 			</tr>
 			<tr>
 				<td class="label-right">ACQUIRED DATE</td>
 				<td><input type="datetime-local" id="txtAcquiredDate"
-					class="form-control" placeholder="dd-MMM-yy"></td>
+					class="required form-control" placeholder="MM/DD/YYYY"></td>
 				<td class="label-right">LAST UPDATE</td>
-
 				<td><input type="datetime-local" id="txtLastUpdate"
-					class="form-control" placeholder="dd-MMM-yy"></td>
+					class="form-control" placeholder="MM/DD/YYYY" disabled="disabled"></td>
 			</tr>
 
 			<tr>
 				<td class="label-right">DESCRIPTION</td>
-				<td><input type="text" id="txtDescription" class="form-control"></td>
+				<td><input type="text" id="txtDescription" class="form-control"
+					maxlength="1000"></td>
 				<td class="label-right">REMARKS</td>
-				<td><input type="text" id="txtRemarks" class="form-control"></td>
+				<td><input type="text" id="txtRemarks" class="form-control"
+					maxlength="1000"></td>
 			</tr>
 		</table>
 		<div align="center">
@@ -139,8 +143,12 @@
 	</div>
 </body>
 <script type="text/javascript">
-	var context = "${pageContext.request.contextPath}";
+	$('btnPeripherals').setAttribute("disabled", "disabled");
+	$('btnUnitAssignment').setAttribute("disabled", "disabled");
+	$('btnOSandSI').setAttribute("disabled", "disabled");
+	$('btnDelete').setAttribute("disabled", "disabled");
 
+	var context = "${pageContext.request.contextPath}";
 	function getRecord(record) {
 		new Ajax.Request(context + "/ComputerUnitsInventoryController", {
 			method : "get",
@@ -167,12 +175,18 @@
 					$('txtModel').value = compUnit.model;
 					$('txtRemarks').value = compUnit.remarks;
 					$('btnAddUpdate').value = "UPDATE";
+
+					$('btnPeripherals').removeAttribute("disabled");
+					$('btnUnitAssignment').removeAttribute("disabled");
+					$('btnOSandSI').removeAttribute("disabled");
+					$('btnDelete').removeAttribute("disabled");
 				})
 			}
 		})
 	};
 
 	function clearFields() {
+		getUserAuth();
 		$('txtUnitNo').value = "";
 		$('txtUnitName').value = "";
 		$('txtTagNumber').value = "";
@@ -181,13 +195,17 @@
 		$('txtBrand').value = "";
 		$('txtSerialNo').value = " ";
 		$('txtAcquiredDate').value = " ";
-		$('txtLastUpdate').value = " ";
+		$('txtLastUpdate').value = new Date().toLocaleDateString();
 		$('txtUserId').value = " ";
 		$('txtDescription').value = " ";
 		$('txtColor').value = "";
 		$('txtModel').value = "";
 		$('txtRemarks').value = "";
 		$('btnAddUpdate').value = "ADD";
+		$('btnPeripherals').setAttribute("disabled", "disabled");
+		$('btnUnitAssignment').setAttribute("disabled", "disabled");
+		$('btnOSandSI').setAttribute("disabled", "disabled");
+		$('btnDelete').setAttribute("disabled", "disabled");
 	};
 </script>
 <script type="text/javascript"

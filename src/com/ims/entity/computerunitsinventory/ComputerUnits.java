@@ -19,9 +19,9 @@ public class ComputerUnits {
 	private String userId;
 	private Date lastUpdate;
 
-	/*public ComputerUnits(Integer unitNo, String unitName, String tagNumber, String ipAddress, String type,
+/*	public ComputerUnits(Integer unitNo, String unitName, String tagNumber, String ipAddress, String type,
 			Date acquiredDate, String description, String serialNo, String brand, String model, String color,
-			String remarks, String deleteTag, String userId, Date lastUpdate) {
+			String remarks,  String userId, Date lastUpdate) {
 		super();
 		this.unitNo = unitNo;
 		this.unitName = unitName;
@@ -35,7 +35,6 @@ public class ComputerUnits {
 		this.model = model;
 		this.color = color;
 		this.remarks = remarks;
-		this.deleteTag = deleteTag;
 		this.userId = userId;
 		this.lastUpdate = lastUpdate;
 	}*/

@@ -15,4 +15,5 @@ public interface UserMaintenanceDao {
 	void updateUser(Map<String, Object> params) throws SQLException;
 	String getPassword(String username) throws SQLException;
 	String getUserAccess(String username)throws SQLException;
+	void updatePassword(Map<String, Object> params) throws SQLException;
 }

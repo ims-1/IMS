@@ -4,23 +4,80 @@
 
 <sqlMap namespace="UnitAssignment">
 
-<typeAlias alias="UnitAssignmentClass" type="com.ims.model.unitassignment.UnitAssignment" />
+	<typeAlias alias="UnitAssignmentClass"
+		type="com.ims.model.unitassignment.UnitAssignment" />
 
 	<resultMap id="getUnitAssignmentMap" class="UnitAssignmentClass">
-		<result column="unit_no" 				property="unitNo"/>
-		<result column="assignee_no"  			property="assigneeNo"/>
-		<result column="location" 				property="location"/>
-		<result column="status"					property="status"/>
-		<result column="ip_address" 			property="ipAddress"/>
-		<result column="assigned_by"  			property="assignedBy"/>
-		<result column="assigned_date" 			property="assignedDate"/>
-		<result column="user_id" 				property="userId"/>
-		<result column="last_update" 			property="lastUpdate"/>
+
+		<!-- unit assignment table -->
+		<result column="unit_no" property="unitNo" />
+		<result column="assignee_no" property="assigneeNo" />
+		<result column="location" property="location" />
+		<result column="status" property="status" />
+		<result column="ip_address" property="ipAddress" />
+		<result column="assigned_by" property="assignedBy" />
+		<result column="assigned_date" property="assignedDate" />
+		<result column="user_id" property="userId" />
+		<result column="last_update" property="lastUpdate" />
+
 	</resultMap>
-	
+
+	<typeAlias alias="AssigneeClass" type="com.ims.model.unitassignment.Assignee" />
+
+	<resultMap id="getAssigneeMap" class="AssigneeClass">
+		<!--assignee table -->
+
+		<result column="assignee_no" property="assigneeNo" />
+		<result column="assignee_name" property="assigneeName" />
+		<result column="department" property="department" />
+		<result column="location" property="location" />
+		<result column="email" property="email" />
+		<result column="active_tag" property="activeTag" />
+		<result column="entry_date" property="entryDate" />
+		<result column="remarks" property="remarks" />
+		<result column="user_id" property="userId" />
+		<result column="last_update" property="lastUpdate" />
+
+	</resultMap>
+
 	<select id="getUnitAssignment" resultMap="getUnitAssignmentMap">
-		SELECT unit_no, assignee_no, location, status, ip_address, assigned_by, assigned_date, user_id, last_update
+		SELECT unit_no,
+		assignee_no, location, status, ip_address, assigned_by, assigned_date,
+		user_id, last_update
 		FROM IMS_UNIT_ASSIGNMENT_1
 	</select>
+
+	<select id="getAssigneeNo" resultMap="getAssigneeMap"
+		parameterClass="java.lang.String">
+		SELECT assignee_no, assignee_name, department,
+		location, email, active_tag,
+		entry_date, remarks, user_id, last_update
+		FROM ims_assignee_1
+		WHERE assignee_no = #assigneeId#
+	</select>
 	
+	<insert id="insertUnitAssignment" parameterClass="java.util.Map">
+		BEGIN
+			INSERT INTO ims_unit_assignment_1
+			(unit_no , assignee_no, location, status, ip_address, assigned_by, assigned_date,
+					user_id, last_update)			
+			VALUES(#unitNo#,
+					#assigneeNo#,
+					#location#,
+					#status#,
+					#ipAddress#,
+					#assignedBy#,
+					SYSDATE,
+					#userId#,
+				SYSDATE);
+		END;
+	</insert>
+	
+	<delete id="deleteUnit" parameterClass="java.util.Map">
+		BEGIN
+			DELETE FROM ims_unit_assignment_1
+			WHERE unit_no = #unitNo#;
+		END;
+	</delete>
+
 </sqlMap>

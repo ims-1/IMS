@@ -15,10 +15,10 @@
 		<table>
 				<tr>
 					<td>
-						<table class="table borderless"> 
+						<table class="table table-striped table-bordered"> 
 							 <tr>
 								<td><label class="label-right">UNIT NO.</label></td>
-								<td><input type="text" id="txtUnitNo"/></td>
+								<td><input type="text" id="txtUnitNo"><input type="button" id="btnUnitSearch"></td>
 								<td><label class="label-right">SERIAL NO. </label></td>
 								<td><input type="text" id="txtSerialNo"/></td>
 							</tr>
@@ -45,14 +45,13 @@
 				</tr>
 				<tr>
 					<td>
-						<table>
+						<table class="table table-striped table-bordered">
 							<tr>
 								<td><label class="label-right">ASSIGNEE</label></td>
-								<td><input type="text" id="txtUnitAssignee"/></td>
+								<td><input type="text" id="txtAssignee"><input type="hidden" id="hiddenAssignNo"><input type="button" id="btnAssigneeSearch"></td>
 								<td><label class="label-right">STATUS </label></td>
 								<td><input type="text" id="txtAssigneeStatus"/></td>
-							</tr>
-							<hr>							
+							</tr>						
 							<tr>
 								<td><label class="label-right">LOCATION </label></td>
 								<td><input type="text" id="txtAssigneeLocation"/></td>
@@ -72,7 +71,7 @@
 
 			<input type="button" value="Assign Unit" id="btnAssign" class="btn btn-primary"/><br><br>
 			
-			<input type="text" value="Enter keyword to search.." class="btn btn-primary"/><br><br>
+			<input type="text" id="searchBox" placeholder="Enter Keyword to search.."/><br><br>
   			
 			</div>
  
@@ -90,10 +89,11 @@
 					</tr>
 				</thead>
 				<tbody id="body">
-					<tr class="record">
-					</tr>
+					<tr class="record"></tr>
 				</table>	
-				<div id="pagination"></div>			
+				<div id="pagination" class="btn btn-primary"></div>	
+						
+				
 </body>
 
 <script> var context = "${pageContext.request.contextPath}"; </script>

@@ -1,8 +1,4 @@
 //BACK BUTTON - go back to USER LISTING PAGE
-$("btnBackToUserListingPage").observe("click", function() {
-	backToUserListingPage();
-});
-
 function backToUserListingPage(){
 	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "post",
@@ -44,25 +40,23 @@ function saveUser(){
 				$("mainContents").update(response.responseText);
 			},
 			onSuccess : function(response) {
-				alert("Saved successfully!");
-			},
-			onFailure : function(response) {
-				alert("User ID already in use.");
+				if (response.status == 203) {
+					alert("User ID already in use.");
+				} else {
+					alert("Saved successfully!");
+				}
 			}
 		});
 	}
 }
 
 //CHANGE PASSWORD BUTTON - change password of user
-$("btnUserChangePassword").observe("click", function() {
-	userChangePassword();
-});
-
-function userChangePassword(){
-	new Ajax.Request("${pageContext.request.contextPath}/UserMaintenanceController", {
+function userChangePassword(){	
+	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "post",
 		parameters : {
-			action : "userChangePassword"
+			action : "userChangePassword",
+			userId : $F("txtUserId")
 		},
 		onComplete : function(response) {
 			$("mainContents").update(response.responseText);

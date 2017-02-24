@@ -25,8 +25,21 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 	
 	@Override
 	public void updateUser(Map<String, Object> params) throws SQLException {
-		this.getSqlMapClient().update("updateUser", params);
+		try {
+			this.getSqlMapClient().update("updateUser", params);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		
+	}
+	
+	@Override
+	public void updatePassword(Map<String, Object> params) throws SQLException {
+		try {
+			this.getSqlMapClient().update("updatePassword", params);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,5 +87,7 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 	public String getUserAccess(String username) throws SQLException {
 		return (String) this.getSqlMapClient().queryForObject("getUserAccess", username);
 	}
+
+	
 
 }
