@@ -12,7 +12,7 @@ import com.ims.model.usermaintenance.Users;
 public class PaginationHelper {
 	public static String getPagePeripherals(List<Peripherals> peripherals, int page, int pageLimit, int size) {
 		List<Peripherals> returnPeripherals = new LinkedList<>();
-		String json = null;
+		String json = "";
 		if (!peripherals.isEmpty()) {
 
 			int startRow = page == 0 ? 0 : (page * pageLimit) - pageLimit;
@@ -31,7 +31,7 @@ public class PaginationHelper {
 	}
 	public static String getPageComputerUnit(List<ComputerUnits> computerUnits, int page, int pageLimit, int size) {
 		List<ComputerUnits> returnComputerUnits = new LinkedList<>();
-		String json = null;
+		String json = "";
 		if (!computerUnits.isEmpty()) {
 
 			int startRow = page == 0 ? 0 : (page * pageLimit) - pageLimit;
@@ -50,7 +50,7 @@ public class PaginationHelper {
 	}
 	public static String getPageUsers(List<Users> users, int page, int pageLimit, int size) {
 		List<Users> returnUsers = new LinkedList<>();
-		String json = null;
+		String json = "";
 		if (!users.isEmpty()) {
 
 			int startRow = page == 0 ? 0 : (page * pageLimit) - pageLimit;
@@ -69,7 +69,7 @@ public class PaginationHelper {
 	}
 	public static String getPageUnitAssignmentHist(List<UnitAssignmentHist> unitAssignmentHist, int page, int pageLimit, int size) {
 		List<UnitAssignmentHist> returnUnitAssignment = new LinkedList<>();
-		String json = null;
+		String json = "";
 		if (!unitAssignmentHist.isEmpty()) {
 
 			int startRow = page == 0 ? 0 : (page * pageLimit) - pageLimit;
