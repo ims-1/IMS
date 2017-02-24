@@ -15,39 +15,39 @@
 <table class="table borderless" id="tableCompUnit">
 	<tr>
 		<td class="label-right">Unit No.</td>
-		<td><input type="text" id="txtUnitNo"/></td>
+		<td><input type="text" id="txtUnitNo" class="required"/></td>
 		<td class="label-right">Serial No.</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtSerialNo" disabled="disabled"/></td>
 	</tr>
 	<tr>
 		<td class="label-right">Unit Name</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtUnitName" disabled="disabled"/></td>
 		<td class="label-right">Brand</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtBrand" disabled="disabled"/></td>
 	</tr>
 	<tr>
 		<td class="label-right">Tag Number</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtTagNumber" disabled="disabled"/></td>
 		<td class="label-right">Model</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtModel" disabled="disabled"/></td>
 	</tr>
 	<tr>
 		<td class="label-right">Type</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtType" disabled="disabled"/></td>
 		<td class="label-right">Color</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtColor" disabled="disabled"/></td>
 	</tr>
 	<tr>
 		<td class="label-right">IP Address</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtIpAddress" disabled="disabled"/></td>
 		<td class="label-right">Location</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtLocation" disabled="disabled"/></td>
 	</tr>
 	<tr>
 		<td class="label-right">Assignee</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtAssignee" disabled="disabled"/></td>
 		<td class="label-right">Status</td>
-		<td><input type="text" id=""/></td>
+		<td><input type="text" id="txtStatus" disabled="disabled"/></td>		
 	</tr>
 </table>
 <table class="table table-striped table-bordered" id="tableRecord">
@@ -85,13 +85,13 @@
 	</tr>
 	<tr>
 		<td class="label-right">Tag Number</td>
-		<td><input type="text" id="txtTagNumber" class="number required form-control"></td>
+		<td><input type="text" id="txtTagNumber" class="form-control"></td>
 		<td class="label-right">Model</td>
 		<td><input type="text" id="txtModel" class="form-control"></td>
 	</tr>
 	<tr>
 		<td class="label-right">Acquired Date</td>
-		<td><input type="datetime-local" id="dtAcquiredDate" class="form-control date" placeholder="MM/DD/YYYY"></td>
+		<td><input type="datetime-local" id="dtAcquiredDate" class="form-control" placeholder="MM/DD/YYYY"></td>
 		<td class="label-right">Color</td>
 		<td><input type="text" id="txtColor" class="form-control"></td>
 	</tr>
@@ -99,13 +99,13 @@
 		<td class="label-right">Description</td>
 		<td><input type="text" id="txtDescription" class="form-control"></td>
 		<td class="label-right">User ID</td>
-		<td><input type="text" id="txtUserId" class="required form-control"></td>
+		<td><input type="text" id="txtUserId" class="form-control" disabled="disabled"></td>
 	</tr>
 	<tr>
 		<td class="label-right">Remarks</td>
 		<td><input type="text" id="txtRemarks" class="form-control"></td>
 		<td class="label-right">Last Update</td>
-		<td><input type="datetime-local" id="dtLastUpdate" class="date form-control" placeholder="MM/DD/YYYY"></td>
+		<td><input type="datetime-local" id="dtLastUpdate" class="date form-control" placeholder="MM/DD/YYYY"  disabled="disabled"></td>
 	</tr>
 	</tbody>
 </table>

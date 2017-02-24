@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ims.dao.impl.peripherals.DaoPeripheralsImpl;
+import com.ims.model.peripherals.ComputerAssigneeData;
 import com.ims.model.peripherals.Peripherals;
 import com.ims.service.peripherals.PeripheralsService;
 import com.ims.utilities.SystemStatus;
@@ -83,5 +84,10 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 		params.put("userId", peripheral.getUserId());
 
 		return this.getDao().updatePeripheral(params);
+	}
+
+	@Override
+	public List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException {
+		return this.getDao().getComputerAssigneeData(unitNo);
 	}
 }

@@ -3,9 +3,48 @@
  */
 var pageSize = 0;
 $('txtUnitNo').observe("change", function() {
-	//TODO-Jenny get comp units
-	getPeripherals();
+	if ($F('txtUnitNo').trim() != '') {
+		getComputerUnitRecord();
+	} else {
+		getPeripherals();
+	}
+
 });
+
+function getComputerUnitRecord() {
+	new Ajax.Request(context + "/PeripheralsController", {
+		method : "post",
+		parameters : {
+			unitNo : $F('txtUnitNo'),
+			status : '',
+			action : "getComputerAssignee"
+		},
+		onSuccess : function(response) {
+			if (response.status == 200) {
+				var unit = response.responseText.evalJSON();
+				unit.each(function(u) {
+					$('txtSerialNo').value = u.serialNo;
+					$('txtUnitName').value = u.unitName;
+					$('txtBrand').value = u.brand;
+					$('txtTagNumber').value = u.tagNumber;
+					$('txtModel').value = u.model;
+					$('txtType').value = u.type;
+					$('txtColor').value = u.color;
+					$('txtIpAddress').value = u.ipAddress;
+					$('txtAssignee').value = u.assigneeName;
+					$('txtStatus').value = u.status;
+				});
+			} else if (response.status == 202) {
+				alert("User id is deleted!");
+			} else if (response.status == 201) {
+				alert("No user found!");
+			}
+		},
+		onComplete : function(response) {
+			getPeripherals();
+		}
+	})
+}
 
 function addPeripherals() {
 	if (validate()) {
@@ -14,7 +53,8 @@ function addPeripherals() {
 		var content = [];
 		var object = {};
 		object.unitNo = $F('txtUnitNo');
-		object.peripheralNo = $F('txtPeripheralNo') == '' ? null : $F('txtPeripheralNo');
+		object.peripheralNo = $F('txtPeripheralNo') == '' ? null
+				: $F('txtPeripheralNo');
 		object.serialNo = $F('txtSerialNo');
 		object.peripheralType = $F('txtPeripheralType');
 		object.brand = $F('txtBrand');
@@ -38,6 +78,11 @@ function addPeripherals() {
 			onSuccess : function(response) {
 				var p = response.responseText.evalJSON();
 				var parent = $('body');
+
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
 				p.each(function(peripheral) {
 					var content = "";
 					content += "<td>" + peripheral.peripheralNo + "</td>";
@@ -66,43 +111,63 @@ function addPeripherals() {
 function getPeripherals() {
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "get",
-		contentType : "application/json",
 		parameters : {
 			action : "pagination",
-			page : "1",
-			num : $F('txtUnitNo')
+			num : $('txtUnitNo').value
 		},
 		onSuccess : function(response) {
-			var p = response.responseText.evalJSON();
-			var parent = $('body');
+			if (response.status == 200) {
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
 
-			$$('.record').each(function(record) {
-				$(record).remove();
-			});
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
 
-			$('body').hide();
+				$('body').hide();
 
-			p.each(function(peripherals) {
-				var content = "";
-				content += "<td>" + peripherals.peripheralNo + "</td>";
-				content += "<td>" + peripherals.peripheralType + "</td>";
-				content += "<td>" + peripherals.tagNumber + "</td>";
-				content += "<td>" + peripherals.brand + " " + peripherals.model
-						+ " </td>";
-				content += "<td>" + peripherals.serialNo + "</td>";
-				content += "<td>" + peripherals.acquiredDate + "</td>";
-				content += "<td>" + peripherals.description + "</td>";
+				p.each(function(peripherals) {
+					var content = "";
+					content += "<td>" + peripherals.peripheralNo + "</td>";
+					content += "<td>" + peripherals.peripheralType + "</td>";
+					content += "<td>" + peripherals.tagNumber + "</td>";
+					content += "<td>" + peripherals.brand + " "
+							+ peripherals.model + " </td>";
+					content += "<td>" + peripherals.serialNo + "</td>";
+					content += "<td>" + peripherals.acquiredDate + "</td>";
+					content += "<td>" + peripherals.description + "</td>";
+
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+				});
+				$('body').show();
+				getSize();
+				recordEvents();
+			} else {
+
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				var parent = $('body');
+
+				var content = "<td colspan=7>No record found.</td>";
 
 				var newTr = new Element('tr');
-				newTr.setAttribute("class", "record");
+				newTr.setAttribute("class", "no-record record");
+				newTr.setAttribute("align", "center");
 				newTr.update(content);
 				parent.insert({
 					bottom : newTr
 				});
-			});
-			$('body').show();
-			getSize();
-			recordEvents();
+
+				$('pagination').innerHTML = '';
+				alert("There is no peripheral record fetched");
+			}
 		},
 		onFailure : function(response) {
 			console.log("There is something wrong. Please check connection");
@@ -135,7 +200,6 @@ function getPeripherals() {
 					parent.insert({
 						bottom : newBtn
 					});
-
 				}
 			}
 		});
@@ -145,8 +209,7 @@ function getPeripherals() {
 
 function getRecordPage(a) {
 	new Ajax.Request(context + "/PeripheralsController", {
-		method : "get",
-		contentType : "application/json",
+		method : "post",
 		parameters : {
 			action : "getRecordPage",
 			page : a

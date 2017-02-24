@@ -20,6 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.ims.model.peripherals.ComputerAssigneeData;
 import com.ims.model.peripherals.Peripherals;
 import com.ims.service.peripherals.PeripheralsService;
 import com.ims.utilities.PaginationHelper;
@@ -38,7 +39,6 @@ public class PeripheralsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
 
@@ -47,18 +47,28 @@ public class PeripheralsController extends HttpServlet {
 		try {
 			int pageLimit = 5;
 			String action = request.getParameter("action");
+			System.out.println(action + " action");
 			if (action.equals("pagination")) {
 				String no = request.getParameter("num");
+				System.out.println("num " + no);
 				if (no != "") {
 					try {
 						response.setContentType("application/json");
 						response.setCharacterEncoding("UTF-8");
 
 						peripherals = service.getPeripherals(request);
-						session.setAttribute("list", peripherals);
-						String json = PaginationHelper.getPagePeripherals(peripherals, 0, pageLimit,
-								peripherals.size());
-						response.getWriter().write(json);
+
+						if (!peripherals.isEmpty()) {
+							session.setAttribute("list", peripherals);
+							String json = PaginationHelper.getPagePeripherals(peripherals, 0, pageLimit,
+									peripherals.size());
+							System.out.println(json);
+
+							response.getWriter().write(json);
+							return;
+						} else {
+							response.setStatus(201);
+						}
 
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -69,10 +79,17 @@ public class PeripheralsController extends HttpServlet {
 						response.setCharacterEncoding("UTF-8");
 
 						peripherals = service.getPeripherals();
-						session.setAttribute("list", peripherals);
-						String json = PaginationHelper.getPagePeripherals(peripherals, 0, pageLimit,
-								peripherals.size());
-						response.getWriter().write(json);
+						if (!peripherals.isEmpty()) {
+							session.setAttribute("list", peripherals);
+							String json = PaginationHelper.getPagePeripherals(peripherals, 0, pageLimit,
+									peripherals.size());
+
+							System.out.println(json);
+
+							response.getWriter().write(json);
+						} else {
+							response.setStatus(201);
+						}
 
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -85,6 +102,7 @@ public class PeripheralsController extends HttpServlet {
 
 				int size = ((List<Peripherals>) session.getAttribute("list")).size();
 
+				System.out.println("size" + size);
 				List<GetSize> getSize = new ArrayList<>();
 				getSize.add(new GetSize(size));
 
@@ -92,19 +110,25 @@ public class PeripheralsController extends HttpServlet {
 				String json = gson.toJson(getSize);
 				response.getWriter().write(json);
 
-			} else if (action.equals("getRecordPage")) {
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				int page = Integer.parseInt(request.getParameter("page"));
-				List<Peripherals> peripheralList = (List<Peripherals>) session.getAttribute("list");
-				int size = ((List<Peripherals>) session.getAttribute("list")).size();
-
-				String json = PaginationHelper.getPagePeripherals(peripheralList, page, 5, size);
-
-				response.getWriter().write(json);
-
 			}
+			// else if (action.equals("getRecordPage")) {
+			// response.setContentType("application/json");
+			// response.setCharacterEncoding("UTF-8");
+			//
+			// int page = Integer.parseInt(request.getParameter("page"));
+			// System.out.println(page + " page");
+			// List<Peripherals> peripheralList = (List<Peripherals>)
+			// session.getAttribute("list");
+			//
+			// int size = ((List<Peripherals>)
+			// session.getAttribute("list")).size();
+			//
+			// String json = PaginationHelper.getPagePeripherals(peripheralList,
+			// page, 5, size);
+			//
+			// response.getWriter().write(json);
+			//
+			// }
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(410);
@@ -123,15 +147,18 @@ public class PeripheralsController extends HttpServlet {
 		System.out.println("doPost");
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		PeripheralsService service = (PeripheralsService) context.getBean("servicePeripheralsBean");
+		System.out.println("service");
+
+		HttpSession session = request.getSession();
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 
 		String action = request.getParameter("action");
+		System.out.println(action);
 		String status = request.getParameter("status");
+		System.out.println(status);
 		if (action.equals("saveRecord")) {
-
-			HttpSession session = request.getSession();
 
 			// sample auth_user
 			session.setAttribute("auth_user", "JB Mapili");
@@ -167,7 +194,6 @@ public class PeripheralsController extends HttpServlet {
 			}
 		} else if (action.equals("add")) {
 			try {
-				HttpSession session = request.getSession();
 
 				List<Peripherals> sessionPeripheral = (List<Peripherals>) session.getAttribute("sessionPeripheral");
 				if (sessionPeripheral == null) {
@@ -184,6 +210,17 @@ public class PeripheralsController extends HttpServlet {
 				for (Peripherals p : addPeripheral) {
 					if (status.equals("Add")) {
 						p.setPeripheralNo(service.getPeripheralNo());
+						System.out.println("pNo" + p.getPeripheralNo());
+						System.out.println("pTyoe" + p.getPeripheralType());
+						System.out.println("ptag" + p.getTagNumber());
+						System.out.println("pacquo" + p.getAcquiredDate());
+						System.out.println("pdesc" + p.getDescription());
+						System.out.println("pser" + p.getSerialNo());
+						System.out.println("pbran" + p.getBrand());
+						System.out.println("pmodel" + p.getModel());
+						System.out.println("pcolor" + p.getColor());
+						System.out.println("prmark" + p.getRemarks());
+						System.out.println("pgetid" + p.getUserId());
 					}
 					p.setStatus(status);
 					sessionPeripheral.add(p);
@@ -214,6 +251,50 @@ public class PeripheralsController extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else if (action.equals("getComputerAssignee")) {
+			System.out.println("getting user");
+			System.out.println(action);
+			Integer unitNo = Integer.parseInt(request.getParameter("unitNo"));
+			System.out.println(unitNo);
+			try {
+
+				System.out.println("here");
+				List<ComputerAssigneeData> computerAssignee;// = new
+															// LinkedList<>();
+				computerAssignee = service.getComputerAssigneeData(unitNo);
+				System.out.println("here");
+				if (computerAssignee != null) {
+					if (computerAssignee.get(0).getDeleteTag().equals("Y")) {
+						System.out.println("Delete tag" + computerAssignee.get(0).getDeleteTag());
+						response.setStatus(202);
+						return;
+					}
+					Gson gson = new Gson();
+					String json = gson.toJson(computerAssignee);
+					response.getWriter().write(json);
+				} else {
+					response.setStatus(201);
+					return;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else if (action.equals("getRecordPage")) {
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+
+			int page = Integer.parseInt(request.getParameter("page"));
+			System.out.println(page + " page");
+			List<Peripherals> peripheralList = (List<Peripherals>) session.getAttribute("list");
+
+			int size = ((List<Peripherals>) session.getAttribute("list")).size();
+
+			String json = PaginationHelper.getPagePeripherals(peripheralList, page, 5, size);
+
+			response.getWriter().write(json);
+
 		}
 	}
 

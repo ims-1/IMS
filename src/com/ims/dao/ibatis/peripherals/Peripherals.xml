@@ -78,25 +78,100 @@
 
 	<insert id="insertNewPeripheral" parameterClass="java.util.Map">
 		BEGIN
-			INSERT INTO ims_peripherals_1
-			(unit_no, peripheral_no, peripheral_type, tag_number, acquired_date,
-			description, serial_no, brand, model, color, remarks, user_id,
-			last_update)
-			VALUES(#unitNo#, #peripheralNo#, #peripheralType#, #tagNumber#, #acquiredDate#,
-			#description#, #serialNo#, #brand#, #model#, #color#, #remarks#,
-			#userId#, sysdate);
+		INSERT INTO
+		ims_peripherals_1
+		(unit_no, peripheral_no, peripheral_type, tag_number,
+		acquired_date,
+		description, serial_no, brand, model, color, remarks,
+		user_id,
+		last_update)
+		VALUES(#unitNo#, #peripheralNo#, #peripheralType#,
+		#tagNumber#, #acquiredDate#,
+		#description#, #serialNo#, #brand#,
+		#model#, #color#, #remarks#,
+		#userId#, sysdate);
 		END;
 	</insert>
 
 	<update id="updatePeripheral" parameterClass="java.util.Map">
 		BEGIN
-			UPDATE ims_peripherals_1
-			SET peripheral_type = #peripheralType#, tag_number = #tagNumber#,
-			acquired_date = #acquiredDate#,
-			description = #description#, serial_no = #serialNo#, brand = #brand#, model =
-			#model#, color = #color#, remarks = #remarks#, user_id = #userId#,
-			last_update = sysdate
-			WHERE peripheral_no = #peripheralNo#
+		UPDATE
+		ims_peripherals_1
+		SET peripheral_type = #peripheralType#, tag_number =
+		#tagNumber#,
+		acquired_date = #acquiredDate#,
+		description =
+		#description#, serial_no = #serialNo#, brand = #brand#, model =
+		#model#, color = #color#, remarks = #remarks#, user_id = #userId#,
+		last_update = sysdate
+		WHERE peripheral_no = #peripheralNo#
 		END;
 	</update>
+
+	<typeAlias alias="ComputerAssigneeDataClass"
+		type="com.ims.model.peripherals.ComputerAssigneeData" />
+
+	<resultMap id="getComputerAssigneeDataMap" class="ComputerAssigneeDataClass">
+		<result column="unit_no" property="unitNo" />
+		<result column="serial_no" property="serialNo" />
+		<result column="unit_name" property="unitName" />
+		<result column="brand" property="brand" />
+		<result column="tag_number" property="tagNumber" />
+		<result column="model" property="model" />
+		<result column="type" property="type" />
+		<result column="color" property="color" />
+		<result column="ip_address" property="ipAddress" />
+	</resultMap>
+
+
+	<!-- getting record on ims_comp_units_1 -->
+	<select id="getComputerAssigneeData" resultMap="getComputerAssigneeDataMap"
+		parameterClass="java.lang.Integer">
+		select
+		ip_address,
+		unit_no,
+		serial_no,
+		unit_name,
+		brand,
+		tag_number,
+		model,
+		type,
+		color,
+		delete_tag
+		from
+		ims_comp_units_1
+		where
+		unit_no = #unitNo#
+	</select>
+
+	<resultMap id="getAssigneeDataMap" class="ComputerAssigneeDataClass">
+		<result column="assignee_no" property="assigneeNo" />
+		<result column="assignee_name" property="assigneeName" />
+	</resultMap>
+
+	<select id="getAssigneeData" resultMap="getAssigneeDataMap"
+		parameterClass="java.lang.Integer">
+		select
+		assignee_no,
+		assignee_name
+		from ims_assignee_1
+		where assignee_no = #assigneeNo#
+	</select>
+
+	<resultMap id="getAssignmentHistDataMap" class="ComputerAssigneeDataClass">
+		<result column="assignee_no" property="assigneeNo" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<select id="getAssignmentHistData" resultMap="getAssignmentHistDataMap"
+		parameterClass="java.lang.Integer">
+		select
+		status,
+		assignee_no
+		from
+		ims_assignment_hist_1
+		where
+		unit_no = #unitNo#
+		and assign_tag = 'Y'
+	</select>
 </sqlMap>
