@@ -30,11 +30,11 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>userlist</servlet-name>
-    <jsp-file>/views/userMaintenance/userListingPage.jsp</jsp-file>
+    <jsp-file>/views/userMaintenance/users.jsp</jsp-file>
   </servlet>
   <servlet-mapping>
     <servlet-name>userlist</servlet-name>
-    <url-pattern>/userlisting</url-pattern>
+    <url-pattern>/users</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>homepage</servlet-name>
@@ -70,10 +70,10 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>auth</filter-name>
-    <url-pattern>/userlisting</url-pattern>
+    <url-pattern>/users</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>authorize</filter-name>
-    <url-pattern>/userlisting</url-pattern>
+    <url-pattern>/users</url-pattern>
   </filter-mapping>
 </web-app>
