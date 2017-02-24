@@ -19,13 +19,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.gson.Gson;
 import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
+import com.ims.model.peripherals.Peripherals;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
+import com.ims.service.impl.peripherals.PeripheralsServiceImpl;
+import com.ims.service.peripherals.PeripheralsService;
 import com.ims.utilities.FilterRecord;
 import com.ims.utilities.PaginationHelper;
 
 @WebServlet("/ComputerUnitsInventoryController")
 public class ComputerUnitsInventoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	int pageLimit = 10;
 
 	@SuppressWarnings({ "resource", "unchecked" })
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,7 +39,6 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				.getBean("serviceComputerUnitsInventoryBean");
 		String action = request.getParameter("action");
 
-		int pageLimit = 10;
 		if (action.equals("pagination")) {
 			try {
 				List<ComputerUnits> computerUnits = null;
@@ -110,6 +113,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+
 		} else if (action.equals("getFilteredRecord")) {
 			List<ComputerUnits> filteredList = new LinkedList<>();
 
@@ -121,28 +125,18 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 			String words = request.getParameter("filterText");
 			words = words.toUpperCase();
-
 			if (!computerUnits.isEmpty()) {
-
-				// TODO-Jenny created function to filter, please test
 				filteredList = FilterRecord.getFilterCompUnits(computerUnits, words);
 			}
+			System.out.println(words);
+			System.out.println(filteredList);
 			String json = "";
 			if (!filteredList.isEmpty()) {
-
-				// TODO-Jenny sample of using paginationhelper
 				json = PaginationHelper.getPageComputerUnit(filteredList, 0, pageLimit, filteredList.size());
 
-				// int endRow = pageLimit;
-				// endRow = pageLimit > filteredList.size() ?
-				// filteredList.size() : endRow;
-				// for (int start = 0; start < endRow; start++) {
-				// compUnitList.add(filteredList.get(start));
-				// }
 			}
-			// Gson gson = new Gson();
-			// String json = gson.toJson(compUnitList);
 			sessionList.setAttribute("filteredList", filteredList);
+			System.out.println(json);
 			response.getWriter().write(json);
 		} else if (action.equals("getFilteredSize")) {
 
@@ -165,24 +159,23 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			int page = Integer.parseInt(request.getParameter("page"));
 			String json = "";
 			if (!filteredList.isEmpty()) {
-				//json = PaginationHelper.getPageComputerUnit(filteredList, page, pageLimit, filteredList.size());
+				json = PaginationHelper.getPageComputerUnit(filteredList, page, pageLimit, filteredList.size());
 
 				response.getWriter().write(json);
 			}
 		} else if (action.equals("getComputerType")) {
 			try {
 				List<ComputerType> compTypeList = computerUnitService.getComputerType();
-
-				for (int x = 0; x < compTypeList.size(); x++) {
-					System.out.println(compTypeList.get(x).getGirValue());
-				}
-
 				Gson gson = new Gson();
 				String json = gson.toJson(compTypeList);
 				response.getWriter().write(json);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} else if (action.equals("getUserAuth")) {
+			HttpSession userSession = request.getSession();
+			String userAuth = (String) userSession.getAttribute("user_auth");
+			response.getWriter().write(userAuth);
 		}
 
 	}
@@ -198,40 +191,104 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 		try {
 			String action = request.getParameter("action");
 			if (action.equals("insertNewComputerUnit")) {
+				// Add comp units
 				HttpSession session = request.getSession();
-				session.setAttribute("currentAction", "ADD");
+				session.setAttribute("currentAction", "NONE");
+				currentAction = (String) session.getAttribute("currentAction");
+				System.out.println(currentAction);
+				if (currentAction.equals("UPDATE")) {
+					String warningMsg = "Your current changes were not yet saved.";
+					response.getWriter().write(warningMsg);
+				} else {
+					session.setAttribute("currentAction", "ADD");
+					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+					if (sessionCompList == null) {
+						sessionCompList = new LinkedList<>();
+					}
+					ComputerUnits newUnitAdded = computerUnitService.returnComputerUnits(request);
 
-				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+					sessionCompList.add(newUnitAdded);
+					session.setAttribute("sessionCompList", sessionCompList);
 
-				if (sessionCompList == null) {
-					sessionCompList = new LinkedList<>();
+					List<ComputerUnits> computerUnits = null;
+					computerUnits = (List<ComputerUnits>) session.getAttribute("list");
+					computerUnits.add(0, newUnitAdded);
+					String json = "";
+					if (!computerUnits.isEmpty()) {
+						json = PaginationHelper.getPageComputerUnit(computerUnits, 0, pageLimit, computerUnits.size());
+						response.getWriter().write(json);
+					}
+
 				}
-				sessionCompList.add(computerUnitService.returnComputerUnits(request));
-				session.setAttribute("sessionCompList", sessionCompList);
-
 			} else if (action.equals("deleteComputerUnit")) {
-				computerUnitService.deleteComputerUnit(request);
+				// Delete Comp Units
+				PeripheralsService peripheral = (PeripheralsService) context.getBean("servicePeripheralsBean");
+				List<Peripherals> periList = new LinkedList<>();
+				periList = peripheral.getPeripherals(request);
+				String warningMsg = "";
+				if (!periList.isEmpty()) {
+					warningMsg = "Cannot delete record.";
+					response.getWriter().write(warningMsg);
+				} else {
+					computerUnitService.deleteComputerUnit(request);
+					warningMsg = "Record deleted!";
+					response.getWriter().write(warningMsg);
+				}
+
 			} else if (action.equals("updateComputerUnit")) {
-				computerUnitService.updateComputerUnit(request);
+				// Update comp units
+				if (currentAction.equals("ADD")) {
+					String warningMsg = "Your current changes were not yet saved.";
+					response.getWriter().write(warningMsg);
+				} else {
+					HttpSession session = request.getSession();
+					session.setAttribute("currentAction", "UPDATE");
+					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+					if (sessionCompList == null) {
+						sessionCompList = new LinkedList<>();
+					}
+					sessionCompList.add(computerUnitService.returnComputerUnits(request));
+					session.setAttribute("sessionCompList", sessionCompList);
+
+					// to update frontend table
+					ComputerUnits updatedUnits = new ComputerUnits();
+					updatedUnits = computerUnitService.returnComputerUnits(request);
+					Gson gson = new Gson();
+					String json = gson.toJson(updatedUnits);
+					response.getWriter().write(json);
+				}
 			} else if (action.equals("save")) {
 				HttpSession session = request.getSession();
-				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
 				currentAction = (String) session.getAttribute("currentAction");
+				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
 
-				if (sessionCompList != null) {
-					if (currentAction.equals("ADD")) {
+				if (currentAction.equals("ADD")) {
+					if (sessionCompList != null) {
 						for (ComputerUnits x : sessionCompList) {
 							computerUnitService.insertComputerUnits(x);
 						}
-						session.invalidate();
-						session.setAttribute("currentAction", "NONE");
-					} else if (currentAction.equals("UPDATE")) {
-						for (ComputerUnits x : sessionCompList) {
-
-						}
+					}
+				} else if (currentAction.equals("UPDATE")) {
+					for (ComputerUnits x : sessionCompList) {
+						computerUnitService.updateComputerUnit(x);
 					}
 				}
+				// remove session records
+				if (!sessionCompList.isEmpty()) {
+					sessionCompList.clear();
+					session.setAttribute("sessionCompList", sessionCompList);
+					session.setAttribute("currentAction", "NONE");
+				}
+			} else if (action.equals("cancel")) {
+				HttpSession session = request.getSession();
+				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+				if (!sessionCompList.isEmpty()) {
+					sessionCompList.clear();
+					session.setAttribute("sessionCompList", sessionCompList);
+					session.setAttribute("currentAction", "NONE");
+				}
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -23,7 +23,7 @@ public interface ComputerUnitsInventoryService {
 
 	void deleteComputerUnit(HttpServletRequest request) throws SQLException;
 
-	void updateComputerUnit(HttpServletRequest request) throws SQLException;
+	void updateComputerUnit(ComputerUnits x) throws SQLException;
 
 	ComputerUnits returnComputerUnits(HttpServletRequest request);
 }
