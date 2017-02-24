@@ -8,5 +8,4 @@
 	<sqlMap resource="com/ims/dao/ibatis/usermaintenance/Users.xml" />
 	<sqlMap resource="com/ims/dao/ibatis/unitassignment/UnitAssignment.xml" /> 
 	<sqlMap resource="com/ims/dao/ibatis/unitassignmenthist/UnitAssignmentHist.xml" />
-	<sqlMap resource="com/ims/dao/ibatis/homeandlogin/Login.xml" />
 </sqlMapConfig>  
