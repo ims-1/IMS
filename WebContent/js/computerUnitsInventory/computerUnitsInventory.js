@@ -76,6 +76,7 @@ function addUnitsToTable() {
 }
 
 function addUnitsToDatabase() {
+	getUserAuth();
 	if (validate()) {
 		var x = 0;
 		new Ajax.Request(context + "/ComputerUnitsInventoryController", {
@@ -135,6 +136,7 @@ function addUnitsToDatabase() {
 };
 
 function updateComputerUnit() {
+	getUserAuth();
 	if (validate()) {
 
 		new Ajax.Request(
