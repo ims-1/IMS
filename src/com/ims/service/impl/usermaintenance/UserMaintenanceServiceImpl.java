@@ -93,4 +93,14 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		this.dao = dao;
 	}
 
+	@Override
+	public String getPassword(String username) throws SQLException {
+		return this.getDao().getPassword(username);
+	}
+
+	@Override
+	public String getUserAccess(String username) throws SQLException {
+		return this.getDao().getUserAccess(username);
+	}
+
 }

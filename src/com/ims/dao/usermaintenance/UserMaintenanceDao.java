@@ -13,4 +13,6 @@ public interface UserMaintenanceDao {
 	String getUserId(String id) throws SQLException;
 	List<Users> getUser(String uId) throws SQLException;
 	void updateUser(Map<String, Object> params) throws SQLException;
+	String getPassword(String username) throws SQLException;
+	String getUserAccess(String username)throws SQLException;
 }

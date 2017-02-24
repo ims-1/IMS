@@ -7,12 +7,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ims.model.peripherals.Peripherals;
+import com.ims.utilities.SystemStatus;
 
 public interface PeripheralsService {
 	List<Peripherals> getPeripherals() throws SQLException;
-	void insertNewPeripherals(Peripherals peripheral) throws SQLException;
+	SystemStatus insertNewPeripherals(Peripherals peripheral) throws SQLException;
 	List<Peripherals> getPeripheralRecord(HttpServletRequest request) throws SQLException;
 	List<Peripherals> getPeripherals(HttpServletRequest request) throws SQLException;
 	Integer getPeripheralNo() throws SQLException;
-	void updatePeripheral(Peripherals peripheral) throws SQLException;
+	SystemStatus updatePeripheral(Peripherals peripheral) throws SQLException;
 }

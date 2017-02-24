@@ -42,6 +42,18 @@
 		  WHERE #userId# = user_id
 	</select>
 	
+	<select id="getPassword" resultClass="java.lang.String" parameterClass="java.lang.String">
+		SELECT password
+		FROM ims_users_1
+		WHERE user_id = #username#
+	</select>
+	
+	<select id="getUserAccess" resultClass="java.lang.String" parameterClass="java.lang.String">
+		SELECT user_access
+		FROM ims_users_1
+		WHERE user_id = #username#
+	</select>
+	
 	<select id="getUser" resultMap = "getUserMap" parameterClass = "java.lang.String">
 		SELECT user_id
 			   ,first_name

@@ -64,7 +64,12 @@
 	</thead>
 	<tbody id="body"></tbody>
 </table>
-<div id="pagination"></div>
+<div class="btn-group border" id="pagination" align="right"> 
+	<button type="button" class="btn">1</button>
+	<button type="button" class="btn">2</button> 
+	<button type="button" class="btn">3</button> 
+	<button type="button" class="btn">4</button>
+</div>
 <table class="table borderless" id="tableInput">
 	<tr>
 		<td class="label-right">Peripheral No.</td>

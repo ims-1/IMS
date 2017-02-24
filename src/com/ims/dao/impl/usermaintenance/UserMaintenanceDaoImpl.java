@@ -65,4 +65,14 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 		this.sqlMapClient = sqlMapClient;
 	}
 
+	@Override
+	public String getPassword(String username) throws SQLException {
+	return (String) this.getSqlMapClient().queryForObject("getPassword", username);
+	}
+
+	@Override
+	public String getUserAccess(String username) throws SQLException {
+		return (String) this.getSqlMapClient().queryForObject("getUserAccess", username);
+	}
+
 }
