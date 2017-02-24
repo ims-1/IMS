@@ -97,7 +97,7 @@
 				<td><div id="divSelectType"></div></td>
 				<td class="label-right">USER ID</td>
 				<td><input type="text" id="txtUserId"
-					class=" required form-control" maxlength="100"></td>
+					class=" required form-control" maxlength="100" disabled="disabled"></td>
 			</tr>
 			<tr>
 				<td class="label-right">ACQUIRED DATE</td>
