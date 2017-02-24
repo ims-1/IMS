@@ -6,77 +6,95 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
+import com.ims.utilities.FilterRecord;
+import com.ims.utilities.PaginationHelper;
 
 @WebServlet("/ComputerUnitsInventoryController")
 public class ComputerUnitsInventoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	List<ComputerUnits> computerUnits = null;
 
-	List<ComputerUnits> filteredList = new LinkedList<>();
-
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "unchecked" })
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		ComputerUnitsInventoryService computerUnitService = (ComputerUnitsInventoryService) context
 				.getBean("serviceComputerUnitsInventoryBean");
 		String action = request.getParameter("action");
-		String dateFormat = "dd-MMM-yy";
+
 		int pageLimit = 10;
 		if (action.equals("pagination")) {
 			try {
-				computerUnits = new LinkedList<>();
-				List<ComputerUnits> compUnitList = new LinkedList<>();
+				List<ComputerUnits> computerUnits = null;
+				HttpSession sessionList = request.getSession();
 				computerUnits = computerUnitService.getComputerUnits();
+				sessionList.setAttribute("list", computerUnits);
+
+				// TODO-Jenny all records returned by select, save it to session
+				// with setAttribute named list
+
+				// TODO-Jenny pagination was moved here
+				// String json = Pagination.getPage(computerUnits, 0, pageLimit,
+				// computerUnits.size);
+				/*
+				 * if (!computerUnits.isEmpty()) { int endRow = pageLimit;
+				 * endRow = pageLimit > computerUnits.size() ?
+				 * computerUnits.size() : endRow; for (int start = 0; start <
+				 * endRow; start++) {
+				 * compUnitList.add(computerUnits.get(start)); } Gson gson = new
+				 * Gson(); String json = gson.toJson(compUnitList);
+				 */
+				String json = "";
 				if (!computerUnits.isEmpty()) {
-					int endRow = pageLimit;
-					endRow = pageLimit > computerUnits.size() ? computerUnits.size() : endRow;
-					for (int start = 0; start < endRow; start++) {
-						compUnitList.add(computerUnits.get(start));
-					}
-					Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
-					String json = gson.toJson(compUnitList);
+					json = PaginationHelper.getPageComputerUnit(computerUnits, 0, pageLimit, computerUnits.size());
 					response.getWriter().write(json);
 				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 		} else if (action.equals("getSize")) {
+			List<ComputerUnits> computerUnits = null;
+			HttpSession sessionList = request.getSession();
+			computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list");
+
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(computerUnits.size()));
 
-			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
+			Gson gson = new Gson();
 			String json = gson.toJson(getSize);
 			response.getWriter().write(json);
 		} else if (action.equals("getRecordPage")) {
+			List<ComputerUnits> computerUnits = null;
+			HttpSession sessionList = request.getSession();
+			computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list");
 			int page = Integer.parseInt(request.getParameter("page"));
-			List<ComputerUnits> compUnitList = new LinkedList<>();
+			String json = "";
 			if (!computerUnits.isEmpty()) {
-				int endRow = page * pageLimit;
-				endRow = endRow > computerUnits.size() ? computerUnits.size() : endRow;
-				for (int start = (page * pageLimit) - pageLimit; start < (endRow); start++) {
-					compUnitList.add(computerUnits.get(start));
-				}
-				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
-				String json = gson.toJson(compUnitList);
+				/*
+				 * int endRow = page * pageLimit; endRow = endRow >
+				 * computerUnits.size() ? computerUnits.size() : endRow; for
+				 * (int start = (page * pageLimit) - pageLimit; start <
+				 * (endRow); start++) {
+				 * compUnitList.add(computerUnits.get(start)); } Gson gson = new
+				 * Gson(); String json = gson.toJson(compUnitList);
+				 */
+
+				json = PaginationHelper.getPageComputerUnit(computerUnits, page, pageLimit, computerUnits.size());
 				response.getWriter().write(json);
 			}
 		} else if (action.equals("getComputerUnitByUnitNo")) {
@@ -86,73 +104,69 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				List<ComputerUnits> compUnitList = new LinkedList<>();
 				compUnitList = computerUnitService.getComputerUnitByUnitNo(unitNo);
 
-				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
+				Gson gson = new Gson();
 				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		} else if (action.equals("getFilteredRecord")) {
+			List<ComputerUnits> filteredList = new LinkedList<>();
+
+			List<ComputerUnits> computerUnits = null;
+			HttpSession sessionList = request.getSession();
+			computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list");
 
 			filteredList.removeAll(computerUnits);
 
 			String words = request.getParameter("filterText");
-			List<ComputerUnits> compUnitList = new LinkedList<>();
 			words = words.toUpperCase();
+
 			if (!computerUnits.isEmpty()) {
 
-				for (int x = 0; x < computerUnits.size(); x++) {
-					String type = (computerUnits.get(x).getType() == "LT" ? "Laptop" : "Desktop");
-					if (computerUnits.get(x).getUnitName().toUpperCase().contains(words)
-							|| computerUnits.get(x).getModel().toUpperCase().contains(words)
-							|| computerUnits.get(x).getAcquiredDate().toString().toUpperCase().contains(words)
-							|| computerUnits.get(x).getBrand().toUpperCase().contains(words)
-							|| computerUnits.get(x).getColor().toUpperCase().contains(words)
-							|| computerUnits.get(x).getDescription().toUpperCase().contains(words)
-							|| computerUnits.get(x).getIpAddress().toUpperCase().contains(words)
-							|| computerUnits.get(x).getLastUpdate().toString().toUpperCase().contains(words)
-							|| computerUnits.get(x).getModel().toUpperCase().contains(words)
-							|| computerUnits.get(x).getUserId().toUpperCase().contains(words)
-							|| computerUnits.get(x).getUnitNo().toString().toUpperCase().contains(words)
-							|| computerUnits.get(x).getTagNumber().toUpperCase().contains(words)
-							|| computerUnits.get(x).getSerialNo().toUpperCase().contains(words)
-							|| computerUnits.get(x).getRemarks().toUpperCase().contains(words)
-							|| type.toUpperCase().contains(words)) {
-
-						filteredList.add(computerUnits.get(x));
-					}
-				}
-
+				// TODO-Jenny created function to filter, please test
+				filteredList = FilterRecord.getFilterCompUnits(computerUnits, words);
 			}
-
+			String json = "";
 			if (!filteredList.isEmpty()) {
-				int endRow = pageLimit;
-				endRow = pageLimit > filteredList.size() ? filteredList.size() : endRow;
-				for (int start = 0; start < endRow; start++) {
-					compUnitList.add(filteredList.get(start));
-				}
+
+				// TODO-Jenny sample of using paginationhelper
+				json = PaginationHelper.getPageComputerUnit(filteredList, 0, pageLimit, filteredList.size());
+
+				// int endRow = pageLimit;
+				// endRow = pageLimit > filteredList.size() ?
+				// filteredList.size() : endRow;
+				// for (int start = 0; start < endRow; start++) {
+				// compUnitList.add(filteredList.get(start));
+				// }
 			}
-			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
-			String json = gson.toJson(compUnitList);
+			// Gson gson = new Gson();
+			// String json = gson.toJson(compUnitList);
+			sessionList.setAttribute("filteredList", filteredList);
 			response.getWriter().write(json);
 		} else if (action.equals("getFilteredSize")) {
+
+			List<ComputerUnits> filteredList = new LinkedList<>();
+			HttpSession filteredSession = request.getSession();
+			filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
+
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(filteredList.size()));
 
-			Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
+			Gson gson = new Gson();
 			String json = gson.toJson(getSize);
 			response.getWriter().write(json);
 		} else if (action.equals("getFilteredRecordPage")) {
+
+			List<ComputerUnits> filteredList = new LinkedList<>();
+			HttpSession filteredSession = request.getSession();
+			filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
+
 			int page = Integer.parseInt(request.getParameter("page"));
-			List<ComputerUnits> compUnitList = new LinkedList<>();
+			String json = "";
 			if (!filteredList.isEmpty()) {
-				int endRow = page * pageLimit;
-				endRow = endRow > filteredList.size() ? filteredList.size() : endRow;
-				for (int start = (page * pageLimit) - pageLimit; start < (endRow); start++) {
-					compUnitList.add(filteredList.get(start));
-				}
-				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
-				String json = gson.toJson(compUnitList);
+				//json = PaginationHelper.getPageComputerUnit(filteredList, page, pageLimit, filteredList.size());
+
 				response.getWriter().write(json);
 			}
 		} else if (action.equals("getComputerType")) {
@@ -163,19 +177,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 					System.out.println(compTypeList.get(x).getGirValue());
 				}
 
-				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
+				Gson gson = new Gson();
 				String json = gson.toJson(compTypeList);
-				response.getWriter().write(json);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} else if (action.equals("getMaxUnitNo")) {
-			List<ComputerUnits> compUnitList = new LinkedList<>();
-			try {
-				compUnitList = computerUnitService.getMaxUnitNumber();
-				System.out.println(compUnitList.get(0).getUnitNo());
-				Gson gson = new GsonBuilder().setDateFormat(dateFormat).serializeNulls().create();
-				String json = gson.toJson(compUnitList);
 				response.getWriter().write(json);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -184,26 +187,50 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		ComputerUnitsInventoryService computerUnitService = (ComputerUnitsInventoryService) context
 				.getBean("serviceComputerUnitsInventoryBean");
+		String currentAction = "";
+
 		try {
 			String action = request.getParameter("action");
 			if (action.equals("insertNewComputerUnit")) {
-
 				HttpSession session = request.getSession();
+				session.setAttribute("currentAction", "ADD");
+
 				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
 
-				
-				computerUnitService.insertComputerUnits(request);
+				if (sessionCompList == null) {
+					sessionCompList = new LinkedList<>();
+				}
+				sessionCompList.add(computerUnitService.returnComputerUnits(request));
+				session.setAttribute("sessionCompList", sessionCompList);
+
 			} else if (action.equals("deleteComputerUnit")) {
 				computerUnitService.deleteComputerUnit(request);
 			} else if (action.equals("updateComputerUnit")) {
 				computerUnitService.updateComputerUnit(request);
-			} else {
-				System.out.println("wrongAction");
+			} else if (action.equals("save")) {
+				HttpSession session = request.getSession();
+				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+				currentAction = (String) session.getAttribute("currentAction");
+
+				if (sessionCompList != null) {
+					if (currentAction.equals("ADD")) {
+						for (ComputerUnits x : sessionCompList) {
+							computerUnitService.insertComputerUnits(x);
+						}
+						session.invalidate();
+						session.setAttribute("currentAction", "NONE");
+					} else if (currentAction.equals("UPDATE")) {
+						for (ComputerUnits x : sessionCompList) {
+
+						}
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -103,7 +103,7 @@
 				<td class="label-right">LAST UPDATE</td>
 
 				<td><input type="datetime-local" id="txtLastUpdate"
-					class="form-control" placeholder="dd-MMM-yy"></td>
+					class="form-control" placeholder="dd-MMM-yy" disabled="disabled"></td>
 			</tr>
 
 			<tr>

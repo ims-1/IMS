@@ -52,8 +52,6 @@ function addUnitsToTable() {
 			row.setAttribute('onclick', 'selectedRow(this)');
 			row.addClassName('record');
 
-			populateTable();
-
 		}
 	} else {
 		alert("Please check fields. Red fields are required while blue fields only accepts integer.");
@@ -385,9 +383,9 @@ function getComputerType() {
 
 $('btnSave').observe('click', function() {
 	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
-		method : "get",
+		method : "post",
 		parameters : {
-			action : "saveCompList"
+			action : "save"
 		},
 		onSuccess : function(response) {
 

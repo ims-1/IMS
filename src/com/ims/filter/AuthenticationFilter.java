@@ -31,7 +31,8 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = req.getSession();
 		//
 		String user = (String) session.getAttribute("user_auth");
-		if (user != null) {
+		chain.doFilter(request, response);
+		/*if (user != null) {
 			chain.doFilter(request, response);
 		} else {
 			SystemStatus status = SystemStatus.unauthenticated;
@@ -39,7 +40,7 @@ public class AuthenticationFilter implements Filter {
 			//res.sendRedirect = login page
 			res.sendError(401);
 			return;
-		}
+		}*/
 	}
 
 	/**
