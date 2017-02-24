@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ims.dao.impl.peripherals.DaoPeripheralsImpl;
 import com.ims.model.peripherals.Peripherals;
 import com.ims.service.peripherals.PeripheralsService;
+import com.ims.utilities.SystemStatus;
 
 public class PeripheralsServiceImpl implements PeripheralsService {
 	private DaoPeripheralsImpl dao;
@@ -28,7 +29,7 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 	}
 
 	@Override
-	public void insertNewPeripherals(Peripherals peripheral) throws SQLException {
+	public SystemStatus insertNewPeripherals(Peripherals peripheral) throws SQLException {
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("unitNo", peripheral.getUnitNo());
@@ -44,7 +45,7 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 		params.put("userId", peripheral.getUserId());
 		params.put("remarks", peripheral.getRemarks());
 
-		this.getDao().insertNewPeripherals(params);
+		return this.getDao().insertNewPeripherals(params);
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 	}
 
 	@Override
-	public void updatePeripheral(Peripherals peripheral) throws SQLException {
+	public SystemStatus updatePeripheral(Peripherals peripheral) throws SQLException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("peripheralNo", peripheral.getPeripheralNo());
 		params.put("peripheralType", peripheral.getPeripheralType());
@@ -81,6 +82,6 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 		params.put("remarks", peripheral.getRemarks());
 		params.put("userId", peripheral.getUserId());
 
-		this.getDao().updatePeripheral(params);
+		return this.getDao().updatePeripheral(params);
 	}
 }

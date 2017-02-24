@@ -3,6 +3,7 @@
  */
 var pageSize = 0;
 $('txtUnitNo').observe("change", function() {
+	//TODO-Jenny get comp units
 	getPeripherals();
 });
 

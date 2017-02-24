@@ -14,8 +14,11 @@ import javax.servlet.http.HttpSession;
 
 import com.ims.utilities.SystemStatus;
 
-public class AuthenticationFilter implements Filter {
+public class UserMaintenanceAuthorizationFilter implements Filter {
 
+	/**
+	 * @see Filter#destroy()
+	 */
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
@@ -23,21 +26,22 @@ public class AuthenticationFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		
 		HttpSession session = req.getSession();
-		//
-		String user = (String) session.getAttribute("user_auth");
-		if (user != null) {
-			chain.doFilter(request, response);
-		} else {
-			SystemStatus status = SystemStatus.unauthenticated;
+		String userAccess = (String) session.getAttribute("user_access");
+		if(userAccess.equals("A")){
+			//clear sessions used
 			
-			//res.sendRedirect = login page
-			res.sendError(401);
+			chain.doFilter(request, response);
+		}else{
+			SystemStatus status = SystemStatus.unauthorized;
+			
+			//res.sendRedirect = not authorized page
+			res.sendError(403);
 			return;
 		}
 	}

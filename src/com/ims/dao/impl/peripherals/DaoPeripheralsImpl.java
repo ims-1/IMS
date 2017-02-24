@@ -8,6 +8,7 @@ import java.util.Map;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ims.dao.peripherals.DaoPeripherals;
 import com.ims.model.peripherals.Peripherals;
+import com.ims.utilities.SystemStatus;
 
 public class DaoPeripheralsImpl implements DaoPeripherals {
 	private SqlMapClient sqlMapClient;
@@ -27,7 +28,8 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 	}
 
 	@Override
-	public void insertNewPeripherals(Map<String, Object> params) throws SQLException {
+	public SystemStatus insertNewPeripherals(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
 		try {
 			this.getSqlMapClient().startTransaction();
 			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
@@ -35,18 +37,20 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 			this.getSqlMapClient().insert("insertNewPeripheral", params);
 			this.getSqlMapClient().executeBatch();
 			this.getSqlMapClient().getCurrentConnection().commit();
-			
+			status = SystemStatus.committed;
+
 		} catch (SQLException e) {
 			this.getSqlMapClient().getCurrentConnection().rollback();
-			System.out.println("in catch");
 			e.printStackTrace();
+			status = SystemStatus.exception;
 		} finally {
 			this.getSqlMapClient().endTransaction();
 		}
+		return status;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Peripherals> getPeripheralRecord(int id) throws SQLException{
+	public List<Peripherals> getPeripheralRecord(int id) throws SQLException {
 		return this.getSqlMapClient().queryForList("getPeripheralRecord", id);
 	}
 
@@ -63,8 +67,23 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 	}
 
 	@Override
-	public void updatePeripheral(Map<String, Object> params) throws SQLException {
-		// TODO Auto-generated method stub
-		
+	public SystemStatus updatePeripheral(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			this.getSqlMapClient().update("updatePeripheral", params);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+		return status;
 	}
 }
