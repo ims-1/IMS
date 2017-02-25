@@ -1,5 +1,6 @@
 $('btnSubmit').observe("click", function() {
 	if (validate()) {
+		
 		new Ajax.Request(context + "/login", {
 			method : "post",
 			parameters : {

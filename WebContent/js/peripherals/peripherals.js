@@ -1,6 +1,50 @@
 /**
  * 
  */
+var unitNo = "";
+
+function searchUnit() {
+	if ($('modalContent').innerHTML != '') {
+		new Ajax.Request(context + "/PeripheralsController", {
+			method : "get",
+			parameters : {
+				action : "getUnits"
+			},
+			onSuccess : function(response) {
+				if (response.status == 200) {
+					var u = response.responseText.evalJSON();
+					var parent = $('modalContent');
+
+					u.each(function(unit) {
+						content = "";
+						content += "<td>" + unit.unitNo + "</td>";
+						content += "<td>" + unit.unitName + "</td>";
+
+						var newTr = new Element('tr');
+						newTr.setAttribute("class", "modalRecord");
+						newTr.setAttribute("onclick", "getUnitRecord(this)");
+						newTr.update(content);
+						parent.insert({
+							bottom : newTr
+						});
+					});
+				}
+			}
+		});
+	}
+}
+
+function getUnitRecord(record) {
+	unitNo = $(record).down('td', 0).innerHTML;
+}
+
+function setUnit() {
+	if (unitNo != "") {
+		$('txtUnitNo').value = unitNo;
+		unitNo = "";
+	}
+}
+
 var pageSize = 0;
 $('txtUnitNo').observe("change", function() {
 	if ($F('txtUnitNo').trim() != '') {
@@ -271,6 +315,7 @@ function getRecord(record) {
 				$('dtLastUpdate').value = peripheral.lastUpdate;
 			});
 			$('btnAdd').value = "Update";
+			$('btnDelete').setAttribute("disabled", "enabled");
 		},
 		onFailed : function(response) {
 
@@ -293,8 +338,32 @@ function insertPeripherals() {
 	});
 }
 
+function deleteRecord() {
+	new Ajax.Request(
+			context + "/PeripheralsController",
+			{
+				method : "post",
+				parameters : {
+					action : "deleteRecord",
+					no : $F('txtPeripheralNo'),
+					num : $F('txtUnitNo')
+				},
+				onSuccess : function(response) {
+					if (response.status == 200) {
+						alert("Record was deleted.");
+					} else if (response.status == 204) {
+						alert("The record you are trying to delete was a pending record. Please save the record first.")
+					} else if (response.status == 205) {
+						alert("There was an exception while deleteng the record")
+					}
+
+				}
+			});
+}
 function clearFields(record) {
 	$('btnAdd').value = "Add";
+	$('btnDelete').setAttribute("disabled", "disabled");
+
 	$$('.form-control').each(function(field) {
 		$(field).value = "";
 	})

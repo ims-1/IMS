@@ -59,6 +59,10 @@ td.label-right {
 	width: 120px;
 }
 
+#content{
+	width: 100%;
+}
+
 #tableInput {
 	width: 80%;
 }

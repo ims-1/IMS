@@ -78,6 +78,7 @@
 
 	<insert id="insertNewPeripheral" parameterClass="java.util.Map">
 		BEGIN
+		
 		INSERT INTO
 		ims_peripherals_1
 		(unit_no, peripheral_no, peripheral_type, tag_number,
@@ -90,11 +91,13 @@
 		#description#, #serialNo#, #brand#,
 		#model#, #color#, #remarks#,
 		#userId#, sysdate);
+		
 		END;
 	</insert>
 
 	<update id="updatePeripheral" parameterClass="java.util.Map">
 		BEGIN
+		
 		UPDATE
 		ims_peripherals_1
 		SET peripheral_type = #peripheralType#, tag_number =
@@ -104,9 +107,19 @@
 		#description#, serial_no = #serialNo#, brand = #brand#, model =
 		#model#, color = #color#, remarks = #remarks#, user_id = #userId#,
 		last_update = sysdate
-		WHERE peripheral_no = #peripheralNo#
+		WHERE peripheral_no = #peripheralNo#;
+		
 		END;
 	</update>
+	
+	<delete id="deletePeripheral" parameterClass="java.lang.Integer">
+		BEGIN
+		
+		DELETE ims_peripherals_1
+		WHERE peripheral_no = #no#;
+		
+		END;
+	</delete>
 
 	<typeAlias alias="ComputerAssigneeDataClass"
 		type="com.ims.model.peripherals.ComputerAssigneeData" />

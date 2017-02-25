@@ -90,4 +90,9 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 	public List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException {
 		return this.getDao().getComputerAssigneeData(unitNo);
 	}
+
+	@Override
+	public SystemStatus deletePeripheral(Integer no) throws SQLException {
+		return this.getDao().deletePeripheral(no);
+	}
 }

@@ -3558,6 +3558,8 @@ tbody.collapse.in {
   position: relative;
   display: inline-block;
   vertical-align: middle;
+  border-width: 1px;
+  border-color: pink;
 }
 .btn-group > .btn,
 .btn-group-vertical > .btn {
@@ -3735,7 +3737,7 @@ tbody.collapse.in {
   position: relative;
   z-index: 2;
   float: left;
-  width: 100%;
+  width: 80%;
   margin-bottom: 0;
 }
 .input-group-lg > .form-control,

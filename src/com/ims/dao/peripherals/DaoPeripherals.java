@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.model.peripherals.ComputerAssigneeData;
 import com.ims.model.peripherals.Peripherals;
 import com.ims.utilities.SystemStatus;
@@ -22,4 +23,6 @@ public interface DaoPeripherals {
 	SystemStatus updatePeripheral(Map<String, Object> params) throws SQLException;
 
 	List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException;
+	
+	SystemStatus deletePeripheral(Integer no) throws SQLException;
 }

@@ -20,8 +20,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.model.peripherals.ComputerAssigneeData;
 import com.ims.model.peripherals.Peripherals;
+import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
 import com.ims.service.peripherals.PeripheralsService;
 import com.ims.utilities.PaginationHelper;
 import com.ims.utilities.SystemStatus;
@@ -111,24 +113,18 @@ public class PeripheralsController extends HttpServlet {
 				response.getWriter().write(json);
 
 			}
-			// else if (action.equals("getRecordPage")) {
-			// response.setContentType("application/json");
-			// response.setCharacterEncoding("UTF-8");
-			//
-			// int page = Integer.parseInt(request.getParameter("page"));
-			// System.out.println(page + " page");
-			// List<Peripherals> peripheralList = (List<Peripherals>)
-			// session.getAttribute("list");
-			//
-			// int size = ((List<Peripherals>)
-			// session.getAttribute("list")).size();
-			//
-			// String json = PaginationHelper.getPagePeripherals(peripheralList,
-			// page, 5, size);
-			//
-			// response.getWriter().write(json);
-			//
-			// }
+			else if(action.equals("getUnit")){
+				response.setContentType("application/json");
+
+				ComputerUnitsInventoryService serviceUnit = (ComputerUnitsInventoryService) context.getBean("serviceComputerUnitsInventoryBean");
+				
+				List<ComputerUnits> compUnits = serviceUnit.getComputerUnits();
+				if(!compUnits.isEmpty()){
+					Gson gson = new Gson();
+					String units = gson.toJson(compUnits);
+					response.getWriter().write(units);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(410);
@@ -160,34 +156,34 @@ public class PeripheralsController extends HttpServlet {
 		System.out.println(status);
 		if (action.equals("saveRecord")) {
 
-			// sample auth_user
-			session.setAttribute("auth_user", "JB Mapili");
-
 			@SuppressWarnings("unchecked")
 			List<Peripherals> sessionPeripheral = (List<Peripherals>) session.getAttribute("sessionPeripheral");
 			String user = (String) session.getAttribute("auth_user");
 			if (sessionPeripheral != null) {
-				for (Peripherals peripheral : sessionPeripheral) {
+				for (int a = 0; a < sessionPeripheral.size(); a++) {
 					try {
-						peripheral.setUserId(user);
-						if (peripheral.getStatus().equals("Add")) {
-							SystemStatus stat = service.insertNewPeripherals(peripheral);
+						sessionPeripheral.get(a).setUserId(user);
+						if (sessionPeripheral.get(a).getStatus().equals("Add")) {
+							SystemStatus stat = service.insertNewPeripherals(sessionPeripheral.get(a));
 							if (stat == SystemStatus.exception) {
-								System.out.println(peripheral.getPeripheralNo() + " : an exception has occured.");
+								System.out.println(
+										sessionPeripheral.get(a).getPeripheralNo() + " : an exception has occured.");
 							} else if (stat == SystemStatus.committed) {
-								System.out.println(peripheral.getPeripheralNo() + " : was successfully committed.");
+								System.out.println(
+										sessionPeripheral.get(a).getPeripheralNo() + " : was successfully committed.");
+								sessionPeripheral.remove(a);
 							}
 						} else {
-							SystemStatus stat = service.updatePeripheral(peripheral);
+							SystemStatus stat = service.updatePeripheral(sessionPeripheral.get(a));
 							if (stat == SystemStatus.exception) {
-								System.out.println(peripheral.getPeripheralNo() + " : an exception has occured.");
+								System.out.println(
+										sessionPeripheral.get(a).getPeripheralNo() + " : an exception has occured.");
 							} else if (stat == SystemStatus.committed) {
-								System.out.println(peripheral.getPeripheralNo() + " : was successfully committed.");
+								sessionPeripheral.remove(a);
 							}
 						}
 
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -210,17 +206,6 @@ public class PeripheralsController extends HttpServlet {
 				for (Peripherals p : addPeripheral) {
 					if (status.equals("Add")) {
 						p.setPeripheralNo(service.getPeripheralNo());
-						System.out.println("pNo" + p.getPeripheralNo());
-						System.out.println("pTyoe" + p.getPeripheralType());
-						System.out.println("ptag" + p.getTagNumber());
-						System.out.println("pacquo" + p.getAcquiredDate());
-						System.out.println("pdesc" + p.getDescription());
-						System.out.println("pser" + p.getSerialNo());
-						System.out.println("pbran" + p.getBrand());
-						System.out.println("pmodel" + p.getModel());
-						System.out.println("pcolor" + p.getColor());
-						System.out.println("prmark" + p.getRemarks());
-						System.out.println("pgetid" + p.getUserId());
 					}
 					p.setStatus(status);
 					sessionPeripheral.add(p);
@@ -277,7 +262,6 @@ public class PeripheralsController extends HttpServlet {
 					return;
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -294,7 +278,49 @@ public class PeripheralsController extends HttpServlet {
 			String json = PaginationHelper.getPagePeripherals(peripheralList, page, 5, size);
 
 			response.getWriter().write(json);
+		} else if (action.equals("deleteRecord")) {
+			Integer no = Integer.parseInt(request.getParameter("no"));
+			String unitNo = request.getParameter("num");
 
+			List<Peripherals> sessionPeripheral = (List<Peripherals>) session.getAttribute("sessionPeripheral");
+			if (!sessionPeripheral.isEmpty()) {
+				for (int a = 0; a < sessionPeripheral.size(); a++) {
+					if (sessionPeripheral.get(a).getPeripheralNo() == (no)
+							&& sessionPeripheral.get(0).getStatus().equals("Update")) {
+						response.setStatus(204);
+						return;
+					} else {
+						sessionPeripheral.remove(a);
+					}
+				}
+				session.setAttribute("sessionPeripheral", sessionPeripheral);
+			}
+			SystemStatus stat;
+			try {
+				stat = service.deletePeripheral(no);
+				if (stat == SystemStatus.exception) {
+					response.setStatus(205);
+					return;
+				} else {
+					if (unitNo != "") {
+						peripherals = service.getPeripherals(request);
+						if (!peripherals.isEmpty()) {
+							if (!sessionPeripheral.isEmpty()) {
+								for (Peripherals p : sessionPeripheral) {
+									peripherals.add(0, p);
+								}
+							}
+							session.setAttribute("list", peripherals);
+							String json = PaginationHelper.getPagePeripherals(peripherals, 0, 5, peripherals.size());
+
+							response.getWriter().write(json);
+							return;
+						}
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

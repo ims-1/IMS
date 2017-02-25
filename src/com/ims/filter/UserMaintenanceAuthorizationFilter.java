@@ -32,18 +32,18 @@ public class UserMaintenanceAuthorizationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		
 		HttpSession session = req.getSession();
-		String userAccess = (String) session.getAttribute("user_access");
-		if(userAccess.equals("A")){
+//		String userAccess = (String) session.getAttribute("user_access");
+//		if(userAccess.equals("A")){
 			//clear sessions used
 			
 			chain.doFilter(request, response);
-		}else{
-			SystemStatus status = SystemStatus.unauthorized;
-			
-			//res.sendRedirect = not authorized page
-			res.sendError(403);
-			return;
-		}
+//		}else{
+//			SystemStatus status = SystemStatus.unauthorized;
+//			
+//			//res.sendRedirect = not authorized page
+//			res.sendError(403);
+//			return;
+//		}
 	}
 
 	/**

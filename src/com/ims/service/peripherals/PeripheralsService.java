@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ims.entity.computerunitsinventory.ComputerUnits;
 import com.ims.model.peripherals.ComputerAssigneeData;
 import com.ims.model.peripherals.Peripherals;
 import com.ims.utilities.SystemStatus;
@@ -24,4 +25,6 @@ public interface PeripheralsService {
 	SystemStatus updatePeripheral(Peripherals peripheral) throws SQLException;
 
 	List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException;
+	
+	SystemStatus deletePeripheral(Integer no) throws SQLException;
 }
