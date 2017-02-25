@@ -101,10 +101,10 @@
 			</tr>
 			<tr>
 				<td class="label-right">ACQUIRED DATE</td>
-				<td><input type="datetime-local" id="txtAcquiredDate"
+				<td><input type="text" id="txtAcquiredDate"
 					class="required form-control" placeholder="MM/DD/YYYY"></td>
 				<td class="label-right">LAST UPDATE</td>
-				<td><input type="datetime-local" id="txtLastUpdate"
+				<td><input type="text" id="txtLastUpdate"
 					class="form-control" placeholder="MM/DD/YYYY" disabled="disabled"></td>
 			</tr>
 
@@ -117,29 +117,27 @@
 					maxlength="1000"></td>
 			</tr>
 		</table>
-		<div align="center">
-			<table class="tblButtons">
-				<tr>
-					<td><input type="button" id="btnAddUpdate" value="ADD"
-						class="btn btn-primary ADD"></td>
-					<td><input type="button" id="btnDelete" value="DELETE"
-						class="btn btn-primary"></td>
-				</tr>
-				<tr>
-					<td><input type="button" id="btnUnitAssignment"
-						value="UNIT ASSIGNMENT" class="btn btn-primary"></td>
-					<td><input type="button" id="btnOSandSI"
-						value="Operating System and Software Installed"
-						class="btn btn-primary"></td>
-					<td><input type="button" id="btnPeripherals"
-						value="PERIPHERALS" class="btn btn-primary"></td>
-					<td><input type="button" id="btnSave" value="SAVE"
-						class="btn btn-primary"></td>
-					<td><input type="button" id="btnCancel" value="CANCEL"
-						class="btn btn-primary"></td>
-				</tr>
-			</table>
-		</div>
+		<table class="tblButtons">
+			<tr>
+				<td><input type="button" id="btnAddUpdate" value="ADD"
+					class="btn btn-primary ADD"></td>
+				<td><input type="button" id="btnDelete" value="DELETE"
+					class="btn btn-primary"></td>
+			</tr>
+			<tr>
+				<td><input type="button" id="btnUnitAssignment"
+					value="UNIT ASSIGNMENT" class="btn btn-primary"></td>
+				<td><input type="button" id="btnOSandSI"
+					value="Operating System and Software Installed"
+					class="btn btn-primary"></td>
+				<td><input type="button" id="btnPeripherals"
+					value="PERIPHERALS" class="btn btn-primary"></td>
+				<td><input type="button" id="btnSave" value="SAVE"
+					class="btn btn-primary"></td>
+				<td><input type="button" id="btnCancel" value="CANCEL"
+					class="btn btn-primary"></td>
+			</tr>
+		</table>
 	</div>
 </body>
 <script type="text/javascript">

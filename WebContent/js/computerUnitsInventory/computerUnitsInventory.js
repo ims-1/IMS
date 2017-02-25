@@ -186,22 +186,6 @@ function updateComputerUnit() {
 	}
 }
 
-function selectedRow(row) {
-	$$('.record').each(function(x) {
-		if (row.rowIndex != r.rowIndex) {
-			r.removeClassName('selected');
-		}
-	})
-
-	row.toggleClassName('selected');
-
-	if (row.hasClassName('selected')) {
-
-	} else {
-
-	}
-}
-
 function populateTable() {
 	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
 		method : "get",
@@ -209,34 +193,61 @@ function populateTable() {
 			action : "pagination"
 		},
 		onComplete : function(response) {
-			var p = response.responseText.evalJSON();
-			var parent = $('body');
-			$$('.record').each(function(record) {
-				$(record).remove();
-			});
+			if (response.status == 200) {
 
-			p.each(function(computerUnits) {
-				var content = "";
-				content += "<td>" + computerUnits.unitNo + "</td>";
-				content += "<td>" + computerUnits.unitName + "</td>";
-				content += "<td>" + computerUnits.tagNumber + "</td>";
-				content += "<td>" + computerUnits.ipAddress + "</td>";
-				content += "<td>" + computerUnits.type + "</td>";
-				content += "<td>" + computerUnits.brand + " "
-						+ computerUnits.model
-				"</td>";
-				content += "<td>" + computerUnits.serialNo + "</td>";
-				content += "<td>" + computerUnits.acquiredDate + "</td>";
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				p.each(function(computerUnits) {
+					var content = "";
+					content += "<td>" + computerUnits.unitNo + "</td>";
+					content += "<td>" + computerUnits.unitName + "</td>";
+					content += "<td>" + computerUnits.tagNumber + "</td>";
+					content += "<td>" + computerUnits.ipAddress + "</td>";
+					content += "<td>" + computerUnits.type + "</td>";
+					content += "<td>" + computerUnits.brand + " "
+							+ computerUnits.model
+					"</td>";
+					content += "<td>" + computerUnits.serialNo + "</td>";
+					content += "<td>" + computerUnits.acquiredDate + "</td>";
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+
+				});
+
+				recordEvents();
+				getSize();
+			} else {
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				var parent = $('body');
+
+				var content = "<td colspan=7>No record found.</td>";
+
 				var newTr = new Element('tr');
-				newTr.setAttribute("class", "record");
+				newTr.setAttribute("class", "no-record record");
+				newTr.setAttribute("align", "center");
 				newTr.update(content);
 				parent.insert({
 					bottom : newTr
 				});
-			});
 
-			recordEvents();
-			getSize();
+				$('pagination').innerHTML = '';
+				alert("There is no Computer Units record fetched");
+			}
+		},
+		onFailure : function(response) {
+			console.log("There is something wrong. Please check connection");
+			alert("There is something wrong. Please check connection");
 		}
 	})
 }
@@ -323,43 +334,70 @@ function filterTable() {
 			filterText : $F('txtSearchBox')
 		},
 		onSuccess : function(response) {
-			$$('.btn-nav').each(function(record) {
-				$(record).remove();
-			});
-			$$('.record').each(function(record) {
-				$(record).remove();
-			});
-			$('body').clear;
+			if (response.status == 200) {
 
-			var p = response.responseText.evalJSON();
-			var parent = $('body');
+				$$('.btn-nav').each(function(record) {
+					$(record).remove();
+				});
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+				$('body').clear;
 
-			p.each(function(computerUnits) {
-				var content = "";
-				content += "<td>" + computerUnits.unitNo + "</td>";
-				content += "<td>" + computerUnits.unitName + "</td>";
-				content += "<td>" + computerUnits.tagNumber + "</td>";
-				content += "<td>" + computerUnits.ipAddress + "</td>";
-				content += "<td>" + computerUnits.type + "</td>";
-				content += "<td>" + computerUnits.brand + " "
-						+ computerUnits.model
-				"</td>";
-				content += "<td>" + computerUnits.serialNo + "</td>";
-				content += "<td>" + computerUnits.acquiredDate + "</td>";
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
+
+				p.each(function(computerUnits) {
+					var content = "";
+					content += "<td>" + computerUnits.unitNo + "</td>";
+					content += "<td>" + computerUnits.unitName + "</td>";
+					content += "<td>" + computerUnits.tagNumber + "</td>";
+					content += "<td>" + computerUnits.ipAddress + "</td>";
+					content += "<td>" + computerUnits.type + "</td>";
+					content += "<td>" + computerUnits.brand + " "
+							+ computerUnits.model
+					"</td>";
+					content += "<td>" + computerUnits.serialNo + "</td>";
+					content += "<td>" + computerUnits.acquiredDate + "</td>";
+
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+				});
+
+				recordEvents();
+
+				getFilteredSize();
+
+			} else {
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				var parent = $('body');
+
+				var content = "<td colspan=7>No record found.</td>";
 
 				var newTr = new Element('tr');
-				newTr.setAttribute("class", "record");
+				newTr.setAttribute("class", "no-record record");
+				newTr.setAttribute("align", "center");
 				newTr.update(content);
 				parent.insert({
 					bottom : newTr
 				});
-			});
 
-			recordEvents();
-
-			getFilteredSize();
-
+				$('pagination').innerHTML = '';
+				alert("There is no Computer Units record fetched");
+			}
+		},
+		onFailure : function(response) {
+			console.log("There is something wrong. Please check connection");
+			alert("There is something wrong. Please check connection");
 		}
+
 	})
 }
 
