@@ -2,6 +2,7 @@ package com.ims.model.unitassignment;
 
 public class UnitAssignment {
 	
+	//unit assignment table
 	private Integer	unitNo;
 	private String assigneeNo;
 	private String location;

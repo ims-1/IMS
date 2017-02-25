@@ -30,4 +30,57 @@
 		FROM ims_assignment_hist_1
 	</select>
 	
+	<select id="getUnitHist" resultMap="getUnitAssignmentHistMap">
+		SELECT hist_no, 
+				unit_no, 
+				unit_name, 
+				assignee_no, 
+				location, 
+				status, 
+				ip_address, 
+				assigned_by, 
+				assigned_date,
+				assign_tag, 
+				return_date, 
+				user_id, 
+				last_update			
+		FROM ims_assignment_hist_1
+		WHERE unit_no = #unitId#
+	</select>
+	
+	<insert id="insertUnitAssignmentHist" parameterClass="java.util.Map">	
+		BEGIN
+			INSERT INTO ims_assignment_hist_1
+			(hist_no, unit_no , unit_name, assignee_no, location, status, ip_address, assigned_by, assigned_date,
+					assign_tag, return_date, user_id, last_update)			
+			VALUES(unit_hist_seq_1.nextval,
+					#unitNo#,
+					#unitName#,
+					#assigneeNo#,
+					#location#,
+					#status#,
+					#ipAddress#,
+					#assignedBy#,
+					SYSDATE,
+					'Y',
+					SYSDATE,
+					#userId#,
+				SYSDATE);		
+		END;
+	</insert>
+
+	<update id="updateUnitHist" parameterClass="java.util.Map">
+		DECLARE
+			var_hist_no number(6);	
+		BEGIN	
+		SELECT unit_hist_seq_1.nextval - 1
+		INTO var_hist_no 
+		FROM dual;
+		UPDATE ims_assignment_hist_1
+		SET ASSIGN_TAG = 'N'
+		WHERE hist_no = var_hist_no AND unit_no = #unitNo#;
+		END;
+
+	</update>
+
 </sqlMap>
