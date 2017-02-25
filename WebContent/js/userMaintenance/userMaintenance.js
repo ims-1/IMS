@@ -1,14 +1,6 @@
 //BACK BUTTON - go back to USER LISTING PAGE
 function backToUserListingPage(){
-	new Ajax.Request(contextPath + "/UserMaintenanceController", {
-		method : "post",
-		parameters : {
-			action : "backToUserListingPage"
-		},
-		onComplete : function(response) {
-			$("mainContents").update(response.responseText);
-		}
-	});
+	window.location.href = contextPath + "/users";
 }
 
 //SAVE BUTTON - save user

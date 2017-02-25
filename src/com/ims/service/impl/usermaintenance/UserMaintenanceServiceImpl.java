@@ -33,30 +33,11 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	}
 	
 	@Override
-	public void populateUserFields(HttpServletRequest request) throws SQLException {
+	public List<Users> populateUserFields(HttpServletRequest request) throws SQLException {
+		System.out.println("Populating fields...");
 		//populate fields
 		String uId = request.getParameter("userId");
-		request.setAttribute("hidden", "edit");
-		//disable uid button
-		request.setAttribute("disableUserId", "disabled='disabled'");
-		List<Users> users = this.getUser(uId);
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		
-		for (Users u : users) {
-			request.setAttribute("userId", 			u.getUserId());
-			request.setAttribute("firstName", 		u.getFirstName());
-			request.setAttribute("middleInitial", 	u.getMiddleInitial());
-			request.setAttribute("lastName", 		u.getLastName());
-			request.setAttribute("email", 			u.getEmail());
-			request.setAttribute("activeTag", 		u.getActiveTag());
-			request.setAttribute("userAccess", 		u.getUserAccess());
-			request.setAttribute("entryDate", 		formatter.format(u.getEntryDate()));
-			request.setAttribute("remarks", 		u.getRemarks());
-			request.setAttribute("lastUserId", 		u.getLastUserId());
-			request.setAttribute("lastUpdate", 		formatter.format(u.getLastUpdate()));	
-			request.setAttribute("password", 		u.getPassword());	
-		}				
+		return this.getDao().getUser(uId);
 	}
 	
 	@Override

@@ -37,11 +37,13 @@
 				</table>
 				<div id="pagination"></div>
 			</div>
+			<jsp:include page="/views/modals/userModal.jsp"></jsp:include>
 </div>
 </body>
 <script type="text/javascript">var contextPath = "${pageContext.request.contextPath}";</script>
 <script src="${pageContext.request.contextPath}/js/validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/userMaintenance/userChangePassword.js"></script>
 <script src="${pageContext.request.contextPath}/js/userMaintenance/users.js"></script>
-<script src="${pageContext.request.contextPath}/js/userMaintenance/userMaintenance.js"></script>
+<script src="${pageContext.request.contextPath}/js/require.js"></script>
+<script src="${pageContext.request.contextPath}/js/resolveConflict.js"></script>
 </html>

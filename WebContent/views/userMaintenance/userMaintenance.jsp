@@ -16,23 +16,23 @@
 		<table class="table borderless">
 		  <tr class="record">
 		    <td class="label-right">USER ID</td>
-		    <td><input id="txtUserId" type="text" class="required form-control" value="${userId}" ${disableUserId} maxlength="15"/></td>
+		    <td><input id="txtUserId" type="text" class="required form-control"  maxlength="15"/></td>
 		  </tr>
 		  <tr class="record">
 		    <td class="label-right">FIRST NAME</td>
-		    <td><input id="txtFirstName" type="text" class="required form-control" value="${firstName}" maxlength="250"/></td>
+		    <td><input id="txtFirstName" type="text" class="required form-control" maxlength="250"/></td>
 		  </tr>
 		  <tr class="record">
 		    <td class="label-right">MIDDLE INITIAL</td>
-		    <td><input id="txtMiddleInitial" type="text" class="required form-control" value="${middleInitial}" maxlength="3"/></td>
+		    <td><input id="txtMiddleInitial" type="text" class="required form-control"  maxlength="3"/></td>
 		  </tr>
 		  <tr class="record">
 		    <td class="label-right">LAST NAME</td>
-		    <td><input id="txtLastName" type="text" class="required form-control" value="${lastName}" maxlength="250"/></td>
+		    <td><input id="txtLastName" type="text" class="required form-control"  maxlength="250"/></td>
 		  </tr>
 		  <tr class="record">
 		    <td class="label-right">EMAIL</td>
-		    <td><input id="txtEmail" type="text" class="required form-control" value="${email}" maxlength="100"/></td>
+		    <td><input id="txtEmail" type="text" class="required form-control"  maxlength="100"/></td>
 		  </tr>
 		  <tr class="record">
 		    <td class="label-right">STATUS</td>		    
@@ -49,19 +49,19 @@
 		  </tr>
 		   <tr class="record">
 		    <td class="label-right">ENTRY DATE</td>
-		    <td><input id="txtEntryDate" type="text" disabled="disabled" value="${entryDate}"/></td>
+		    <td><input id="txtEntryDate" type="text" disabled="disabled" /></td>
 		  </tr>
 		   <tr class="record">
 		    <td class="label-right">REMARKS</td>
-		    <td><input id="txtRemarks" type="text" class="form-control" value="${remarks}" maxlength="100"/></td>
+		    <td><input id="txtRemarks" type="text" class="form-control" maxlength="100"/></td>
 		  </tr>
 		   <tr class="record">
 		    <td class="label-right">LAST UPDATED BY</td>
-		    <td><input id="txtLastUpdatedBy" type="text" disabled="disabled" value="${lastUserId}"/></td>
+		    <td><input id="txtLastUpdatedBy" type="text" disabled="disabled"/></td>
 		  </tr>
 		   <tr class="record">
 		    <td class="label-right">LAST UPDATE</td>
-		    <td><input id="txtLastUpdate" type="text" disabled="disabled" value="${lastUpdate}"/></td>
+		    <td><input id="txtLastUpdate" type="text" disabled="disabled"/></td>
 		  </tr>	  
 		</table>
 		<div align="center">
@@ -69,31 +69,16 @@
 		    <input id="btnSaveUser" type="button" value="SAVE" class="btn btn-primary" onclick="saveUser()"/>
 		    <input id="btnUserChangePassword" type="button" data-toggle="modal" value="CHANGE PASSWORD" class="btn btn-primary" onclick="userChangePassword()"/>
 		</div>
-	<input type="hidden" id="txtHidden" value="${hidden}"/>
+	<input type="hidden" id="txtHidden"/>
 	</div>
 </body>
 <script type="text/javascript">
 var contextPath = "${pageContext.request.contextPath}";
-//radio btn
-if ('${activeTag}' == 'Y') {
-	$("rdActive").checked = "checked";
-}
-if ('${activeTag}' == 'N') {
-	$("rdInactive").checked = "checked";
-}
-//dropdown
-if ('${userAccess}' == 'A') {
-	$('selUserAccess').value = '${userAccess}';
-}
-if ('${userAccess}' == 'U') {
-	$('selUserAccess').value = '${userAccess}';
-}
 if ('${hidden}' == '') {
 	$('btnUserChangePassword').setAttribute("disabled", "disabled");
 }
 </script>
 <script src="${pageContext.request.contextPath}/js/validation.js"></script>
 <script src="${pageContext.request.contextPath}/js/userMaintenance/userMaintenance.js"></script>
-<script src="${pageContext.request.contextPath}/js/userMaintenance/users.js"></script>
 <script src="${pageContext.request.contextPath}/js/userMaintenance/userChangePassword.js"></script>
 </html>

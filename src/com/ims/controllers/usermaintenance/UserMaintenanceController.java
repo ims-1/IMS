@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ims.model.usermaintenance.Users;
 import com.ims.service.usermaintenance.UserMaintenanceService;
 import com.ims.utilities.FilterRecord;
@@ -152,21 +153,13 @@ public class UserMaintenanceController extends HttpServlet {
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
 		String hidden = request.getParameter("hidden");
-		String page = "views/userMaintenance/userMaintenance.jsp";
 		
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		UserMaintenanceService service = (UserMaintenanceService) context.getBean("serviceUsersBean");
 
 		try {
-			if (action.equals("goToUserMaintenanceScreen")) {
-				System.out.println("To User Maintenance Screen...");
-				hidden = "";
-				page = "views/userMaintenance/userMaintenance.jsp";
-			} else if (action.equals("backToUserListingPage")) {
-				System.out.println("Go back to User Listing Page...");
-				page = "views/userMaintenance/users.jsp";
-			} else if (action.equals("saveUser")) {
+			if (action.equals("saveUser")) {
 				if (hidden.equals("edit")) {
 					service.updateUser(request);
 					System.out.println("Record updated successfully!");
@@ -186,25 +179,34 @@ public class UserMaintenanceController extends HttpServlet {
 					}	
 				}	
 			} else if (action.equals("editUser")) {
+				System.out.println("fjlas");
+				System.out.println("we");
 				System.out.println("Editing user...");
-				service.populateUserFields(request);
-				page = "views/userMaintenance/userMaintenance.jsp";
+				String json ="";
+				
+				List<Users> users = service.populateUserFields(request);
+	
+				if (!users.isEmpty()) {
+					System.out.println("NOT EMPTY");
+					Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
+					json = gson.toJson(users);
+				}
+				System.out.println("EMPTY");
+				response.getWriter().write(json);
+				return;
 			} else if (action.equals("userChangePassword")) {
 				String userId = request.getParameter("userId");
-				//System.out.println("In change password...\n"+userId);
 				List<Users> users = service.getUser(userId);
 				for (Users u : users) {	
 					request.setAttribute("userId", u.getUserId());
 				}	
-				page = "views/userMaintenance/userChangePassword.jsp";
 			} else if (action.equals("confirmPassword")) {
 				service.updatePassword(request);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in doPost.");
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-		dispatcher.forward(request, response);
+
 	}
 
 }

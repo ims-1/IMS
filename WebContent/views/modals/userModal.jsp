@@ -1,4 +1,4 @@
-<div class="modal fade" id="myAssigneeModal">
+<div class="modal fade" id="myUserModal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">Edit User</div>
@@ -7,30 +7,29 @@
 					<tr class="record">
 						<td class="label-right">USER ID</td>
 						<td><input id="txtUserId" type="text"
-							class="required form-control" value="${userId}" ${disableUserId}
-							maxlength="15" /></td>
+							class="required form-control" disabled="disabled" maxlength="15" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">FIRST NAME</td>
 						<td><input id="txtFirstName" type="text"
-							class="required form-control" value="${firstName}"
+							class="required form-control"
 							maxlength="250" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">MIDDLE INITIAL</td>
 						<td><input id="txtMiddleInitial" type="text"
-							class="required form-control" value="${middleInitial}"
+							class="required form-control"
 							maxlength="3" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">LAST NAME</td>
 						<td><input id="txtLastName" type="text"
-							class="required form-control" value="${lastName}" maxlength="250" /></td>
+							class="required form-control" maxlength="250" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">EMAIL</td>
 						<td><input id="txtEmail" type="text"
-							class="required form-control" value="${email}" maxlength="100" /></td>
+							class="required form-control" maxlength="100" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">STATUS</td>
@@ -48,22 +47,22 @@
 					<tr class="record">
 						<td class="label-right">ENTRY DATE</td>
 						<td><input id="txtEntryDate" type="text" disabled="disabled"
-							value="${entryDate}" /></td>
+							 /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">REMARKS</td>
 						<td><input id="txtRemarks" type="text" class="form-control"
-							value="${remarks}" maxlength="100" /></td>
+							maxlength="100" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">LAST UPDATED BY</td>
 						<td><input id="txtLastUpdatedBy" type="text"
-							disabled="disabled" value="${lastUserId}" /></td>
+							disabled="disabled" /></td>
 					</tr>
 					<tr class="record">
 						<td class="label-right">LAST UPDATE</td>
 						<td><input id="txtLastUpdate" type="text" disabled="disabled"
-							value="${lastUpdate}" /></td>
+							 /></td>
 					</tr>
 				</table>
 			</div>
