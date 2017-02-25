@@ -1,5 +1,7 @@
 package com.ims.model.usermaintenance;
 
+import java.util.Date;
+
 public class Users {
 
 	private String userId;
@@ -11,11 +13,23 @@ public class Users {
 	private String activeTag;
 	private String status;
 	private String userAccess;
-	private String entryDate;
+	private Date entryDate;
 	private String remarks;
 	private String lastUserId;
-	private String lastUpdate;
+	private Date lastUpdate;
 	
+	public Date getEntryDate() {
+		return entryDate;
+	}
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -58,23 +72,11 @@ public class Users {
 	public void setUserAccess(String userAccess) {
 		this.userAccess = userAccess;
 	}
-	public String getEntryDate() {
-		return entryDate;
-	}
-	public void setEntryDate(String entryDate) {
-		this.entryDate = entryDate;
-	}
 	public String getRemarks() {
 		return remarks;
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
-	}
-	public String getLastUpdate() {
-		return lastUpdate;
-	}
-	public void setLastUpdate(String lastUpdate) {
-		this.lastUpdate = lastUpdate;
 	}
 	public String getPassword() {
 		return password;

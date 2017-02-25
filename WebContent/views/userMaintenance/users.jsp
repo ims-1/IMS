@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,13 +11,13 @@
 </head>
 <body>
 <div id="mainContents">
-<jsp:include page="../header.jsp"></jsp:include>
+<jsp:include page="/views/header.jsp"></jsp:include>
 	<h1 align="center" style="color: yellow;">User Listing Page</h1>
 			<div id="usersMainTable" align=center>
 				<table id="usersMainBodyList" class="table table-striped table-bordered">
 					<thead>
 					  <tr>
-					    <th colspan="2"><input id="txtSearch" type="text" value="Enter keyword to search..." class="form-control"/></th>
+					    <th colspan="2"><input id="txtSearch" type="text" placeholder = "Enter keyword to search.." class="form-control" onkeyup="filterUserRecords()"/></th>
 					    <th></th>
 					    <th></th>
 					    <th></th>
@@ -38,10 +37,11 @@
 				</table>
 				<div id="pagination"></div>
 			</div>
-		</div>
+</div>
 </body>
-<script type="text/javascript">var contextPath = "${pageContext.request.contextPath}"</script>
+<script type="text/javascript">var contextPath = "${pageContext.request.contextPath}";</script>
 <script src="${pageContext.request.contextPath}/js/validation.js"></script>
-<script src="${pageContext.request.contextPath}/js/userMaintenance/userListingPage.js"></script>
-<script src="${pageContext.request.contextPath}/js/userMaintenance/userMaintenanceScreen.js"></script>
+<script src="${pageContext.request.contextPath}/js/userMaintenance/userChangePassword.js"></script>
+<script src="${pageContext.request.contextPath}/js/userMaintenance/users.js"></script>
+<script src="${pageContext.request.contextPath}/js/userMaintenance/userMaintenance.js"></script>
 </html>

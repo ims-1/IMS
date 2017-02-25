@@ -6,11 +6,27 @@ var tablerowCounter = 0;
 var pageSize = 0;
 getComputerType();
 populateTable();
+getUserAuth();
+
+function getUserAuth() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "get",
+		parameters : {
+			action : "getUserAuth"
+		},
+		onSuccess : function(response) {
+			$('txtUserId').value = response.responseText;
+		},
+		onError : function(response) {
+			$('txtUserId').innerHTML = "ssds";
+		}
+	})
+}
 
 $('btnAddUpdate').observe('click', function() {
 	if ($F('btnAddUpdate') == "ADD") {
 
-		addUnitsToTable();
+		// addUnitsToTable();
 		addUnitsToDatabase();
 	} else if ($F('btnAddUpdate') == "UPDATE") {
 		updateComputerUnit();
@@ -23,11 +39,12 @@ $('btnDelete').observe('click', function() {
 		method : "post",
 		parameters : {
 			action : "deleteComputerUnit",
-			unitNo : $F('txtUnitNo')
+			num : $F('txtUnitNo')
 		},
 		onComplete : function(response) {
 			populateTable();
 			clearFields();
+			alert(response.responseText);
 		}
 	})
 });
@@ -59,53 +76,112 @@ function addUnitsToTable() {
 }
 
 function addUnitsToDatabase() {
-	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
-		method : "post",
-		parameters : {
-			action : "insertNewComputerUnit",
-			unitName : $F('txtUnitName'),
-			tagNumber : $F('txtTagNumber'),
-			ipAddress : $F('txtIpAddress'),
-			type : $F('txtType') == "Desktop" ? "DT" : "LT",
-			acquiredDate : $F('txtAcquiredDate'),
-			description : $F('txtDescription'),
-			serialNo : $F('txtSerialNo'),
-			brand : $F('txtBrand'),
-			model : $F('txtModel'),
-			color : $F('txtColor'),
-			userId : $F('txtUserId'),
-			lastUpdate : $F('txtLastUpdate'),
-			remarks : $F('txtRemarks')
-		},
-		onComplete : function(response) {
-		}
-	})
+	if (validate()) {
+		var x = 0;
+		new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+			method : "post",
+			parameters : {
+				action : "insertNewComputerUnit",
+				unitNo : x,
+				unitName : $F('txtUnitName'),
+				tagNumber : $F('txtTagNumber'),
+				ipAddress : $F('txtIpAddress'),
+				type : $F('txtType') == "Desktop" ? "DT" : "LT",
+				acquiredDate : $F('txtAcquiredDate'),
+				description : $F('txtDescription'),
+				serialNo : $F('txtSerialNo'),
+				brand : $F('txtBrand'),
+				model : $F('txtModel'),
+				color : $F('txtColor'),
+				userId : $F('txtUserId'),
+				lastUpdate : $F('txtLastUpdate'),
+				remarks : $F('txtRemarks')
+			},
+			onComplete : function(response) {
+				// alert(response.responseText);
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				p.each(function(computerUnits) {
+					var content = "";
+					content += "<td>" + "Temp" + "</td>";
+					content += "<td>" + computerUnits.unitName + "</td>";
+					content += "<td>" + computerUnits.tagNumber + "</td>";
+					content += "<td>" + computerUnits.ipAddress + "</td>";
+					content += "<td>" + computerUnits.type + "</td>";
+					content += "<td>" + computerUnits.brand + " "
+							+ computerUnits.model
+					"</td>";
+					content += "<td>" + computerUnits.serialNo + "</td>";
+					content += "<td>" + computerUnits.acquiredDate + "</td>";
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+				});
+
+				recordEvents();
+				getSize();
+			}
+		})
+	} else {
+		alert("Please check fields. Red fields are required while blue fields only accepts integer.");
+	}
 };
 
 function updateComputerUnit() {
-	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
-		method : "post",
-		parameters : {
-			action : "updateComputerUnit",
-			unitNo : $F('txtUnitNo'),
-			unitName : $F('txtUnitName'),
-			tagNumber : $F('txtTagNumber'),
-			ipAddress : $F('txtIpAddress'),
-			type : $F('txtType') == "Desktop" ? "DT" : "LT",
-			acquiredDate : $F('txtAcquiredDate'),
-			description : $F('txtDescription'),
-			serialNo : $F('txtSerialNo'),
-			brand : $F('txtBrand'),
-			model : $F('txtModel'),
-			color : $F('txtColor'),
-			userId : $F('txtUserId'),
-			lastUpdate : $F('txtLastUpdate'),
-			remarks : $F('txtRemarks')
-		},
-		onComplete : function(response) {
-		}
-	})
-	populateTable();
+	if (validate()) {
+
+		new Ajax.Request(
+				context + "/ComputerUnitsInventoryController",
+				{
+					method : "post",
+					parameters : {
+						action : "updateComputerUnit",
+						unitNo : $F('txtUnitNo'),
+						unitName : $F('txtUnitName'),
+						tagNumber : $F('txtTagNumber'),
+						ipAddress : $F('txtIpAddress'),
+						type : $F('txtType') == "Desktop" ? "DT" : "LT",
+						acquiredDate : $F('txtAcquiredDate'),
+						description : $F('txtDescription'),
+						serialNo : $F('txtSerialNo'),
+						brand : $F('txtBrand'),
+						model : $F('txtModel'),
+						color : $F('txtColor'),
+						userId : $F('txtUserId'),
+						lastUpdate : $F('txtLastUpdate'),
+						remarks : $F('txtRemarks')
+					},
+					onComplete : function(response) {
+						var p = response.responseText.evalJSON();
+						$$('.record')
+								.each(
+										function(record) {
+
+											if (p.unitNo == record.down(0).innerHTML) {
+												record.down(1).innerHTML = p.unitName;
+												record.down(2).innerHTML = p.tagNumber;
+												record.down(3).innerHTML = p.ipAddress;
+												record.down(4).innerHTML = p.type == "DT" ? "Desktop"
+														: "Laptop";
+												record.down(5).innerHTML = p.brand
+														+ " " + p.model;
+												record.down(6).innerHTML = p.serialNo;
+												record.down(7).innerHTML = p.acquiredDate;
+											}
+
+										});
+					}
+				})
+	} else {
+		alert("Please check fields. Red fields are required while blue fields only accepts integer.");
+	}
 }
 
 function selectedRow(row) {
@@ -245,11 +321,17 @@ function filterTable() {
 			filterText : $F('txtSearchBox')
 		},
 		onSuccess : function(response) {
-			var p = response.responseText.evalJSON();
-			var parent = $('body');
+			$$('.btn-nav').each(function(record) {
+				$(record).remove();
+			});
 			$$('.record').each(function(record) {
 				$(record).remove();
 			});
+			$('body').clear;
+
+			var p = response.responseText.evalJSON();
+			var parent = $('body');
+
 			p.each(function(computerUnits) {
 				var content = "";
 				content += "<td>" + computerUnits.unitNo + "</td>";
@@ -262,6 +344,7 @@ function filterTable() {
 				"</td>";
 				content += "<td>" + computerUnits.serialNo + "</td>";
 				content += "<td>" + computerUnits.acquiredDate + "</td>";
+
 				var newTr = new Element('tr');
 				newTr.setAttribute("class", "record");
 				newTr.update(content);
@@ -271,9 +354,7 @@ function filterTable() {
 			});
 
 			recordEvents();
-			$$('.btn-nav').each(function(record) {
-				$(record).remove();
-			});
+
 			getFilteredSize();
 
 		}
@@ -388,7 +469,32 @@ $('btnSave').observe('click', function() {
 			action : "save"
 		},
 		onSuccess : function(response) {
-
+			alert("Changes Saved!");
+		},
+		onError : function(response) {
+			alert("Error saving changes.");
 		}
 	})
+	populateTable();
 })
+
+$('btnCancel').observe('click', function() {
+	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
+		method : "post",
+		parameters : {
+			action : "cancel"
+		},
+		onSuccess : function(response) {
+			alert("Changes cancelled!");
+		}
+	})
+	clearFields();
+})
+
+$('btnPeripherals').observe('click', function() {
+	window.location.href = "/IMS/peripherals?unitNo=" + $F('txtUnitNo');
+})
+
+$('btnUnitAssignment').observe('click', function() {
+	window.location.href = "/IMS/unitassignment?unitNo=" + $F('txtUnitNo');
+});

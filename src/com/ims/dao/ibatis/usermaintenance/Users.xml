@@ -92,8 +92,15 @@
 	
 	<update id="updateUser" parameterClass="java.util.Map">
 		UPDATE ims_users_1
-		   SET first_name = #firstName#, middle_initial = #middleInitial#, last_name = #lastName#, email = #email#, active_tag = #activeTag#, remarks = #remarks#
+		   SET first_name = #firstName#, middle_initial = #middleInitial#, last_name = #lastName#, email = #email#, active_tag = #activeTag#, remarks = #remarks#, password = #password#
 		 WHERE #userId# = user_id
 	</update>
+	
+	<update id="updatePassword" parameterClass="java.util.Map">
+		UPDATE ims_users_1
+		   SET password = #password#
+		 WHERE #userId# = user_id
+	</update>
+	
 
 </sqlMap>

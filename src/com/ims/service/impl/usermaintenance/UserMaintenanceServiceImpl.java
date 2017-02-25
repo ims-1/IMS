@@ -1,6 +1,7 @@
 package com.ims.service.impl.usermaintenance;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,33 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	}
 	
 	@Override
+	public void populateUserFields(HttpServletRequest request) throws SQLException {
+		//populate fields
+		String uId = request.getParameter("userId");
+		request.setAttribute("hidden", "edit");
+		//disable uid button
+		request.setAttribute("disableUserId", "disabled='disabled'");
+		List<Users> users = this.getUser(uId);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		
+		for (Users u : users) {
+			request.setAttribute("userId", 			u.getUserId());
+			request.setAttribute("firstName", 		u.getFirstName());
+			request.setAttribute("middleInitial", 	u.getMiddleInitial());
+			request.setAttribute("lastName", 		u.getLastName());
+			request.setAttribute("email", 			u.getEmail());
+			request.setAttribute("activeTag", 		u.getActiveTag());
+			request.setAttribute("userAccess", 		u.getUserAccess());
+			request.setAttribute("entryDate", 		formatter.format(u.getEntryDate()));
+			request.setAttribute("remarks", 		u.getRemarks());
+			request.setAttribute("lastUserId", 		u.getLastUserId());
+			request.setAttribute("lastUpdate", 		formatter.format(u.getLastUpdate()));	
+			request.setAttribute("password", 		u.getPassword());	
+		}				
+	}
+	
+	@Override
 	public void updateUser(HttpServletRequest request) throws SQLException {
 		String userId = request.getParameter("userId");
 		String firstName = request.getParameter("firstName");
@@ -54,9 +82,45 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	}
 	
 	@Override
-	public void insertNewUser(HttpServletRequest request) throws SQLException {
-		System.out.println("START INSERT");
+	public void updatePassword(HttpServletRequest request) throws SQLException {
+		String userId = request.getParameter("userId");
+		String currentPassword = request.getParameter("currentPassword");
+		String newPassword = request.getParameter("newPassword");
 		
+		String defaultPassword = "";
+		String userID = "";
+		
+		List<Users> users = this.getUser(userId);
+
+		System.out.println("CURRENT PASSWORD "+ currentPassword);
+		
+		for (Users u : users) {	
+			userID = u.getUserId();
+			defaultPassword = u.getPassword();
+		}		
+		System.out.println("DEFAULT PASSWORD "+defaultPassword);
+		
+		if (Password.checkPassword(currentPassword,defaultPassword)) {
+			System.out.println("Change successful.");
+			
+			Map<String, Object> params = new HashMap<>();
+			params.put("userId", userID);
+			params.put("password", Password.hashPassword(newPassword));
+			
+			this.getDao().updatePassword(params);
+		} else {
+			System.out.println("Current password is incorrect.");
+		}
+	}
+	
+	@Override
+	public void confirmPassword(HttpServletRequest request) throws SQLException {
+		
+	}
+	
+	@Override
+	public void insertNewUser(HttpServletRequest request) throws SQLException {
+
 		String userId = request.getParameter("userId");
 		String firstName = request.getParameter("firstName");
 		String middleInitial = request.getParameter("middleInitial");
