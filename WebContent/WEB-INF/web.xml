@@ -37,6 +37,14 @@
     <url-pattern>/users</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>usermaintenance</servlet-name>
+    <jsp-file>/views/userMaintenance/userMaintenance.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>usermaintenance</servlet-name>
+    <url-pattern>/usermaintenance</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>homepage</servlet-name>
     <jsp-file>/views/home.jsp</jsp-file>
   </servlet>

@@ -22,6 +22,8 @@ public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
 
 	@Override
 	public void insertComputerUnits(Map<String, Object> params) throws SQLException {
+		
+		//TODO-Jenny : please surround with try and catch for dml insert update and delete
 		this.getSqlMapClient().insert("insertComputerUnits", params);
 	}
 

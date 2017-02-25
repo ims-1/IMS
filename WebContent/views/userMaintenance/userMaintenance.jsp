@@ -67,7 +67,7 @@
 		<div align="center">
 			<input id="btnBackToUserListingPage" type="button" value="BACK" class="btn btn-primary" onclick="backToUserListingPage()"/>
 		    <input id="btnSaveUser" type="button" value="SAVE" class="btn btn-primary" onclick="saveUser()"/>
-		    <input id="btnUserChangePassword" type="button" value="CHANGE PASSWORD" class="btn btn-primary" onclick="userChangePassword()"/>
+		    <input id="btnUserChangePassword" type="button" data-toggle="modal" value="CHANGE PASSWORD" class="btn btn-primary" onclick="userChangePassword()"/>
 		</div>
 	<input type="hidden" id="txtHidden" value="${hidden}"/>
 	</div>
