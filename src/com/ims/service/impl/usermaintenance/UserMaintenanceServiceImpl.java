@@ -1,17 +1,18 @@
 package com.ims.service.impl.usermaintenance;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.ims.dao.impl.usermaintenance.UserMaintenanceDaoImpl;
 import com.ims.model.usermaintenance.Users;
 import com.ims.service.usermaintenance.UserMaintenanceService;
 import com.ims.utilities.Password;
+import com.ims.utilities.SystemStatus;
 
 public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 
@@ -35,13 +36,16 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 	@Override
 	public List<Users> populateUserFields(HttpServletRequest request) throws SQLException {
 		System.out.println("Populating fields...");
-		//populate fields
 		String uId = request.getParameter("userId");
 		return this.getDao().getUser(uId);
 	}
 	
 	@Override
-	public void updateUser(HttpServletRequest request) throws SQLException {
+	public SystemStatus updateUser(HttpServletRequest request) throws SQLException {
+	
+		HttpSession session = request.getSession();
+		
+		String loggedInId = (String) session.getAttribute("user_auth");
 		String userId = request.getParameter("userId");
 		String firstName = request.getParameter("firstName");
 		String middleInitial = request.getParameter("middleInitial");
@@ -58,28 +62,29 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		params.put("email", email);
 		params.put("activeTag", activeTag);
 		params.put("remarks", remarks);
+		params.put("lastUserId", loggedInId);
 		
-		this.getDao().updateUser(params);
+		return this.getDao().updateUser(params);
 	}
 	
 	@Override
-	public void updatePassword(HttpServletRequest request) throws SQLException {
+	public SystemStatus updatePassword(HttpServletRequest request) throws SQLException {
 		String userId = request.getParameter("userId");
 		String currentPassword = request.getParameter("currentPassword");
 		String newPassword = request.getParameter("newPassword");
+		
+		HttpSession session = request.getSession();
+		String loggedInId = (String) session.getAttribute("user_auth");
 		
 		String defaultPassword = "";
 		String userID = "";
 		
 		List<Users> users = this.getUser(userId);
-
-		System.out.println("CURRENT PASSWORD "+ currentPassword);
 		
 		for (Users u : users) {	
 			userID = u.getUserId();
 			defaultPassword = u.getPassword();
 		}		
-		System.out.println("DEFAULT PASSWORD "+defaultPassword);
 		
 		if (Password.checkPassword(currentPassword,defaultPassword)) {
 			System.out.println("Change successful.");
@@ -87,21 +92,21 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 			Map<String, Object> params = new HashMap<>();
 			params.put("userId", userID);
 			params.put("password", Password.hashPassword(newPassword));
+			params.put("lastUserId", loggedInId);
 			
-			this.getDao().updatePassword(params);
+			return this.getDao().updatePassword(params);
 		} else {
 			System.out.println("Current password is incorrect.");
+			return SystemStatus.notmatched;
 		}
 	}
 	
 	@Override
-	public void confirmPassword(HttpServletRequest request) throws SQLException {
-		
-	}
-	
-	@Override
-	public void insertNewUser(HttpServletRequest request) throws SQLException {
+	public SystemStatus insertNewUser(HttpServletRequest request) throws SQLException {
 
+		HttpSession session = request.getSession();
+		String loggedInId = (String) session.getAttribute("user_auth");
+		
 		String userId = request.getParameter("userId");
 		String firstName = request.getParameter("firstName");
 		String middleInitial = request.getParameter("middleInitial");
@@ -124,10 +129,10 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		params.put("userAccess", userAccess);
 		params.put("remarks", remarks);
 		params.put("password", generatedPassword);
-		
-		this.getDao().insertNewUser(params);
+		params.put("lastUserId", loggedInId);
 		
 		System.out.println("Record added successfully.");
+		return this.getDao().insertNewUser(params);
 	}
 
 	public UserMaintenanceDaoImpl getDao() {

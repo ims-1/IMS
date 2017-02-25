@@ -3,12 +3,17 @@ function confirmPassword() {
 		method : "post",
 		parameters : {
 			action : "confirmPassword",
-			userId : $F("hiddenBtn"),
+			userId : $F("txtUserId"),
 			currentPassword : $F("txtCurrentPassword"),
 			newPassword : $F("txtNewPassword")
 		},
-		onComplete : function(response) {
-		
+		onSuccess : function(response) {
+			if (response.status == 202) {
+				alert("Incorrect password.");
+			}
+			if (response.status == 200) {
+				alert("Password changed.");
+			}	
 		}
 	});
 }

@@ -16,8 +16,7 @@ function onLoadUserListPage() {
 						$(record).remove();
 					});
 
-					u
-							.each(function(users) {
+					u.each(function(users) {
 								var content = "";
 								var uAccess = "";
 								var isActive = "";
@@ -122,7 +121,8 @@ function getRecordPage(a) {
 						$(record).remove();
 					});
 
-					u.each(function(users) {
+					u
+							.each(function(users) {
 								var content = "";
 								var uAccess = "";
 								var isActive = "";
@@ -174,33 +174,19 @@ function getRecordPage(a) {
 }
 
 // add new user
-$("btnAddUser").observe("click", function() {
-	window.location.href = contextPath + "/usermaintenance";
-});
 
 function addUser() {
-	new Ajax.Request(contextPath + "/UserMaintenanceController", {
-		method : "post",
-		parameters : {
-			action : "goToUserMaintenanceScreen",
-			hidden : "",
-		},
-		onComplete : function(response) {
-			$("mainContents").update(response.responseText);
-		}
-	});
+	window.location.href = contextPath + "/usermaintenance";
 }
 
 var userId = "";
 function getRecord(record) {
-	alert("getting record");
 	userId = $(record).down("td", 0).innerHTML;
 	editUser();
 }
 
 // EDIT USER
 function editUser() {
-	alert("editting user");
 	new Ajax.Request(contextPath + "/UserMaintenanceController", {
 		method : "post",
 		parameters : {
@@ -210,37 +196,31 @@ function editUser() {
 		},
 		onComplete : function(response) {
 			var u = response.responseText.evalJSON();
-			u.each(function(users){
-				
-				var content = "";
-				var uAccess = "";
-				var isActive = "";
 
-				if (users.userAccess == "A") {
-					uAccess = "Admin";
-				}
-				if (users.userAccess == "U") {
-					uAccess = "Regular User";
-				}
-				if (users.activeTag == "Y") {
-					isActive = '<span class="glyphicon glyphicon-ok"></span>';
-				}
-				if (users.activeTag == "N") {
-					isActive = "<span class='glyphicon glyphicon-remove'></span>";
-				}
-				
+			u.each(function(users) {
+				firstName = users.firstName;
+
 				$("txtUserId").value = users.userId;
 				$("txtFirstName").value = users.firstName;
 				$("txtMiddleInitial").value = users.middleInitial;
 				$("txtLastName").value = users.lastName;
 				$("txtEmail").value = users.email;
-				$("txtUserAccess").value = uAccess;
-				$("txtRemarks").value = u.remarks;
-				$("txtLastUpdatedBy").value = users.lastUpdateId;
+				$("txtRemarks").value = users.remarks;
+				$("txtLastUpdatedBy").value = users.lastUserId;
 				$("txtLastUpdate").value = users.lastUpdate;
+				$("selUserAccess").value = users.userAccess;
+				$("txtEntryDate").value = users.entryDate;
+
+				if (users.activeTag == "Y") {
+					$("rdActive").checked = "checked";
+				}
+				if (users.activeTag == "N") {
+
+					$("rdInactive").checked = "checked";
+				}
 
 			});
-			
+
 		}
 	});
 }
@@ -264,8 +244,7 @@ function filterUserRecords() {
 
 					$('pagination').innerHTML = "";
 
-					u
-							.each(function(users) {
+					u.each(function(users) {
 								var content = "";
 								var uAccess = "";
 								var isActive = "";
@@ -302,8 +281,8 @@ function filterUserRecords() {
 										+ "<td>"
 										+ users.entryDate
 										+ "</td>"
-										+ '<td><button onclick="getRecord(this.parentNode)" class="btn btn-info btn-lg" data-toggle=modal data-targer=#myUserModal><span class="glyphicon glyphicon-edit"></span></td>';
-//							
+										+ '<td><button onclick="getRecord(this.parentNode)" data-toggle=modal data-target=#myUserModal class="btn btn-info btn-lg"><span class="glyphicon glyphicon-edit"></span></td>';
+								//							
 								var newTr = new Element("tr");
 								newTr.setAttribute("class", "record");
 								newTr.update(content);
@@ -373,8 +352,7 @@ function getFilteredUserPage(a) {
 						$(record).remove();
 					});
 
-					u
-							.each(function(users) {
+					u.each(function(users) {
 								var content = "";
 								var uAccess = "";
 								var isActive = "";

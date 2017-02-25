@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,12 +21,11 @@ import com.ims.model.usermaintenance.Users;
 import com.ims.service.usermaintenance.UserMaintenanceService;
 import com.ims.utilities.FilterRecord;
 import com.ims.utilities.PaginationHelper;
+import com.ims.utilities.SystemStatus;
 
 @WebServlet("/UserMaintenanceController")
 public class UserMaintenanceController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	
 
 	@SuppressWarnings({ "unchecked"})
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -129,8 +127,7 @@ public class UserMaintenanceController extends HttpServlet {
 				List<Users> filteredUserRecords = new LinkedList<>();
 				HttpSession filteredUserSession = request.getSession();
 				filteredUserRecords = (List<Users>) filteredUserSession.getAttribute("filteredUsers");
-				
-				int page = Integer.parseInt(request.getParameter("page"));
+			
 				String json = "";
 				
 				if (filteredUserRecords != null) {
@@ -146,52 +143,58 @@ public class UserMaintenanceController extends HttpServlet {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.setStatus(201);
+			return;
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
-		String hidden = request.getParameter("hidden");
 		
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		UserMaintenanceService service = (UserMaintenanceService) context.getBean("serviceUsersBean");
 
 		try {
-			if (action.equals("saveUser")) {
-				if (hidden.equals("edit")) {
-					service.updateUser(request);
-					System.out.println("Record updated successfully!");
-				}	
-				if (hidden.equals("")) {
+			if (action.equals("saveUserAdd")) {
 					System.out.println("Creating new user...");
 					String userId = request.getParameter("userId");
-					String result = service.getUserId(userId);
+					String result = service.getUserId(userId.toLowerCase());
 					
-					if (userId.equals(result)) {
+					if (userId.equalsIgnoreCase(result)) {
 						System.out.println("Ooops! USER ID ALREADY IN USE");
 						response.setStatus(203);
 						return;
 					} else {
-						service.insertNewUser(request);
+						SystemStatus status = service.insertNewUser(request);
+						if (status == SystemStatus.committed) {
+							response.setStatus(200);
+						} 
+						if (status == SystemStatus.exception) {
+							response.setStatus(201);
+						} 
 						System.out.println("Record inserted.");
 					}	
-				}	
+			} else if (action.equals("saveUserEdit")) {
+				SystemStatus status = service.updateUser(request);
+				if (status == SystemStatus.committed) {
+					response.setStatus(200);
+					System.out.println("Record updated successfully!");
+				} 
+				if (status == SystemStatus.exception) {
+					response.setStatus(201);
+				} 
 			} else if (action.equals("editUser")) {
-				System.out.println("fjlas");
-				System.out.println("we");
 				System.out.println("Editing user...");
 				String json ="";
-				
+				System.out.println(json);
 				List<Users> users = service.populateUserFields(request);
 	
 				if (!users.isEmpty()) {
-					System.out.println("NOT EMPTY");
 					Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").create();
 					json = gson.toJson(users);
 				}
-				System.out.println("EMPTY");
 				response.getWriter().write(json);
 				return;
 			} else if (action.equals("userChangePassword")) {
@@ -201,12 +204,23 @@ public class UserMaintenanceController extends HttpServlet {
 					request.setAttribute("userId", u.getUserId());
 				}	
 			} else if (action.equals("confirmPassword")) {
-				service.updatePassword(request);
+				SystemStatus status = service.updatePassword(request);
+				if (status == SystemStatus.committed) {
+					response.setStatus(200);
+				} 
+				if (status == SystemStatus.notmatched) {
+					response.setStatus(202);
+				} 
+				if (status == SystemStatus.exception) {
+					response.setStatus(201);
+				} 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("Error in doPost.");
+			response.setStatus(201);
+			return;
 		}
-
 	}
 
 }

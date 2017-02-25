@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.ims.model.usermaintenance.Users;
+import com.ims.utilities.SystemStatus;
 
 public interface UserMaintenanceDao {
 
 	List<Users> getUsers() throws SQLException;
-	void insertNewUser(Map<String, Object> params) throws SQLException;
+	SystemStatus insertNewUser(Map<String, Object> params) throws SQLException;
 	String getUserId(String id) throws SQLException;
 	List<Users> getUser(String uId) throws SQLException;
-	void updateUser(Map<String, Object> params) throws SQLException;
+	SystemStatus updateUser(Map<String, Object> params) throws SQLException;
 	String getPassword(String username) throws SQLException;
 	String getUserAccess(String username)throws SQLException;
-	void updatePassword(Map<String, Object> params) throws SQLException;
+	SystemStatus updatePassword(Map<String, Object> params) throws SQLException;
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ims.dao.usermaintenance.UserMaintenanceDao;
 import com.ims.model.usermaintenance.Users;
+import com.ims.utilities.SystemStatus;
 
 public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 
@@ -24,22 +25,51 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 	}
 	
 	@Override
-	public void updateUser(Map<String, Object> params) throws SQLException {
+	public SystemStatus updateUser(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
 		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+
 			this.getSqlMapClient().update("updateUser", params);
-		} catch(Exception e) {
+			this.getSqlMapClient().executeBatch();
+
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			System.out.println("in catch");
 			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
 		}
-		
+		return status;
 	}
 	
 	@Override
-	public void updatePassword(Map<String, Object> params) throws SQLException {
+	public SystemStatus updatePassword(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
 		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+
 			this.getSqlMapClient().update("updatePassword", params);
-		} catch(Exception e) {
+			this.getSqlMapClient().executeBatch();
+
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			System.out.println("in catch");
 			e.printStackTrace();
+			status= SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
 		}
+		return status;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -49,8 +79,8 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 	}
 
 	@Override
-	public void insertNewUser(Map<String, Object> params) throws SQLException {
-
+	public SystemStatus insertNewUser(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
 		try {
 			this.getSqlMapClient().startTransaction();
 			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
@@ -60,14 +90,16 @@ public class UserMaintenanceDaoImpl implements UserMaintenanceDao {
 			this.getSqlMapClient().executeBatch();
 
 			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
 		} catch (SQLException e) {
 			this.getSqlMapClient().getCurrentConnection().rollback();
 			System.out.println("in catch");
 			e.printStackTrace();
+			status = SystemStatus.exception;
 		} finally {
 			this.getSqlMapClient().endTransaction();
 		}
-
+		return status;
 	}
 
 	public SqlMapClient getSqlMapClient() {
