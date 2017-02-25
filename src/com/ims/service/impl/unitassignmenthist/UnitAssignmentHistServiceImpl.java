@@ -41,6 +41,7 @@ private DaoUnitAssignmentHistImpl dao;
 		params.put("status", unitassignmentHist.getStatus());
 		params.put("ipAddress", unitassignmentHist.getIpAddress());
 		params.put("assignedBy", unitassignmentHist.getAssignedBy());
+		params.put("returnDate", unitassignmentHist.getReturnDate());
 		params.put("userId", "ydt");
 
 		this.getDao().insertNewAssigneeHist(params);

@@ -79,6 +79,12 @@ public class DaoUnitAssignmentImpl implements DaoUnitAssignment {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Assignee> getAssigneeList() throws SQLException {
+		return this.getSqlMapClient().queryForList("getAssigneeList");
+	}
+
 
 	
 }

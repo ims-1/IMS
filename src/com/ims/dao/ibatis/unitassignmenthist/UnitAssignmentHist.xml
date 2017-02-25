@@ -28,6 +28,7 @@
 		SELECT hist_no, unit_no, unit_name, assignee_no, location, status, ip_address, assigned_by, assigned_date,
 				assign_tag, return_date, user_id, last_update
 		FROM ims_assignment_hist_1
+		WHERE assign_tag != 'Y'
 	</select>
 	
 	<select id="getUnitHist" resultMap="getUnitAssignmentHistMap">
@@ -63,7 +64,7 @@
 					#assignedBy#,
 					SYSDATE,
 					'Y',
-					SYSDATE,
+					#returnDate#,
 					#userId#,
 				SYSDATE);		
 		END;

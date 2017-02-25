@@ -1,47 +1,83 @@
+function populateCompUnits() {
 
-$("btnUnitSearch").observe('click', function () {
-	new Ajax.Request(context + "/UnitAssignmentController" , {
+	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
 			action : "populate",
 			selectUnits : $F("txtUnitNo")
-		},		
+		},
 		onSuccess : function(response) {
 			var compUnit = response.responseText.evalJSON();
 			compUnit.each(function(unit) {
-				
 				$("txtSerialNo").value = unit.unitNo;
-				$("txtUnitName").value =  unit.unitName;
+				$("txtUnitName").value = unit.unitName;
 				$("txtBrand").value = unit.brand;
-				$("txtTagNumber").value =  unit.tagNumber;
-				$("txtUnitModel").value =  unit.model;
+				$("txtTagNumber").value = unit.tagNumber;
+				$("txtUnitModel").value = unit.model;
 				$("txtUnitType").value = unit.type;
-				$("txtUnitColor").value = unit.color;		
+				$("txtUnitColor").value = unit.color;
 			});
 		}
 	});
-})
+}
+function fetchCompUnits() {
+	alert("fetch");
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "fetchUnits",
+			selectUnits : $F("txtUnitNo")
+		},
+		onSuccess : function(response) {
+			var compUnit = response.responseText.evalJSON();
+			var parent = $('modalContent');
 
-$("btnUnitSearch").observe('click', function() {
-	alert($F("txtUnitNo"));
-	new Ajax.Request(context + "/UnitAssignmentController" , {
+			$$('.modalRecord').each(function(record) {
+				$(record).remove();
+			});
+
+			compUnit.each(function(unit) {
+				var units = "";
+
+				units += '<td>' + unit.unitNo + '</td>';
+				units += '<td>' + unit.unitName + '</td>';
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "modalRecord");
+				newTr.setAttribute("onclick", "getUnit(this)");
+
+				newTr.update(units);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			// recordEvents();
+		}
+	});
+}
+function getUnit(compUnitNo) {
+	$("txtUnitNo").value = compUnitNo.down(0).innerHTML;
+	populateCompUnits();
+	
+	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
 			action : "fetch",
 			selectUnits : $F("txtUnitNo"),
 			page : "1"
-		},		
+		},
 		onSuccess : function(response) {
 			var u = response.responseText.evalJSON();
 			var parent = $('body');
-
+			
+			alert("hello");
 			$$('.record').each(function(record) {
 				$(record).remove();
 			});
-	
+
 			u.each(function(unit) {
 				var units = "";
-				
+
 				units += "<td>" + unit.unitNo + "</td>";
 				units += "<td>" + unit.unitName + "</td>";
 				units += "<td>" + unit.location + "</td>";
@@ -62,121 +98,153 @@ $("btnUnitSearch").observe('click', function() {
 			recordEvents();
 		}
 	});
-})
+}
 
-
-$("btnAssigneeSearch").observe('click', function () {
-	new Ajax.Request(context + "/UnitAssignmentController" , {
-		method : "get",
-		parameters : {
-			action : "findName",
-			findAssigneeNo : $F("txtAssignee")
-		},		
-		onSuccess : function(response) {
-			var assigneeList = response.responseText.evalJSON();
-			assigneeList.each(function(assignee) {			
-				$("txtAssignee").value = assignee.assigneeName;		
-				$("hiddenAssignNo").value = assignee.assigneeNo;	
-			});
-		}
-	});
-})
-
-
-function loadPage() {
+$("btnUnitSearch").observe('click', function() {
+	fetchCompUnits();
 	
+	
+})
+
+$("btnAssigneeSearch").observe('click', function() {
+	fetchAssignees();
+})
+
+function fetchAssignees() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
-			
-			action : "loadData"
-		
+			action : "findName",
 		},
-		onComplete : function (response) {
-			$("mainContents").update(response.responseText);
+		onSuccess : function(response) {
+
+			var assigneeList = response.responseText.evalJSON();
+			var parent = $('modalContentAssignee');
+
+			$$('.modalRecord').each(function(record) {
+				$(record).remove();
+			});
+
+			assigneeList.each(function(assignee) {
+				var assigneeContent = "";
+
+				assigneeContent += '<td>' + assignee.assigneeNo + '</td>';
+				assigneeContent += '<td>' + assignee.assigneeName + '</td>';
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "modalRecord");
+				newTr.setAttribute("onclick", "getAssigneeName(this)");
+				newTr.update(assigneeContent);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			alert("wew");
 		}
 	});
-	
 }
+
+function getAssigneeName(fetchName) {
+	$("hiddenAssignNo").value = fetchName.down(0).innerHTML;
+	$("txtAssignee").value = fetchName.down(1).innerHTML;
+	populateTxtAssignee();
+}
+
+function populateTxtAssignee() {
+
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "populateAssignee",
+			selectAssignee : $F("txtAssignee")
+		},
+		onSuccess : function(response) {
+			var assignee = response.responseText.evalJSON();
+			assignee.each(function(assign) {
+				$("txtAssignee").value = assign.assigneeName;
+			});
+		}
+	});
+}
+
 
 function addRecord() {
 	delete Array.prototype.toJSON;
 	var obj = [];
 	var addObj = {};
-	
+
 	addObj.unitNo = $F("txtUnitNo");
-	addObj.unitName =$F("txtUnitName");
+	addObj.unitName = $F("txtUnitName");
 	addObj.assigneeNo = $F("hiddenAssignNo");
 	addObj.location = $F("txtAssigneeLocation");
 	addObj.ipAddress = $F("txtIpAdd");
 	addObj.status = $F("txtAssigneeStatus");
 	addObj.assignedBy = $F("txtAssignedBy");
-	
-	
+	addObj.returnDate = $F("txtReturnDate");
 	obj.push(addObj);
 	var json = JSON.stringify(obj);
 	return json;
 }
 
-$("btnAssign").observe('click', function () {
-	alert("Assign");
+$("btnYes").observe('click', function() {
+	alert("Assign");	
 	var json = addRecord();
 	alert(json);
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "post",
-		parameters : {			
-			action  : "assignToDatabase",
+		parameters : {
+			action : "assignToDatabase",
 			actionTwo : "assignToHistData",
-			unitassignment		: json,	
+			unitassignment : json,
 			unitassignmenthist : json,
 			unitId : $F("txtUnitNo")
 		},
-		onComplete : function (response) {
+		onComplete : function(response) {
 			//$("mainContents").update(response.responseText);
 		}
 	});
 })
 
+function getUnitAssignmentHist() {
+	
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "pagination",
+			page : "1"
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('body');
 
- function getUnitAssignmentHist() {
-		new Ajax.Request(context + "/UnitAssignmentController", {
-			method : "get",
-			parameters : {
-				action : "pagination",
-				page : "1"
-			},
-			onSuccess : function(response) {
-				var u = response.responseText.evalJSON();
-				var parent = $('body');
+			u.each(function(unit) {
+				var content = "";
 
-				u.each(function(unit) {
-					var content = "";
-					
-					content += "<td>" + unit.unitNo + "</td>";
-					content += "<td>" + unit.unitName + "</td>";
-					content += "<td>" + unit.location + "</td>";
-					content += "<td>" + unit.ipAddress + "</td>";
-					content += "<td>" + unit.status + "</td>";
-					content += "<td>" + unit.assignedBy + "</td>";
-					content += "<td>" + unit.assignedDate + "</td>";
-					content += "<td>" + unit.returnDate + "</td>";
+				content += "<td>" + unit.unitNo + "</td>";
+				content += "<td>" + unit.unitName + "</td>";
+				content += "<td>" + unit.location + "</td>";
+				content += "<td>" + unit.ipAddress + "</td>";
+				content += "<td>" + unit.status + "</td>";
+				content += "<td>" + unit.assignedBy + "</td>";
+				content += "<td>" + unit.assignedDate + "</td>";
+				content += "<td>" + unit.returnDate + "</td>";
 
-					var newTr = new Element('tr');
-					newTr.setAttribute("class", "record");
-					newTr.update(content);
-					parent.insert({
-						bottom : newTr
-					});
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
 				});
-				getSize();
-				recordEvents();
-			}
-		});
+			});
+			getSize();
+			recordEvents();
+		}
+	});
 
-
-	}
-		function getSize() {
-			new Ajax.Request(context + "/UnitAssignmentController", {
+}
+function getSize() {
+	new Ajax.Request(context + "/UnitAssignmentController",
+			{
 				method : "get",
 				parameters : {
 					action : "getSize"
@@ -202,45 +270,43 @@ $("btnAssign").observe('click', function () {
 					}
 				}
 			});
+}
+function getRecordPage(a) {
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "getRecordPage",
+			page : a
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('body');
+
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+
+			u.each(function(unit) {
+				var content = "";
+
+				content += "<td>" + unit.unitNo + "</td>";
+				content += "<td>" + unit.unitName + "</td>";
+				content += "<td>" + unit.location + "</td>";
+				content += "<td>" + unit.ipAddress + "</td>";
+				content += "<td>" + unit.status + "</td>";
+				content += "<td>" + unit.assignedBy + "</td>";
+				content += "<td>" + unit.assignedDate + "</td>";
+				content += "<td>" + unit.returnDate + "</td>";
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			recordEvents();
 		}
-	function getRecordPage(a) {
-		new Ajax.Request(context + "/UnitAssignmentController", {
-			method : "get",
-			parameters : {
-				action : "getRecordPage",
-				page : a
-			},
-			onSuccess : function(response) {
-				var u = response.responseText.evalJSON();
-				var parent = $('body');
-
-				$$('.record').each(function(record) {
-					$(record).remove();
-				});
-
-				u.each(function(unit) {
-					var content = "";
-					
-					content += "<td>" + unit.unitNo + "</td>";
-					content += "<td>" + unit.unitName + "</td>";
-					content += "<td>" + unit.location + "</td>";
-					content += "<td>" + unit.ipAddress + "</td>";
-					content += "<td>" + unit.status + "</td>";
-					content += "<td>" + unit.assignedBy + "</td>";
-					content += "<td>" + unit.assignedDate + "</td>";
-					content += "<td>" + unit.returnDate + "</td>";
-
-					var newTr = new Element('tr');
-					newTr.setAttribute("class", "record");
-					newTr.update(content);
-					parent.insert({
-						bottom : newTr
-					});
-				});
-				recordEvents();
-			}
-		});
-	}
-
-	getUnitAssignmentHist();
-
+	});
+}
+getUnitAssignmentHist();

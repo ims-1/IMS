@@ -66,6 +66,9 @@ public class UnitAssignmentServiceImpl implements UnitAssignmentService {
 		this.getDao().deleteUnit(params);
 	}
 
-	
+	@Override
+	public List<Assignee> getAssigneeList() throws SQLException {
+		return this.getDao().getAssigneeList();
+	}
 
 }

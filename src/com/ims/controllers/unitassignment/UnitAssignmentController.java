@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ims.controllers.unitassignment.GetSize;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
-import com.ims.model.peripherals.Peripherals;
 import com.ims.model.unitassignment.Assignee;
 import com.ims.model.unitassignment.UnitAssignment;
 import com.ims.model.unitassignmenthist.UnitAssignmentHist;
@@ -35,11 +33,9 @@ import com.ims.utilities.PaginationHelper;
 public class UnitAssignmentController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	List<UnitAssignmentHist> unitHist = null;
 	List<Assignee> assigneeList = null;
-	List<ComputerUnits> compUnits = null;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "resource", "unused" })
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -48,8 +44,12 @@ public class UnitAssignmentController extends HttpServlet {
 				.getBean("serviceUnitAssignmentHistBean");
 		UnitAssignmentService service = (UnitAssignmentService) context.getBean("serviceUnitAssignmentBean");
 
+		ComputerUnitsInventoryService computerUnitService = (ComputerUnitsInventoryService) context
+				.getBean("serviceComputerUnitsInventoryBean");
+
 		int pageLimit = 5;
 		String action = request.getParameter("action");
+
 		System.out.println(action);
 
 		HttpSession session = request.getSession();
@@ -59,16 +59,18 @@ public class UnitAssignmentController extends HttpServlet {
 			// String no = request.getParameter("num");
 			// if (no != "") {
 			try {
+
+				List<UnitAssignmentHist> unitHist = null;
+
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 
 				unitHist = serviceHist.getUnitAssignmentHist();
-
+				System.out.println(unitHist);
 				session.setAttribute("list", unitHist);
 
-				System.out.println("here");
 				String json = PaginationHelper.getPageUnitAssignmentHist(unitHist, 0, pageLimit, unitHist.size());
-
+				System.out.println(unitHist.isEmpty());
 				System.out.println("here1");
 				response.getWriter().write(json);
 
@@ -94,6 +96,9 @@ public class UnitAssignmentController extends HttpServlet {
 			 */
 
 		} else if (action.equals("getSize")) {
+
+			List<UnitAssignmentHist> unitHist = null;
+			unitHist = (List<UnitAssignmentHist>) session.getAttribute("list");
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(unitHist.size()));
 			System.out.println(unitHist.size());
@@ -133,10 +138,11 @@ public class UnitAssignmentController extends HttpServlet {
 		}
 
 		else if (action.equals("findName")) {
-			String assigneeNum = request.getParameter("findAssigneeNo");
 
+			System.out.println("start");
+			List<Assignee> assigneeList = new LinkedList<>();
 			try {
-				assigneeList = service.getAssignee(assigneeNum);
+				assigneeList = service.getAssigneeList();
 
 				Gson gson = new Gson();
 				String json = gson.toJson(assigneeList);
@@ -144,12 +150,31 @@ public class UnitAssignmentController extends HttpServlet {
 				response.getWriter().write(json);
 
 			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 
-		else if (action.equals("populate")) {
+		} else if (action.equals("fetchUnits")) {
+			System.out.println("start");
+			List<ComputerUnits> compUnit = new LinkedList<>();
+			try {
+				compUnit = computerUnitService.getComputerUnits();
+
+				Gson gson = new Gson();
+				String json = gson.toJson(compUnit);
+				System.out.println(json);
+				response.getWriter().write(json);
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else if (action.equals("populate")) {
+
 			String selectUnit = request.getParameter("selectUnits");
+			List<ComputerUnits> compUnits = null;
+			System.out.println(selectUnit);
 
 			try {
 				compUnits = service.getUnit(selectUnit);
@@ -168,13 +193,39 @@ public class UnitAssignmentController extends HttpServlet {
 			}
 		}
 
+		else if (action.equals("populateAssignee")) {
+			System.out.println();
+			String selectAssignee = request.getParameter("selectAssignee");
+			List<Assignee> assigneeList = null;
+
+			System.out.println(assigneeList);
+
+			try {
+				assigneeList = service.getAssignee(selectAssignee);
+
+				System.out.println("foundAssignee");
+
+				Gson gson = new Gson();
+				String json = gson.toJson(assigneeList);
+				System.out.println(json);
+				response.getWriter().write(json);
+				System.out.println("fetched Assignee");
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 		else if (action.equals("fetch")) {
 
 			String assigneeNum = request.getParameter("selectUnits");
 			System.out.println(assigneeNum);
 			int page = Integer.parseInt(request.getParameter("page"));
 			try {
-				List<UnitAssignmentHist> returnUnitHist = new LinkedList<>();
+				List<UnitAssignmentHist> unitHist = null;
+				unitHist = (List<UnitAssignmentHist>) session.getAttribute("list");
 
 				unitHist = serviceHist.getUnitHist(assigneeNum);
 				String json = PaginationHelper.getPageUnitAssignmentHist(unitHist, 0, 10, unitHist.size());
@@ -186,6 +237,7 @@ public class UnitAssignmentController extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -195,54 +247,55 @@ public class UnitAssignmentController extends HttpServlet {
 				.getBean("serviceUnitAssignmentHistBean");
 		String action = request.getParameter("action");
 		String actionTwo = request.getParameter("actionTwo");
-		
+
 		System.out.println(actionTwo);
 		System.out.println(action);
-		
+
 		if (action.equals("assignToDatabase")) {
-			Gson gson = new Gson();
 			String json = request.getParameter("unitassignment");
-			
+
 			Type collectionType = new TypeToken<ArrayList<UnitAssignment>>() {
 			}.getType();
 			List<UnitAssignment> unitassignment = new Gson().fromJson(json, collectionType);
-		
+
 			for (UnitAssignment unit : unitassignment) {
 				try {
-					service.deleteUnit(unit);			//delete existing unit	
-					service.insertNewAssignee(unit); 	//insert new unit
+					service.deleteUnit(unit); // delete existing unit
+					service.insertNewAssignee(unit); // insert new unit
 					System.out.println("tapos sa unitassignment");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			/*Type collectionTypeHist = new TypeToken<ArrayList<UnitAssignment>>() {
-			}.getType();
-			
-			List<UnitAssignmentHist> unitassignmenthist = new Gson().fromJson(json, collectionTypeHist);
-			for(UnitAssignmentHist unitHist : unitassignmenthist) {
-				try {
-					serviceHist.insertNewAssigneeHist(unitHist);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}*/
+			/*
+			 * Type collectionTypeHist = new
+			 * TypeToken<ArrayList<UnitAssignment>>() { }.getType();
+			 * 
+			 * List<UnitAssignmentHist> unitassignmenthist = new
+			 * Gson().fromJson(json, collectionTypeHist); for(UnitAssignmentHist
+			 * unitHist : unitassignmenthist) { try {
+			 * serviceHist.insertNewAssigneeHist(unitHist); } catch
+			 * (SQLException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); } }
+			 */
 		}
-		
+
 		if (actionTwo.equals("assignToHistData")) {
-			Gson gson = new Gson();
-			String json = request.getParameter("unitassignmenthist");	
+			String json = request.getParameter("unitassignmenthist");
 			System.out.println(json);
 			Type collectionType = new TypeToken<ArrayList<UnitAssignmentHist>>() {
 			}.getType();
 			List<UnitAssignmentHist> unitAssignmentHist = new Gson().fromJson(json, collectionType);
-			
+
 			for (UnitAssignmentHist unitHist : unitAssignmentHist) {
-				try {	
-					serviceHist.updateUnit(unitHist); //update assign_tag to 'N'
-					serviceHist.insertNewAssigneeHist(unitHist); 	//insert new unit in history table				
+				try {
+					serviceHist.updateUnit(unitHist); // update assign_tag to
+														// 'N'
+					serviceHist.insertNewAssigneeHist(unitHist); // insert new
+																	// unit in
+																	// history
+																	// table
 					System.out.println("tapos na din sa history");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block

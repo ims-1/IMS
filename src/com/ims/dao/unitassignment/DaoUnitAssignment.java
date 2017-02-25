@@ -16,4 +16,5 @@ public interface DaoUnitAssignment {
 	void insertNewAssignee(Map<String, Object> params) throws SQLException;
 	List<ComputerUnits> getUnit(String unitId) throws SQLException;
 	void deleteUnit(Map<String, Object> params) throws SQLException;
+	List<Assignee> getAssigneeList() throws SQLException;
 }

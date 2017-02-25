@@ -79,5 +79,13 @@
 			WHERE unit_no = #unitNo#;
 		END;
 	</delete>
-
+	
+	<select id="getAssigneeList" resultMap="getAssigneeMap"
+		parameterClass="java.lang.String">
+		SELECT assignee_no, assignee_name, department,
+		location, email, active_tag,
+		entry_date, remarks, user_id, last_update
+		FROM ims_assignee_1
+	</select>
+	
 </sqlMap>

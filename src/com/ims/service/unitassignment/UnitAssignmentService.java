@@ -18,4 +18,5 @@ public interface UnitAssignmentService {
 	void insertNewAssignee(UnitAssignment unitassignment) throws SQLException; 
 	List<ComputerUnits> getUnit(String unitId) throws SQLException;
 	void deleteUnit(UnitAssignment unitassignment) throws SQLException;
+	List<Assignee> getAssigneeList() throws SQLException;
 }

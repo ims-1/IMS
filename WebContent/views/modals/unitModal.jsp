@@ -11,11 +11,8 @@
 						</tr>
 					</thead>
 					<tbody id="modalContent">
-						
 					</tbody>
-				</table>
-			
-			
+				</table>			
 			</div>
 			<div class="modal-footer">
 				<button type=button class="btn btn-default" data-dismiss="modal"  id="btnOk" onclick="setUnit()">OK</button>
