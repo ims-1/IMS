@@ -27,6 +27,7 @@ import com.ims.model.unitassignmenthist.UnitAssignmentHist;
 import com.ims.service.computerunitsinventory.ComputerUnitsInventoryService;
 import com.ims.service.unitassignment.UnitAssignmentService;
 import com.ims.service.unitassignmenthist.UnitAssignmentHistService;
+import com.ims.utilities.FilterRecord;
 import com.ims.utilities.PaginationHelper;
 
 @WebServlet("/UnitAssignmentController")
@@ -77,28 +78,12 @@ public class UnitAssignmentController extends HttpServlet {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			// }
-
-			/*
-			 * System.out.println("here1"); int page =
-			 * Integer.parseInt(request.getParameter("page")); try {
-			 * List<UnitAssignmentHist> returnUnitHist = new LinkedList<>();
-			 * unitHist = serviceHist.getUnitAssignmentHist();
-			 * 
-			 * if (!unitHist.isEmpty()) {
-			 * 
-			 * for (int start = 0; start < pageLimit; start++) {
-			 * returnUnitHist.add(unitHist.get(start)); } Gson gson = new
-			 * Gson(); String json = gson.toJson(returnUnitHist);
-			 * response.getWriter().write(json); }
-			 * 
-			 * } catch (SQLException e) { e.printStackTrace(); }
-			 */
 
 		} else if (action.equals("getSize")) {
 
 			List<UnitAssignmentHist> unitHist = null;
 			unitHist = (List<UnitAssignmentHist>) session.getAttribute("list");
+
 			List<GetSize> getSize = new ArrayList<>();
 			getSize.add(new GetSize(unitHist.size()));
 			System.out.println(unitHist.size());
@@ -121,24 +106,53 @@ public class UnitAssignmentController extends HttpServlet {
 
 			response.getWriter().write(json);
 
-			/*
-			 * int page = Integer.parseInt(request.getParameter("page"));
-			 * 
-			 * 
-			 * List<UnitAssignmentHist> returnUnitHist = new LinkedList<>(); if
-			 * (!unitHist.isEmpty()) { System.out.println((page * pageLimit) +
-			 * "  " + ((page * pageLimit) - pageLimit));
-			 * 
-			 * for (int start = (page * pageLimit) - pageLimit; start < (page *
-			 * pageLimit); start++) { returnUnitHist.add(unitHist.get(start)); }
-			 * 
-			 * Gson gson = new Gson(); String json =
-			 * gson.toJson(returnUnitHist); response.getWriter().write(json); }
-			 */
-		}
+		} else if (action.equals("getFilteredRecord")) {
+			String words = request.getParameter("filterText").toUpperCase();
+			List<UnitAssignmentHist> unitHist = null;
+			List<UnitAssignmentHist> filteredUnitHist = null;
+			unitHist = (List<UnitAssignmentHist>) session.getAttribute("list");
 
-		else if (action.equals("findName")) {
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			String json = "";
+			if (!unitHist.isEmpty()) {
+				filteredUnitHist = FilterRecord.getFilterUnitAssignmentHist(unitHist, words);
+			}
 
+			session.setAttribute("filteredList", filteredUnitHist);
+
+			if (!filteredUnitHist.isEmpty()) {
+				json = PaginationHelper.getPageUnitAssignmentHist(filteredUnitHist, 0, pageLimit, unitHist.size());
+				System.out.println(filteredUnitHist.isEmpty());
+				System.out.println("here1");
+			}
+			response.getWriter().write(json);
+		} else if (action.equals("getFilteredUnitAssignmentSize")) {
+			List<UnitAssignmentHist> filteredUnitHist = null;
+			filteredUnitHist = (List<UnitAssignmentHist>) session.getAttribute("filteredList");
+
+			List<GetSize> getSize = new ArrayList<>();
+			getSize.add(new GetSize(filteredUnitHist.size()));
+			System.out.println(filteredUnitHist.size());
+
+			Gson gson = new Gson();
+			String json = gson.toJson(getSize);
+			System.out.println(json);
+			response.getWriter().write(json);
+
+		} else if (action.equals("getFilteredUnitAssignmentPage")) {
+
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+
+			int page = Integer.parseInt(request.getParameter("page"));
+			List<UnitAssignmentHist> unitHistList = (List<UnitAssignmentHist>) session.getAttribute("filteredList");
+			String json = "";
+			if (!unitHistList.isEmpty()) {
+				json = PaginationHelper.getPageUnitAssignmentHist(unitHistList, page, 5, unitHistList.size());
+			}
+			response.getWriter().write(json);
+		} else if (action.equals("findName")) {
 			System.out.println("start");
 			List<Assignee> assigneeList = new LinkedList<>();
 			try {

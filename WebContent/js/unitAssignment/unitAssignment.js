@@ -1,5 +1,4 @@
 function populateCompUnits() {
-
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
@@ -58,7 +57,7 @@ function fetchCompUnits() {
 function getUnit(compUnitNo) {
 	$("txtUnitNo").value = compUnitNo.down(0).innerHTML;
 	populateCompUnits();
-	
+
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
@@ -69,7 +68,7 @@ function getUnit(compUnitNo) {
 		onSuccess : function(response) {
 			var u = response.responseText.evalJSON();
 			var parent = $('body');
-			
+
 			alert("hello");
 			$$('.record').each(function(record) {
 				$(record).remove();
@@ -102,8 +101,7 @@ function getUnit(compUnitNo) {
 
 $("btnUnitSearch").observe('click', function() {
 	fetchCompUnits();
-	
-	
+
 })
 
 $("btnAssigneeSearch").observe('click', function() {
@@ -167,7 +165,6 @@ function populateTxtAssignee() {
 	});
 }
 
-
 function addRecord() {
 	delete Array.prototype.toJSON;
 	var obj = [];
@@ -187,7 +184,7 @@ function addRecord() {
 }
 
 $("btnYes").observe('click', function() {
-	alert("Assign");	
+	alert("Assign");
 	var json = addRecord();
 	alert(json);
 	new Ajax.Request(context + "/UnitAssignmentController", {
@@ -206,7 +203,6 @@ $("btnYes").observe('click', function() {
 })
 
 function getUnitAssignmentHist() {
-	
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
@@ -257,6 +253,9 @@ function getSize() {
 						pageSize = sizes.listSize;
 					});
 					var btnCount = parseInt(pageSize / 5);
+					if (pageSize % 5 != 0) {
+						btnCount += 1;
+					}
 					for (var a = 1; a <= btnCount; a++) {
 						var newBtn = new Element('button');
 						newBtn.setAttribute("class", "btn-nav");
@@ -266,7 +265,6 @@ function getSize() {
 						parent.insert({
 							bottom : newBtn
 						});
-
 					}
 				}
 			});
@@ -310,3 +308,116 @@ function getRecordPage(a) {
 	});
 }
 getUnitAssignmentHist();
+
+function filteredUnitAssignmentsHist(){
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredRecord",
+			filterText : $F('searchBox')
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('body');
+			
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});			
+			u.each(function(unit) {
+				var content = "";
+				content += "<td>" + unit.unitNo + "</td>";
+				content += "<td>" + unit.unitName + "</td>";
+				content += "<td>" + unit.location + "</td>";
+				content += "<td>" + unit.ipAddress + "</td>";
+				content += "<td>" + unit.status + "</td>";
+				content += "<td>" + unit.assignedBy + "</td>";
+				content += "<td>" + unit.assignedDate + "</td>";
+				content += "<td>" + unit.returnDate + "</td>";
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			$$('.btn-nav').each(function(record) {
+				$(record).remove();
+			});
+			getFilteredUnitAssignmentSize();
+			recordEvents();
+		}
+	});
+}
+
+function getFilteredUnitAssignmentSize() {
+	new Ajax.Request(context + "/UnitAssignmentController",
+			{
+				method : "get",
+				parameters : {
+					action : "getFilteredUnitAssignmentSize"
+				},
+				onSuccess : function(response) {
+					var u = response.responseText.evalJSON();
+					var parent = $('pagination');
+
+					u.each(function(sizes) {
+						pageSize = sizes.listSize;
+					});
+					var btnCount = parseInt(pageSize / 5);
+					if (pageSize % 5 != 0) {
+						btnCount += 1;
+					}
+					for (var a = 1; a <= btnCount; a++) {
+						var newBtn = new Element('button');
+						newBtn.setAttribute("class", "btn-nav");
+						newBtn.update(a);
+						newBtn.setAttribute("onclick",
+								"getFilteredUnitAssignmentPage(this.innerHTML)");
+						parent.insert({
+							bottom : newBtn
+						});
+					}
+				}
+			});
+}
+
+function getFilteredUnitAssignmentPage(a) {
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredUnitAssignmentPage",
+			page : a
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('body');
+			$$('.btn-nav').each(function(record) {
+				$(record).remove();
+			});
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+			u.each(function(unit) {
+				var content = "";
+
+				content += "<td>" + unit.unitNo + "</td>";
+				content += "<td>" + unit.unitName + "</td>";
+				content += "<td>" + unit.location + "</td>";
+				content += "<td>" + unit.ipAddress + "</td>";
+				content += "<td>" + unit.status + "</td>";
+				content += "<td>" + unit.assignedBy + "</td>";
+				content += "<td>" + unit.assignedDate + "</td>";
+				content += "<td>" + unit.returnDate + "</td>";
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			recordEvents();
+		}
+	});
+}

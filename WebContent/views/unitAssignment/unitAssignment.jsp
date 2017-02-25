@@ -15,14 +15,11 @@
 <body>
 	<jsp:include page="/views/header.jsp"></jsp:include>
 	<div id="mainContents">
-		<table>
+		<table class="table borderless" id="tableInput">
 			<tr>
+				<td class="label-right">UNIT NO.</td>
 				<td>
-					<table class="table borderless">
-						<tr>
-							<td><label class="label-right">UNIT NO.</label></td>
-							<td>
-								<!-- <div class="input-group">
+					<!-- <div class="input-group">
 									<input type="text" class="form-control" id="txtUnitNo">
 									<span class="input-group-btn">
 										<button class="btn btn-secondary" type="button"
@@ -30,94 +27,91 @@
 											<span class="glyphicon glyphicon-search"></span>
 										</button>
 									</span>
-								</div> -->
-								
-					 <% String unitNo = request.getParameter("unitNo");	
-						
-						if(unitNo == null || unitNo == ""){
-							out.print("<div class=input-group>");
-							out.print("<input type=text class=form-control id=txtUnitNo readonly='readonly'>");
-							out.print("<span class=\"input-group-btn\">");
-							out.print("	<button class=\"btn btn-secondary\" type=button");
-							out.print("		data-toggle=modal data-target=#myUnitModal");
-							out.print("		id=btnUnitSearch onclick=\"fetchCompUnits()\">");
-							out.print("		<span class=\"glyphicon glyphicon-search\"></span>");
-							out.print("	</button>");
-							out.print("</span></div>");
-						}			
-						else{
-							out.print("<input type=text class=form-control id=txtUnitNo value=" + unitNo + " readonly='readonly'>");
-						}
-						%>
-						
-							</td>
-							<td><label class="label-right">SERIAL NO. </label></td>
-							<td><input type="text" id="txtSerialNo" /></td>
-						</tr>
-						<tr>
-							<td><label class="label-right">UNIT NAME </label></td>
-							<td><input type="text" id="txtUnitName" readonly="readonly"/></td>
-							<td><label class="label-right">BRAND</label></td>
-							<td><input type="text" id="txtBrand" readonly="readonly" /></td>
-						</tr>
-						<tr>
-							<td><label class="label-right">TAG NUMBER </label></td>
-							<td><input type="text" id="txtTagNumber" readonly="readonly" /></td>
-							<td><label class="label-right">MODEL </label></td>
-							<td><input type="text" id="txtUnitModel" /></td>
-						</tr>
-						<tr>
-							<td><label class="label-right">TYPE </label></td>
-							<td><input type="text" id="txtUnitType" readonly="readonly" /></td>
-							<td><label class="label-right">COLOR </label></td>
-							<td><input type="text" id="txtUnitColor" readonly="readonly" /></td>
-						</tr>
-					</table>
+								</div> --> <%
+ 	String unitNo = request.getParameter("unitNo");
+
+ 	if (unitNo == null || unitNo == "") {
+ 		out.print("<div class=input-group>");
+ 		out.print("<input type=text class=form-control id=txtUnitNo readonly='readonly'>");
+ 		out.print("<span class=\"input-group-btn\">");
+ 		out.print("	<button class=\"btn btn-secondary\" type=button");
+ 		out.print("		data-toggle=modal data-target=#myUnitModal");
+ 		out.print("		id=btnUnitSearch onclick=\"fetchCompUnits()\">");
+ 		out.print("		<span class=\"glyphicon glyphicon-search\"></span>");
+ 		out.print("	</button>");
+ 		out.print("</span></div>");
+ 	} else {
+ 		out.print("<input type=text class=form-control id=txtUnitNo value=" + unitNo + " readonly='readonly'>");
+ 	}
+ %>
+
 				</td>
+				<td class="label-right" > SERIAL NO.</td>
+				<td><input type="text" id="txtSerialNo" class="form-control" /></td>
 			</tr>
 			<tr>
-				<td>
-					<table class="table borderless">
-						<tr>
-							<td><label class="label-right">ASSIGNEE</label></td>
-							<td>
-								<div class="input-group">
-									<input type="text" class="form-control" id="txtAssignee">
-									<span class="input-group-btn">
-										<button class="btn btn-secondary" type="button"
-											data-toggle="modal" data-target="#myAssigneeModal"
-											id="btnAssigneeSearch">
-											<span class="glyphicon glyphicon-search"></span>
-										</button>
-									</span>
-								</div> <input type="hidden" id="hiddenAssignNo">
-							</td>
-							<td><label class="label-right">STATUS </label></td>
-							<td><input type="text" id="txtAssigneeStatus" /></td>
-						</tr>
-						<tr>
-							<td><label class="label-right">LOCATION </label></td>
-							<td><input type="text" id="txtAssigneeLocation" /></td>
-							<td><label class="label-right">ASSIGNED BY </label></td>
-							<td><input type="text" id="txtAssignedBy" /></td>
-						</tr>
-						<tr>
-							<td><label class="label-right">IP ADDRESS </label></td>
-							<td><input type="text" id="txtIpAdd" /></td>
-							<td><label class="label-right">DATE ASSIGNED </label></td>
-							<td><input type="text" id="txtDateAssigned" /></td>
-						</tr>
-					</table>
-				</td>
+				<td class="label-right">UNIT NAME</td>
+				<td><input type="text" id="txtUnitName" readonly="readonly"
+					class="form-control" /></td>
+				<td class="label-right">BRAND</td>
+				<td><input type="text" id="txtBrand" readonly="readonly"
+					class="form-control" /></td>
+			</tr>
+			<tr>
+				<td class="label-right">TAG NUMBER</td>
+				<td><input type="text" id="txtTagNumber" readonly="readonly"
+					class="form-control" /></td>
+				<td class="label-right">MODEL </td>
+				<td><input type="text" id="txtUnitModel" class="form-control" /></td>
+			</tr>
+			<tr>
+				<td class="label-right">TYPE </td>
+				<td><input type="text" id="txtUnitType" readonly="readonly"
+					class="form-control" /></td>
+				<td class="label-right">COLOR </td>
+				<td><input type="text" id="txtUnitColor" readonly="readonly"
+					class="form-control" /></td>
 			</tr>
 		</table>
+		<table class="table borderless" id="tableInput">
+			<tr>
+				<td class="label-right">ASSIGNEE</td>
+				<td>
+					<div class="input-group">
+						<input type="text" class="form-control" id="txtAssignee">
+						<span class="input-group-btn">
+							<button class="btn btn-secondary" type="button"
+								data-toggle="modal" data-target="#myAssigneeModal"
+								id="btnAssigneeSearch">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</span>
+					</div> <input type="hidden" id="hiddenAssignNo">
+				</td>
+				<td class="label-right">STATUS </td>
+				<td><input type="text" id="txtAssigneeStatus"
+					class="form-control" /></td>
+			</tr>
+			<tr>
+				<td class="label-right">LOCATION </td>
+				<td><input type="text" id="txtAssigneeLocation"
+					class="form-control" /></td>
+				<td class="label-right">ASSIGNED BY </td>
+				<td><input type="text" id="txtAssignedBy" class="form-control" /></td>
+			</tr>
+			<tr>
+				<td class="label-right">IP ADDRESS </td>
+				<td><input type="text" id="txtIpAdd" class="form-control" /></td>
+				<td class="label-right">DATE ASSIGNED </td>
+				<td><input type="text" id="txtDateAssigned"
+					class="form-control" /></td>
+			</tr>
+		</table>
+		<input type="text" id="searchBox"
+			onkeyup="filteredUnitAssignmentsHist()" placeholder="Enter Keyword to search.." class="form-control"/><br> <br>
 
-		<input type="text"
-			id="searchBox" placeholder="Enter Keyword to search.." /><br> <br>
-
-		<button class="btn btn-secondary" type="button"
-											data-toggle="modal" data-target="#modalReturnDate"
-											id="btnAssign"></button>
+		<button class="btn btn-secondary" type="button" data-toggle="modal"
+			data-target="#modalReturnDate" id="btnAssign"></button>
 	</div>
 
 	<table class="table table-striped table-bordered">
@@ -144,7 +138,7 @@
 <script>
 	var context = "${pageContext.request.contextPath}";
 </script>
-<script	src="${pageContext.request.contextPath}/js/prototype.js"></script>
+<script src="${pageContext.request.contextPath}/js/prototype.js"></script>
 <script type="text/javascript" src="js/require.js"></script>
 <script type="text/javascript" src="js/resolveConflict.js"></script>
 
@@ -152,7 +146,4 @@
 	src="${pageContext.request.contextPath}/js/unitAssignment/unitAssignment.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/validation.js"></script>
-
-
-
 </html>
