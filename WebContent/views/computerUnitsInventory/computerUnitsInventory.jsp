@@ -94,7 +94,8 @@
 
 			<tr>
 				<td class="label-right">TYPE</td>
-				<td><div id="divSelectType"></div></td>
+				<td><div id="divSelectType"><input type="text" id="txtType" class="form-control"
+					maxlength="100"></div></td>
 				<td class="label-right">USER ID</td>
 				<td><input type="text" id="txtUserId"
 					class=" required form-control" maxlength="100" disabled="disabled"></td>
@@ -104,8 +105,8 @@
 				<td><input type="text" id="txtAcquiredDate"
 					class="required form-control" placeholder="MM/DD/YYYY"></td>
 				<td class="label-right">LAST UPDATE</td>
-				<td><input type="text" id="txtLastUpdate"
-					class="form-control" placeholder="MM/DD/YYYY" disabled="disabled"></td>
+				<td><input type="text" id="txtLastUpdate" class="form-control"
+					placeholder="MM/DD/YYYY" disabled="disabled"></td>
 			</tr>
 
 			<tr>

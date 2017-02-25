@@ -25,8 +25,6 @@ function getUserAuth() {
 
 $('btnAddUpdate').observe('click', function() {
 	if ($F('btnAddUpdate') == "ADD") {
-
-		// addUnitsToTable();
 		addUnitsToDatabase();
 	} else if ($F('btnAddUpdate') == "UPDATE") {
 		updateComputerUnit();
@@ -193,96 +191,89 @@ function populateTable() {
 			action : "pagination"
 		},
 		onComplete : function(response) {
-			if (response.status == 200) {
+			// if (response.status == 200) {
 
-				var p = response.responseText.evalJSON();
-				var parent = $('body');
-				$$('.record').each(function(record) {
-					$(record).remove();
-				});
+			var p = response.responseText.evalJSON();
+			var parent = $('body');
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
 
-				p.each(function(computerUnits) {
-					var content = "";
-					content += "<td>" + computerUnits.unitNo + "</td>";
-					content += "<td>" + computerUnits.unitName + "</td>";
-					content += "<td>" + computerUnits.tagNumber + "</td>";
-					content += "<td>" + computerUnits.ipAddress + "</td>";
-					content += "<td>" + computerUnits.type + "</td>";
-					content += "<td>" + computerUnits.brand + " "
-							+ computerUnits.model
-					"</td>";
-					content += "<td>" + computerUnits.serialNo + "</td>";
-					content += "<td>" + computerUnits.acquiredDate + "</td>";
-					var newTr = new Element('tr');
-					newTr.setAttribute("class", "record");
-					newTr.update(content);
-					parent.insert({
-						bottom : newTr
-					});
-
-				});
-
-				recordEvents();
-				getSize();
-			} else {
-				$$('.record').each(function(record) {
-					$(record).remove();
-				});
-
-				var parent = $('body');
-
-				var content = "<td colspan=7>No record found.</td>";
-
+			p.each(function(computerUnits) {
+				var content = "";
+				content += "<td>" + computerUnits.unitNo + "</td>";
+				content += "<td>" + computerUnits.unitName + "</td>";
+				content += "<td>" + computerUnits.tagNumber + "</td>";
+				content += "<td>" + computerUnits.ipAddress + "</td>";
+				content += "<td>" + computerUnits.type + "</td>";
+				content += "<td>" + computerUnits.brand + " "
+						+ computerUnits.model
+				"</td>";
+				content += "<td>" + computerUnits.serialNo + "</td>";
+				content += "<td>" + computerUnits.acquiredDate + "</td>";
 				var newTr = new Element('tr');
-				newTr.setAttribute("class", "no-record record");
-				newTr.setAttribute("align", "center");
+				newTr.setAttribute("class", "record");
 				newTr.update(content);
 				parent.insert({
 					bottom : newTr
 				});
 
-				$('pagination').innerHTML = '';
-				alert("There is no Computer Units record fetched");
-			}
-		},
-		onFailure : function(response) {
-			console.log("There is something wrong. Please check connection");
-			alert("There is something wrong. Please check connection");
-		}
+			});
+
+			recordEvents();
+			getSize();
+			/*
+			 * } else { $$('.record').each(function(record) {
+			 * $(record).remove(); });
+			 * 
+			 * var parent = $('body');
+			 * 
+			 * var content = "<td colspan=7>No record found.</td>";
+			 * 
+			 * var newTr = new Element('tr'); newTr.setAttribute("class",
+			 * "no-record record"); newTr.setAttribute("align", "center");
+			 * newTr.update(content); parent.insert({ bottom : newTr });
+			 * 
+			 * $('pagination').innerHTML = ''; alert("There is no Computer Units
+			 * record fetched"); } }, onFailure : function(response) {
+			 * console.log("There is something wrong. Please check connection");
+			 * alert("There is something wrong. Please check connection");
+			 */}
 	})
 }
 
 function getSize() {
-	new Ajax.Request(context + "/ComputerUnitsInventoryController", {
-		method : "get",
-		parameters : {
-			action : "getSize"
-		},
-		onComplete : function(response) {
-			var p = response.responseText.evalJSON();
-			var parent = $('pagination');
-			$$('.btn-nav').each(function(record) {
-				$(record).remove();
-			});
-			p.each(function(sizes) {
-				pageSize = sizes.listSize;
-			});
-			var btnCount = parseInt(pageSize / 10);
-			if (pageSize % 10 != 0) {
-				btnCount += 1;
-				for (var a = 1; a <= btnCount; a++) {
-					var newBtn = new Element('button');
-					newBtn.setAttribute("class", "btn-nav");
-					newBtn.update(a);
-					newBtn.setAttribute("onclick",
-							"getRecordPage(this.innerHTML)");
-					parent.insert({
-						bottom : newBtn
+	new Ajax.Request(context + "/ComputerUnitsInventoryController",
+			{
+				method : "get",
+				parameters : {
+					action : "getSize"
+				},
+				onComplete : function(response) {
+					var p = response.responseText.evalJSON();
+					var parent = $('pagination');
+					$$('.btn-nav').each(function(record) {
+						$(record).remove();
 					});
+					p.each(function(sizes) {
+						pageSize = sizes.listSize;
+					});
+					var btnCount = parseInt(pageSize / 10);
+					if (pageSize % 10 != 0) {
+						btnCount += 1;
+					}
+					for (var a = 1; a <= btnCount; a++) {
+						var newBtn = new Element('button');
+						newBtn.setAttribute("class", "btn-nav");
+						newBtn.update(a);
+						newBtn.setAttribute("onclick",
+								"getRecordPage(this.innerHTML)");
+						parent.insert({
+							bottom : newBtn
+						});
+					}
 				}
-			}
-		}
-	})
+			})
 }
 
 function getRecordPage(x) {
@@ -486,6 +477,7 @@ function getComputerType() {
 			var p = response.responseText.evalJSON();
 			var parent = $('divSelectType');
 			var content = "";
+			parent.innerHTML = "";
 			content += "<option> </option>";
 			p.each(function(TypeList) {
 				content += "<option>" + TypeList.girMeaning + "</option>";
