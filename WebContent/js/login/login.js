@@ -1,6 +1,6 @@
 $('btnSubmit').observe("click", function() {
 	if (validate()) {
-		
+		$('spinner').style.display = "block";
 		new Ajax.Request(context + "/login", {
 			method : "post",
 			parameters : {
@@ -8,10 +8,17 @@ $('btnSubmit').observe("click", function() {
 				password : $F('txtPassword')
 			},
 			onSuccess : function(response) {
-				window.location.href = "/home";
+				if(response.status == 200){
+					window.location.href = "/views/home";
+				}
+				else{
+					alert("Please provide correct password and username");
+				}
+				$('spinner').style.display = "none";				
 			},
 			onFailure : function(response) {
-				alert("Please provide correct password and username");
+				alert('There is something wrong with the connection');
+				$('spinner').style.display = "none";
 			}
 		});
 	}
