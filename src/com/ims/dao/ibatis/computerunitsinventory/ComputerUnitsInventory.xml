@@ -69,7 +69,6 @@
 		#serialNo#, #brand#, #model#, #color#, #remarks#,
 		#deleteTag#,
 		#userId#, #lastUpdate#);
-		commit;
 		END;
 	</insert>
 

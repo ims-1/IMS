@@ -8,6 +8,7 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ims.dao.computerunitsinventory.ComputerUnitsInventoryDao;
 import com.ims.entity.computerunitsinventory.ComputerType;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
+import com.ims.utilities.SystemStatus;
 
 public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
 	private SqlMapClient sqlMapClient;
@@ -21,21 +22,68 @@ public class ComputerUnitsInventoryImpl implements ComputerUnitsInventoryDao {
 	}
 
 	@Override
-	public void insertComputerUnits(Map<String, Object> params) throws SQLException {
-		
-		//TODO-Jenny : please surround with try and catch for dml insert update and delete
-		this.getSqlMapClient().insert("insertComputerUnits", params);
+	public SystemStatus insertComputerUnits(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			this.getSqlMapClient().insert("insertComputerUnits", params);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+		return status;
 	}
 
 	@Override
-	public void deleteComputerUnit(Map<String, Object> params) throws SQLException {
-		this.getSqlMapClient().update("deleteComputerUnit", params);
+	public SystemStatus deleteComputerUnit(Map<String, Object> params) throws SQLException {
+
+		SystemStatus status = SystemStatus.ok;
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			this.getSqlMapClient().update("deleteComputerUnit", params);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+		return status;
 
 	}
 
 	@Override
-	public void updateComputerUnit(Map<String, Object> params) throws SQLException {
-		this.getSqlMapClient().update("updateComputerUnit", params);
+	public SystemStatus updateComputerUnit(Map<String, Object> params) throws SQLException {
+		SystemStatus status = SystemStatus.ok;
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			this.getSqlMapClient().update("updateComputerUnit", params);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+		return status;
 	}
 
 	@SuppressWarnings("unchecked")

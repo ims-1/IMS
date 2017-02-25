@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ims.utilities.SystemStatus;
+
 public class AuthenticationFilter implements Filter {
 
 	public void destroy() {
@@ -28,24 +30,15 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = req.getSession();
 		//
 		String user = (String) session.getAttribute("user_auth");
-//		if (user != null) {
-		chain.doFilter(request, response);
-		/*if (user != null) {
+		if (user != null) {
 			chain.doFilter(request, response);
-//		} else {
-//			SystemStatus status = SystemStatus.unauthenticated;
-//			
-//			//res.sendRedirect = login page
-//			res.sendError(401);
-//			return;
-//		}
 		} else {
 			SystemStatus status = SystemStatus.unauthenticated;
 			
 			//res.sendRedirect = login page
 			res.sendError(401);
 			return;
-		}*/
+		}
 	}
 
 	/**
