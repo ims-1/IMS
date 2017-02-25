@@ -45,6 +45,13 @@ function validate() { // use on your own js file
 			}
 		}
 	});
+	
+	$$('.text-only').each(function(field){
+		if($F(field).trim() != ''){
+			var text_only = "";
+		}
+	});
+	
 	return !hasError;
 }
 
@@ -68,5 +75,8 @@ function recordEvents() { // call on your own js file
 		});
 	});
 }
+
+
+
 
 // use

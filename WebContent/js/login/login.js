@@ -8,13 +8,14 @@ $('btnSubmit').observe("click", function() {
 				password : $F('txtPassword')
 			},
 			onSuccess : function(response) {
-				if(response.status == 200){
-					window.location.href = "/views/home";
-				}
-				else{
+				if (response.status == 200) {
+					window.location.href = context + "/home";
+				} else if (response.status == 201) {
 					alert("Please provide correct password and username");
+				} else if (response.status == 202) {
+					alert("User inactive");
 				}
-				$('spinner').style.display = "none";				
+				$('spinner').style.display = "none";
 			},
 			onFailure : function(response) {
 				alert('There is something wrong with the connection');
@@ -23,3 +24,14 @@ $('btnSubmit').observe("click", function() {
 		});
 	}
 });
+
+//onLoad();
+//function onLoad() {
+//	new Ajax.Request(context + "/login", {
+//		method : "get",
+//		parameters : {
+//			
+//		}
+//
+//	});
+//}

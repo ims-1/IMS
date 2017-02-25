@@ -24,7 +24,7 @@ public class PaginationHelper {
 			for (int start = startRow; start < endRow; start++) {
 				returnPeripherals.add(peripherals.get(start));
 			}
-			Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").serializeNulls().create();
+			Gson gson = new GsonBuilder().setDateFormat("mm/dd/yyyy").serializeNulls().create();
 			json = gson.toJson(returnPeripherals);
 
 		}

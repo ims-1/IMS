@@ -39,8 +39,6 @@ public class UserMaintenanceAuthorizationFilter implements Filter {
 			chain.doFilter(request, response);
 		} else {
 			SystemStatus status = SystemStatus.unauthorized;
-
-			// res.sendRedirect = not authorized page
 			res.sendError(403);
 			return;
 		}

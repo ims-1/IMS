@@ -45,7 +45,8 @@
 	<select id="getPassword" resultClass="java.lang.String" parameterClass="java.lang.String">
 		SELECT password
 		FROM ims_users_1
-		WHERE user_id = #username#
+		WHERE lower(user_id) = #username#
+		and active_tag = 'Y'
 	</select>
 	
 	<select id="getUserAccess" resultClass="java.lang.String" parameterClass="java.lang.String">

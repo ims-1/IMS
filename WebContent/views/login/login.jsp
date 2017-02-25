@@ -16,7 +16,7 @@
 </head>
 <body>
 	<jsp:include page="/views/header.jsp"></jsp:include>
-	<table id="tableLogin" class="table table-bordered table-striped">
+	<table id="tableLogin" class="table borderless">
 		<tr>
 			<td class="label-right">Username:</td>
 			<td><input type="text" id="txtUserName" placeholder="username"
@@ -30,6 +30,7 @@
 		<tr align="right">
 			<td><input type="button" id="btnSubmit" value="Login"
 				class="btn btn-primary"></td>
+			<td><jsp:include page="/views/spinner.jsp"></jsp:include></td>
 		</tr>
 	</table>
 </body>
@@ -40,4 +41,6 @@
 	src="${pageContext.request.contextPath}/js/validation.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/login/login.js"></script>
+<script type="text/javascript" src="js/require.js"></script>
+<script type="text/javascript" src="js/resolveConflict.js"></script>
 </html>

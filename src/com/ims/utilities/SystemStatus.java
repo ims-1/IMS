@@ -6,7 +6,8 @@ public enum SystemStatus {
 	exception,
 	unauthorized,
 	unauthenticated,
-	norecord;
+	norecord,
+	notmatched;
 	
 	String key;
 	
