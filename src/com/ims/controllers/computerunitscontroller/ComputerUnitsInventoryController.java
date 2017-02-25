@@ -46,20 +46,6 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				computerUnits = computerUnitService.getComputerUnits();
 				sessionList.setAttribute("list", computerUnits);
 
-				// TODO-Jenny all records returned by select, save it to session
-				// with setAttribute named list
-
-				// TODO-Jenny pagination was moved here
-				// String json = Pagination.getPage(computerUnits, 0, pageLimit,
-				// computerUnits.size);
-				/*
-				 * if (!computerUnits.isEmpty()) { int endRow = pageLimit;
-				 * endRow = pageLimit > computerUnits.size() ?
-				 * computerUnits.size() : endRow; for (int start = 0; start <
-				 * endRow; start++) {
-				 * compUnitList.add(computerUnits.get(start)); } Gson gson = new
-				 * Gson(); String json = gson.toJson(compUnitList);
-				 */
 				String json = "";
 				if (!computerUnits.isEmpty()) {
 					json = PaginationHelper.getPageComputerUnit(computerUnits, 0, pageLimit, computerUnits.size());
@@ -88,14 +74,6 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 			int page = Integer.parseInt(request.getParameter("page"));
 			String json = "";
 			if (!computerUnits.isEmpty()) {
-				/*
-				 * int endRow = page * pageLimit; endRow = endRow >
-				 * computerUnits.size() ? computerUnits.size() : endRow; for
-				 * (int start = (page * pageLimit) - pageLimit; start <
-				 * (endRow); start++) {
-				 * compUnitList.add(computerUnits.get(start)); } Gson gson = new
-				 * Gson(); String json = gson.toJson(compUnitList);
-				 */
 
 				json = PaginationHelper.getPageComputerUnit(computerUnits, page, pageLimit, computerUnits.size());
 				response.getWriter().write(json);
