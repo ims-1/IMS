@@ -65,6 +65,30 @@ function getUnitHist() {
 if($F("txtUnitNo") != "") {
 	populateCompUnits();
 	getUnitHist();
+	
+	$("btnAssigneeSearch").observe('click', function() {
+		fetchAssignees();
+	})
+	
+	$("btnYes").observe('click', function() {
+		alert("Assign");
+		var json = addRecord();
+		alert(json);
+		new Ajax.Request(context + "/UnitAssignmentController", {
+			method : "post",
+			parameters : {
+				action : "assignToDatabase",
+				actionTwo : "assignToHistData",
+				unitassignment : json,
+				unitassignmenthist : json,
+				unitId : $F("txtUnitNo")
+			},
+			onComplete : function(response) {
+				//$("mainContents").update(response.responseText);
+			}
+		});
+	})
+
 }
 
 function fetchCompUnits() {
@@ -306,7 +330,7 @@ function getSize() {
 					}
 					for (var a = 1; a <= btnCount; a++) {
 						var newBtn = new Element('button');
-						newBtn.setAttribute("class", "btn-nav");
+						newBtn.setAttribute("class", "btn-nav btn btn-primary");
 						newBtn.update(a);
 						newBtn.setAttribute("onclick",
 								"getRecordPage(this.innerHTML)");

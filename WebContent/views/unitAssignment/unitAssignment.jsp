@@ -47,7 +47,7 @@
 
 				</td>
 				<td class="label-right" > SERIAL NO.</td>
-				<td><input type="text" id="txtSerialNo" class="form-control" /></td>
+				<td><input type="text" id="txtSerialNo" class="form-control" readonly="readonly"/></td>
 			</tr>
 			<tr>
 				<td class="label-right">UNIT NAME</td>
@@ -62,7 +62,7 @@
 				<td><input type="text" id="txtTagNumber" readonly="readonly"
 					class="form-control" /></td>
 				<td class="label-right">MODEL </td>
-				<td><input type="text" id="txtUnitModel" class="form-control" /></td>
+				<td><input type="text" id="txtUnitModel" class="form-control" readonly="readonly"/></td>
 			</tr>
 			<tr>
 				<td class="label-right">TYPE </td>
@@ -78,7 +78,7 @@
 				<td class="label-right">ASSIGNEE</td>
 				<td>
 					<div class="input-group">
-						<input type="text" class="form-control" id="txtAssignee">
+						<input type="text" class="form-control" id="txtAssignee" readonly="readonly">
 						<span class="input-group-btn">
 							<button class="btn btn-secondary" type="button"
 								data-toggle="modal" data-target="#myAssigneeModal"
@@ -101,14 +101,14 @@
 				<td><input type="text" id="txtAssigneeLocation"
 					class="form-control" /></td>
 				<td class="label-right">ASSIGNED BY </td>
-				<td><input type="text" id="txtAssignedBy" class="form-control" /></td>
+				<td><input type="text" id="txtAssignedBy" class="form-control" readonly="readonly" /></td>
 			</tr>
 			<tr>
 				<td class="label-right">IP ADDRESS </td>
 				<td><input type="text" id="txtIpAdd" class="form-control" /></td>
 				<td class="label-right">DATE ASSIGNED </td>
 				<td><input type="text" id="txtDateAssigned"
-					class="form-control" /></td>
+					class="form-control" readonly="readonly" /></td>
 			</tr>
 		</table>
 		<input type="text" id="searchBox"
@@ -134,7 +134,7 @@
 		<tbody id="body">
 			<tr class="record"></tr>
 	</table>
-	<div id="pagination" class="btn btn-primary"></div>
+	<div id="pagination"></div>
 	<jsp:include page="/views/modals/unitModal.jsp"></jsp:include>
 	<jsp:include page="/views/modals/assigneeModal.jsp"></jsp:include>
 	<jsp:include page="/views/modals/returnDateModal.jsp"></jsp:include>

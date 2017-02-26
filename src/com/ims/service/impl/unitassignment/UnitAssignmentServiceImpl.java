@@ -42,7 +42,7 @@ public class UnitAssignmentServiceImpl implements UnitAssignmentService {
 		params.put("status", unitassignment.getStatus());
 		params.put("ipAddress", unitassignment.getIpAddress());
 		params.put("assignedBy", unitassignment.getAssignedBy());
-		params.put("userId", "ydt");
+		params.put("userId", unitassignment.getUserId());
 
 		this.getDao().insertNewAssignee(params);
 	}
