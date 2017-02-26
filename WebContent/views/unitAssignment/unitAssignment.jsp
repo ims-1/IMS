@@ -89,8 +89,12 @@
 					</div> <input type="hidden" id="hiddenAssignNo">
 				</td>
 				<td class="label-right">STATUS </td>
-				<td><input type="text" id="txtAssigneeStatus"
-					class="form-control" /></td>
+				<td><select id="txtAssigneeStatus" class="form-control">
+						<option value="P">PERMANENT</option>
+						<option value="T">TEMPORARY</option>
+						<option value="V">VACANT</option>
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td class="label-right">LOCATION </td>
@@ -111,11 +115,11 @@
 			onkeyup="filteredUnitAssignmentsHist()" placeholder="Enter Keyword to search.." class="form-control"/><br> <br>
 
 		<button class="btn btn-secondary" type="button" data-toggle="modal"
-			data-target="#modalReturnDate" id="btnAssign"></button>
+			data-target="#modalReturnDate" id="btnAssign">Assign Unit</button>
 	</div>
 
 	<table class="table table-striped table-bordered">
-		<thead>
+		<thead>	
 			<tr>
 				<th>NO.</th>
 				<th>Unit Name</th>

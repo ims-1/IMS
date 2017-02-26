@@ -57,7 +57,7 @@ public class DaoUnitAssignmentImpl implements DaoUnitAssignment {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ComputerUnits> getUnit(String unitId) throws SQLException {
-		return this.getSqlMapClient().queryForList("getUnit", unitId);
+		return this.getSqlMapClient().queryForList("getUnitAssignment", unitId);
 	}
 
 	@Override

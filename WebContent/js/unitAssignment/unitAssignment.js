@@ -19,6 +19,54 @@ function populateCompUnits() {
 		}
 	});
 }
+
+function getUnitHist() {
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "fetch",
+			selectUnits : $F("txtUnitNo"),
+			page : "1"
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('body');
+
+			alert("fetching");
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+
+			u.each(function(unit) {
+				var units = "";
+
+				units += "<td>" + unit.unitNo + "</td>";
+				units += "<td>" + unit.unitName + "</td>";
+				units += "<td>" + unit.location + "</td>";
+				units += "<td>" + unit.ipAddress + "</td>";
+				units += "<td>" + unit.status + "</td>";
+				units += "<td>" + unit.assignedBy + "</td>";
+				units += "<td>" + unit.assignedDate + "</td>";
+				units += "<td>" + unit.returnDate + "</td>";
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(units);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			getSize();
+			recordEvents();
+		}
+	});
+}
+
+if($F("txtUnitNo") != "") {
+	populateCompUnits();
+	getUnitHist();
+}
+
 function fetchCompUnits() {
 	alert("fetch");
 	new Ajax.Request(context + "/UnitAssignmentController", {
@@ -154,7 +202,7 @@ function populateTxtAssignee() {
 		method : "get",
 		parameters : {
 			action : "populateAssignee",
-			selectAssignee : $F("txtAssignee")
+			selectAssignee : $F("hiddenAssignNo")
 		},
 		onSuccess : function(response) {
 			var assignee = response.responseText.evalJSON();

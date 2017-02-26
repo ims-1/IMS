@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.ims.controllers.unitassignment.GetSize;
 import com.ims.entity.computerunitsinventory.ComputerUnits;
@@ -65,11 +66,12 @@ public class UnitAssignmentController extends HttpServlet {
 
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-
+				System.out.println("here1");
 				unitHist = serviceHist.getUnitAssignmentHist();
 				System.out.println(unitHist);
 				session.setAttribute("list", unitHist);
 
+				System.out.println("here2");
 				String json = PaginationHelper.getPageUnitAssignmentHist(unitHist, 0, pageLimit, unitHist.size());
 				System.out.println(unitHist.isEmpty());
 				System.out.println("here1");
@@ -88,7 +90,7 @@ public class UnitAssignmentController extends HttpServlet {
 			getSize.add(new GetSize(unitHist.size()));
 			System.out.println(unitHist.size());
 
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
 			String json = gson.toJson(getSize);
 			System.out.println(json);
 			response.getWriter().write(json);
@@ -135,7 +137,7 @@ public class UnitAssignmentController extends HttpServlet {
 			getSize.add(new GetSize(filteredUnitHist.size()));
 			System.out.println(filteredUnitHist.size());
 
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
 			String json = gson.toJson(getSize);
 			System.out.println(json);
 			response.getWriter().write(json);
@@ -157,8 +159,7 @@ public class UnitAssignmentController extends HttpServlet {
 			List<Assignee> assigneeList = new LinkedList<>();
 			try {
 				assigneeList = service.getAssigneeList();
-
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
 				String json = gson.toJson(assigneeList);
 				System.out.println(json);
 				response.getWriter().write(json);
@@ -174,7 +175,7 @@ public class UnitAssignmentController extends HttpServlet {
 			try {
 				compUnit = computerUnitService.getComputerUnits();
 
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
 				String json = gson.toJson(compUnit);
 				System.out.println(json);
 				response.getWriter().write(json);
@@ -188,14 +189,16 @@ public class UnitAssignmentController extends HttpServlet {
 
 			String selectUnit = request.getParameter("selectUnits");
 			List<ComputerUnits> compUnits = null;
+			
 			System.out.println(selectUnit);
 
 			try {
-				compUnits = service.getUnit(selectUnit);
+				compUnits = computerUnitService.getComputerUnitByUnitNo(Integer.parseInt(selectUnit));
 
 				System.out.println("huh");
 
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
+				
 				String json = gson.toJson(compUnits);
 				System.out.println(json);
 				response.getWriter().write(json);
@@ -208,8 +211,9 @@ public class UnitAssignmentController extends HttpServlet {
 		}
 
 		else if (action.equals("populateAssignee")) {
-			System.out.println();
+			System.out.println("here");
 			String selectAssignee = request.getParameter("selectAssignee");
+			
 			List<Assignee> assigneeList = null;
 
 			System.out.println(assigneeList);
@@ -219,7 +223,7 @@ public class UnitAssignmentController extends HttpServlet {
 
 				System.out.println("foundAssignee");
 
-				Gson gson = new Gson();
+				Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
 				String json = gson.toJson(assigneeList);
 				System.out.println(json);
 				response.getWriter().write(json);
@@ -249,6 +253,21 @@ public class UnitAssignmentController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		else if(action.equals("fromCompUnit")) {
+			String assigneeNum = request.getParameter("selectUnits");
+			System.out.println(assigneeNum);
+			int page = Integer.parseInt(request.getParameter("page"));
+			try {
+				List<UnitAssignmentHist> unitHist = null;
+				unitHist = (List<UnitAssignmentHist>) session.getAttribute("list");
+				unitHist = serviceHist.getUnitHist(assigneeNum);
+				String json = PaginationHelper.getPageUnitAssignmentHist(unitHist, 0, 10, unitHist.size());
+				response.getWriter().write(json);
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@SuppressWarnings("resource")
@@ -267,10 +286,12 @@ public class UnitAssignmentController extends HttpServlet {
 
 		if (action.equals("assignToDatabase")) {
 			String json = request.getParameter("unitassignment");
-
+			
+			Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
+			
 			Type collectionType = new TypeToken<ArrayList<UnitAssignment>>() {
 			}.getType();
-			List<UnitAssignment> unitassignment = new Gson().fromJson(json, collectionType);
+			List<UnitAssignment> unitassignment = gson.fromJson(json, collectionType);
 
 			for (UnitAssignment unit : unitassignment) {
 				try {
@@ -300,7 +321,10 @@ public class UnitAssignmentController extends HttpServlet {
 			System.out.println(json);
 			Type collectionType = new TypeToken<ArrayList<UnitAssignmentHist>>() {
 			}.getType();
-			List<UnitAssignmentHist> unitAssignmentHist = new Gson().fromJson(json, collectionType);
+			
+			Gson gson = new GsonBuilder().setDateFormat("MM/dd/YYYY").serializeNulls().create();
+			
+			List<UnitAssignmentHist> unitAssignmentHist = gson.fromJson(json, collectionType);
 
 			for (UnitAssignmentHist unitHist : unitAssignmentHist) {
 				try {

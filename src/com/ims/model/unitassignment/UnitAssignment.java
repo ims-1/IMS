@@ -1,5 +1,7 @@
 package com.ims.model.unitassignment;
 
+import java.util.Date;
+
 public class UnitAssignment {
 	
 	//unit assignment table
@@ -9,9 +11,9 @@ public class UnitAssignment {
 	private String status;
 	private String ipAddress;
 	private String assignedBy;
-	private String assignedDate;
+	private Date assignedDate;
 	private String userId;
-	private String lastUpdate;
+	private Date lastUpdate;
 	
 	public Integer getUnitNo() {
 		return unitNo;
@@ -49,25 +51,24 @@ public class UnitAssignment {
 	public void setAssignedBy(String assignedBy) {
 		this.assignedBy = assignedBy;
 	}
-	public String getAssignedDate() {
-		return assignedDate;
-	}
-	public void setAssignedDate(String assignedDate) {
-		this.assignedDate = assignedDate;
-	}
 	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getLastUpdate() {
+	public Date getAssignedDate() {
+		return assignedDate;
+	}
+	public void setAssignedDate(Date assignedDate) {
+		this.assignedDate = assignedDate;
+	}
+	public Date getLastUpdate() {
 		return lastUpdate;
 	}
-	public void setLastUpdate(String lastUpdate) {
+	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
-	
 	
 	
 	

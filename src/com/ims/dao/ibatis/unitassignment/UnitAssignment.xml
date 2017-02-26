@@ -47,8 +47,7 @@
 		FROM IMS_UNIT_ASSIGNMENT_1
 	</select>
 
-	<select id="getAssigneeNo" resultMap="getAssigneeMap"
-		parameterClass="java.lang.String">
+	<select id="getAssigneeNo" resultMap="getAssigneeMap">
 		SELECT assignee_no, assignee_name, department,
 		location, email, active_tag,
 		entry_date, remarks, user_id, last_update

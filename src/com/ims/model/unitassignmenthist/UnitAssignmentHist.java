@@ -1,5 +1,7 @@
 package com.ims.model.unitassignmenthist;
 
+import java.util.Date;
+
 public class UnitAssignmentHist {
 	
 	private Integer histNo;
@@ -10,12 +12,30 @@ public class UnitAssignmentHist {
 	private String status;
 	private String ipAddress;
 	private String assignedBy;
-	private String assignedDate;
+	private Date assignedDate;
 	private String assignTag;
-	private String returnDate;
+	private Date returnDate;
 	private String userId;
-	private String lastUpdate;
+	private Date lastUpdate;
 	
+	public Date getAssignedDate() {
+		return assignedDate;
+	}
+	public Date getReturnDate() {
+		return returnDate;
+	}
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+	public void setAssignedDate(Date assignedDate) {
+		this.assignedDate = assignedDate;
+	}
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 	public Integer getHistNo() {
 		return histNo;
 	}
@@ -64,23 +84,11 @@ public class UnitAssignmentHist {
 	public void setAssignedBy(String assignedBy) {
 		this.assignedBy = assignedBy;
 	}
-	public String getAssignedDate() {
-		return assignedDate;
-	}
-	public void setAssignedDate(String assignedDate) {
-		this.assignedDate = assignedDate;
-	}
 	public String getAssignTag() {
 		return assignTag;
 	}
 	public void setAssignTag(String assignTag) {
 		this.assignTag = assignTag;
-	}
-	public String getReturnDate() {
-		return returnDate;
-	}
-	public void setReturnDate(String returnDate) {
-		this.returnDate = returnDate;
 	}
 	public String getUserId() {
 		return userId;
@@ -88,11 +96,4 @@ public class UnitAssignmentHist {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getLastUpdate() {
-		return lastUpdate;
-	}
-	public void setLastUpdate(String lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-	
 }

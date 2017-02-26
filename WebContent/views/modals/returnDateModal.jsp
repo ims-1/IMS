@@ -11,7 +11,7 @@
 							<td>
 								<p>Are you sure you want to re-assign this unit</p><br>
 								<label>Return Date: </label>
-								<input type="text" id="txtReturnDate" class="date required" />
+								<input type="text" id="txtReturnDate" class="date required form-class" placeholder="MM/DD/YYYY" />
 							</td>
 						</tr>
 					</tbody>
