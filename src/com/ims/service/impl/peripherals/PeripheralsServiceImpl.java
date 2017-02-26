@@ -95,4 +95,9 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 	public SystemStatus deletePeripheral(Integer no) throws SQLException {
 		return this.getDao().deletePeripheral(no);
 	}
+
+	@Override
+	public SystemStatus savePeripheral(List<Peripherals> sessionPeripherals) throws SQLException {
+		return this.getDao().savePeripherals(sessionPeripherals);
+	}
 }

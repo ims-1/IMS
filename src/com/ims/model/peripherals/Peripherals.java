@@ -1,8 +1,10 @@
 package com.ims.model.peripherals;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Peripherals {
+@SuppressWarnings("serial")
+public class Peripherals implements Serializable{
 	private Integer unitNo;
 	private Integer peripheralNo;
 	private String peripheralType;

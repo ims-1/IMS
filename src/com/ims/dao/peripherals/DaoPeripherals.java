@@ -25,4 +25,6 @@ public interface DaoPeripherals {
 	List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException;
 	
 	SystemStatus deletePeripheral(Integer no) throws SQLException;
+	
+	SystemStatus savePeripherals(List<Peripherals> sessionPeripherals) throws SQLException;
 }

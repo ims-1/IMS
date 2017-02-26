@@ -27,4 +27,6 @@ public interface PeripheralsService {
 	List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException;
 	
 	SystemStatus deletePeripheral(Integer no) throws SQLException;
+	
+	SystemStatus savePeripheral(List<Peripherals> sessionPeripherals) throws SQLException;
 }

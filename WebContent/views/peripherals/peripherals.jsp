@@ -22,12 +22,10 @@
 			<tr>
 				<td class="label-right">Unit No.</td>
 				<td>
-					
-						<%
-							String unitNo = request.getParameter("unitNo");
-							
-						
-						if(unitNo == null || unitNo == ""){
+					<%
+						String unitNo = request.getParameter("unitNo");
+
+						if (unitNo == null || unitNo == "") {
 							out.print("<div class=input-group>");
 							out.print("<input type=text class=form-control id=txtUnitNo disabled=disabled>");
 							out.print("<span class=\"input-group-btn\">");
@@ -37,12 +35,10 @@
 							out.print("		<span class=\"glyphicon glyphicon-search\"></span>");
 							out.print("	</button>");
 							out.print("</span></div>");
-						}			
-						else{
+						} else {
 							out.print("<input type=text class=form-control id=txtUnitNo value=" + unitNo + " disabled=disabled>");
 						}
-						%>
-					 <jsp:include page="/views/modals/unitModal.jsp"></jsp:include>
+					%> <jsp:include page="/views/modals/unitModal.jsp"></jsp:include>
 				</td>
 				<td class="label-right">Serial No.</td>
 				<td><input type="text" id="txtSerialNo" class="form-control"
@@ -103,48 +99,48 @@
 			</thead>
 			<tbody id="body"></tbody>
 		</table>
-		<div class="btn-group border" id="pagination" align="right">
-		</div>
+		<jsp:include page="/views/spinner.jsp"></jsp:include>
+		<div class="btn-group border" id="pagination" align="right"></div>
 		<table class="table borderless" id="tableInput">
 			<tr>
 				<td class="label-right">Peripheral No.</td>
-				<td><input type="text" id="txtPeripheralNo"
+				<td><input type="text" id="ptxtPeripheralNo"
 					class="form-control" readonly="readonly"></td>
 				<td class="label-right">Serial No.</td>
-				<td><input type="text" id="txtSerialNo" class="form-control"></td>
+				<td><input type="text" id="ptxtSerialNo" class="form-control"></td>
 			</tr>
 			<tr>
 				<td class="label-right">Peripheral Type</td>
-				<td><input type="text" id="txtPeripheralType"
+				<td><input type="text" id="ptxtPeripheralType"
 					class="required form-control"></td>
 				<td class="label-right">Brand</td>
-				<td><input type="text" id="txtBrand" class="form-control"></td>
+				<td><input type="text" id="ptxtBrand" class="form-control"></td>
 			</tr>
 			<tr>
 				<td class="label-right">Tag Number</td>
-				<td><input type="text" id="txtTagNumber" class="form-control"></td>
+				<td><input type="text" id="ptxtTagNumber" class="form-control"></td>
 				<td class="label-right">Model</td>
-				<td><input type="text" id="txtModel" class="form-control"></td>
+				<td><input type="text" id="ptxtModel" class="form-control"></td>
 			</tr>
 			<tr>
 				<td class="label-right">Acquired Date</td>
-				<td><input type="text" id="dtAcquiredDate"
-					class="form-control" placeholder="MM/DD/YYYY"></td>
+				<td><input type="text" id="pdtAcquiredDate" class="form-control"
+					placeholder="MM/DD/YYYY"></td>
 				<td class="label-right">Color</td>
-				<td><input type="text" id="txtColor" class="form-control"></td>
+				<td><input type="text" id="ptxtColor" class="form-control"></td>
 			</tr>
 			<tr>
 				<td class="label-right">Description</td>
-				<td><input type="text" id="txtDescription" class="form-control"></td>
+				<td><input type="text" id="ptxtDescription" class="form-control"></td>
 				<td class="label-right">User ID</td>
-				<td><input type="text" id="txtUserId" class="form-control"
+				<td><input type="text" id="ptxtUserId" class="form-control"
 					disabled="disabled"></td>
 			</tr>
 			<tr>
 				<td class="label-right">Remarks</td>
-				<td><input type="text" id="txtRemarks" class="form-control"></td>
+				<td><input type="text" id="ptxtRemarks" class="form-control"></td>
 				<td class="label-right">Last Update</td>
-				<td><input type="text" id="dtLastUpdate"
+				<td><input type="text" id="pdtLastUpdate"
 					class="date form-control" placeholder="MM/DD/YYYY"
 					disabled="disabled"></td>
 			</tr>
@@ -153,7 +149,8 @@
 		<table class="table borderless">
 			<tr>
 				<td align="right"><input type="button" id="btnAdd" value="Add"
-					class="btn btn-primary" onclick="addPeripherals()"></td>
+					class="btn btn-primary" onclick="addPeripherals()"
+					disabled="disabled"></td>
 				<td><input type="button" id="btnDelete" value="Delete"
 					class="btn btn-primary" disabled="disabled"
 					onclick="deleteRecord()"></td>
@@ -166,7 +163,6 @@
 			</tr>
 		</table>
 	</div>
-
 </body>
 <script>
 	var context = "${pageContext.request.contextPath}";

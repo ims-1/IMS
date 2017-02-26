@@ -2,8 +2,6 @@ package com.ims.utilities;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.ims.model.peripherals.Peripherals;
 import com.ims.service.usermaintenance.UserMaintenanceService;
 
 /**

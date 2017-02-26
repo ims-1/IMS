@@ -94,57 +94,7 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ComputerAssigneeData> getComputerAssigneeData(Integer unitNo) throws SQLException {
-		List<ComputerAssigneeData> returnList = new LinkedList<>();
-		ComputerAssigneeData returnResultData = new ComputerAssigneeData();
-		// select computerassignee
-		List<ComputerAssigneeData> computerAssignee = this.getSqlMapClient().queryForList("getComputerAssigneeData",
-				unitNo);
-		System.out.println("error here");
-		if (!computerAssignee.isEmpty()) {
-			returnResultData.setUnitNo(computerAssignee.get(0).getUnitNo());
-			returnResultData.setSerialNo(computerAssignee.get(0).getSerialNo());
-			returnResultData.setUnitName(computerAssignee.get(0).getUnitName());
-			returnResultData.setBrand(computerAssignee.get(0).getBrand());
-			returnResultData.setTagNumber(computerAssignee.get(0).getTagNumber());
-			returnResultData.setModel(computerAssignee.get(0).getModel());
-			returnResultData.setType(computerAssignee.get(0).getType());
-			returnResultData.setColor(computerAssignee.get(0).getColor());
-			returnResultData.setDeleteTag(computerAssignee.get(0).getDeleteTag());
-			returnResultData.setIpAddress(computerAssignee.get(0).getIpAddress());
-
-			System.out.println(computerAssignee.get(0).getUnitNo());
-			System.out.println(computerAssignee.get(0).getSerialNo());
-			System.out.println(computerAssignee.get(0).getUnitName());
-			System.out.println(computerAssignee.get(0).getBrand());
-			System.out.println(computerAssignee.get(0).getTagNumber());
-			System.out.println(computerAssignee.get(0).getModel());
-			System.out.println(computerAssignee.get(0).getType());
-			System.out.println(computerAssignee.get(0).getColor());
-			System.out.println(computerAssignee.get(0).getDeleteTag());
-			System.out.println(computerAssignee.get(0).getIpAddress());
-
-			List<ComputerAssigneeData> assignmentHist = this.getSqlMapClient().queryForList("getAssignmentHistData",
-					unitNo);
-
-			// select assignee
-			if (!assignmentHist.isEmpty()) {
-				returnResultData.setStatus(assignmentHist.get(0).getStatus());
-				returnResultData.setAssigneeNo(assignmentHist.get(0).getAssigneeNo());
-
-				List<ComputerAssigneeData> assignee = this.getSqlMapClient().queryForList("getAssigneeData",
-						assignmentHist.get(0).getAssigneeNo());
-
-				if (!assignee.isEmpty()) {
-					returnResultData.setAssigneeName(assignee.get(0).getAssigneeName());
-				}
-			}
-		}
-
-		else {
-			return null;
-		}
-		returnList.add(returnResultData);
-		return returnList;
+		return this.getSqlMapClient().queryForList("getComputerAssigneeData", unitNo);
 	}
 
 	@Override
@@ -155,6 +105,60 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
 			this.getSqlMapClient().startBatch();
 			this.getSqlMapClient().delete("deletePeripheral", no);
+			this.getSqlMapClient().executeBatch();
+			this.getSqlMapClient().getCurrentConnection().commit();
+			status = SystemStatus.committed;
+		} catch (SQLException e) {
+			this.getSqlMapClient().getCurrentConnection().rollback();
+			e.printStackTrace();
+			status = SystemStatus.exception;
+		} finally {
+			this.getSqlMapClient().endTransaction();
+		}
+		return status;
+	}
+
+	@Override
+	public SystemStatus savePeripherals(List<Peripherals> sessionPeripherals) throws SQLException {
+
+		SystemStatus status = SystemStatus.ok;
+		try {
+			this.getSqlMapClient().startTransaction();
+			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+			this.getSqlMapClient().startBatch();
+			for (Peripherals p : sessionPeripherals) {
+				if (p.getStatus().equals("Add")) {
+					Map<String, Object> params = new HashMap<>();
+					params.put("unitNo", p.getUnitNo());
+					params.put("peripheralNo", p.getPeripheralNo());
+					params.put("serialNo", p.getSerialNo());
+					params.put("peripheralType", p.getPeripheralType());
+					params.put("brand", p.getBrand());
+					params.put("tagNumber", p.getTagNumber());
+					params.put("model", p.getModel());
+					params.put("acquiredDate", p.getAcquiredDate());
+					params.put("color", p.getColor());
+					params.put("description", p.getColor());
+					params.put("userId", p.getUserId());
+					params.put("remarks", p.getRemarks());
+					this.insertNewPeripherals(params);
+				}
+				else{
+					Map<String, Object> params = new HashMap<>();
+					params.put("peripheralNo", p.getPeripheralNo());
+					params.put("peripheralType", p.getPeripheralType());
+					params.put("tagNumber", p.getTagNumber());
+					params.put("acquiredDate", p.getAcquiredDate());
+					params.put("description", p.getDescription());
+					params.put("serialNo", p.getSerialNo());
+					params.put("brand", p.getBrand());
+					params.put("model", p.getModel());
+					params.put("color", p.getColor());
+					params.put("remarks", p.getRemarks());
+					params.put("userId", p.getUserId());
+					this.updatePeripheral(params);
+				}
+			}
 			this.getSqlMapClient().executeBatch();
 			this.getSqlMapClient().getCurrentConnection().commit();
 			status = SystemStatus.committed;

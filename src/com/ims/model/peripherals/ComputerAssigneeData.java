@@ -14,6 +14,7 @@ public class ComputerAssigneeData {
 	private Integer assigneeNo;
 	private String status;
 	private String deleteTag;
+	private String location;
 	
 	public String getAssigneeName() {
 		return assigneeName;
@@ -92,6 +93,12 @@ public class ComputerAssigneeData {
 	}
 	public void setDeleteTag(String deleteTag) {
 		this.deleteTag = deleteTag;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 }
