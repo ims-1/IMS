@@ -33,7 +33,7 @@ public class UserMaintenanceAuthorizationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		HttpSession session = req.getSession();
-		String userAccess = (String) session.getAttribute("user_access");
+		String userAccess = (String) session.getAttribute("user_access")  == null ? "" : (String) session.getAttribute("user_access");
 		if (userAccess.equals("A")) {
 			// clear sessions used
 
