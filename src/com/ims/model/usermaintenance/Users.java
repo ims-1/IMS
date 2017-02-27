@@ -1,8 +1,9 @@
 package com.ims.model.usermaintenance;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Users {
+public class Users implements Serializable{
 
 	private String userId;
 	private String firstName;

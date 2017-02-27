@@ -54,8 +54,11 @@ public class FilterRecord {
 			if (users.get(x).getFirstName().toUpperCase().contains(words)
 					|| users.get(x).getMiddleInitial().toUpperCase().contains(words)
 					|| users.get(x).getLastName().toString().toUpperCase().contains(words)
-					|| users.get(x).getEmail().toUpperCase().contains(words)) {
-				// TODO-Sharlene do the rest of the getters
+					|| users.get(x).getEmail().toUpperCase().contains(words)
+					|| users.get(x).getUserId().toUpperCase().contains(words)
+					|| users.get(x).getUserAccess().toUpperCase().contains(words)
+					|| users.get(x).getActiveTag().toUpperCase().contains(words)){
+				//TODO-Sharlene do the rest of the getters
 				filterList.add(users.get(x));
 			}
 		}
