@@ -28,14 +28,19 @@ public class FilterRecord {
 		return filterList;
 	}
 
-	public static List<UnitAssignmentHist> getFilterUnitAssignmentHist(List<UnitAssignmentHist> unitAssignmentHist,
-			String words) {
+	public static List<UnitAssignmentHist> getFilterUnitAssignmentHist(List<UnitAssignmentHist> unitAssignmentHist, String words) {
 		List<UnitAssignmentHist> filterList = new LinkedList<>();
 		for (int x = 0; x < unitAssignmentHist.size(); x++) {
 			if (unitAssignmentHist.get(x).getHistNo().toString().toUpperCase().contains(words)
 					|| unitAssignmentHist.get(x).getUnitNo().toString().toUpperCase().contains(words)
 					|| unitAssignmentHist.get(x).getUnitName().toString().toUpperCase().contains(words)
-					|| unitAssignmentHist.get(x).getAssigneeNo().toUpperCase().contains(words)) {
+					|| unitAssignmentHist.get(x).getAssigneeNo().toUpperCase().contains(words)
+					|| unitAssignmentHist.get(x).getLocation().toUpperCase().contains(words) 
+					|| unitAssignmentHist.get(x).getAssignedBy().toUpperCase().contains(words)
+					|| unitAssignmentHist.get(x).getIpAddress().toUpperCase().contains(words)
+					|| unitAssignmentHist.get(x).getStatus().toUpperCase().contains(words)
+					|| unitAssignmentHist.get(x).getAssignedDate().toString().toUpperCase().contains(words)
+					|| unitAssignmentHist.get(x).getReturnDate().toString().toUpperCase().contains(words)){
 				// TODO-Phyllis do the rest of the getters
 				filterList.add(unitAssignmentHist.get(x));
 			}
