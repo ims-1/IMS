@@ -18,7 +18,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>unauthorized</servlet-name>
-    <url-pattern>/unauthenticated</url-pattern>
+    <url-pattern>/unauthorized</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>cui</servlet-name>

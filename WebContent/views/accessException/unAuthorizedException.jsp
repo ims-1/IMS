@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Unauthorized Access</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css" type="text/css"> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/ims-css.css" type="text/css"> 
 </head>
 <body>
 <jsp:include page="/views/header.jsp"></jsp:include>
-User is not authorized to access the screen
+<p class="error-message">User is not authorized to access the screen<p>
 </body>
 </html>

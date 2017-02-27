@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>User Unauthenticated</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css" type="text/css"> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/ims-css.css" type="text/css"> 
 </head>
 <body>
 <jsp:include page="/views/header.jsp"></jsp:include>
-User not authenticated exception
+<p class="error-message">User not authenticated exception<p>
 </body>
 </html>

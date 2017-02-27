@@ -95,7 +95,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 				List<ComputerUnits> computerUnits = null;
 				HttpSession sessionList = request.getSession();
-				computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list");
+				computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list") == null ? new LinkedList<>()
+						: (List<ComputerUnits>) sessionList.getAttribute("list");
 
 				filteredList.removeAll(computerUnits);
 
@@ -115,7 +116,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 				List<ComputerUnits> filteredList = new LinkedList<>();
 				HttpSession filteredSession = request.getSession();
-				filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
+				filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList") == null
+						? new LinkedList<>() : (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
 
 				List<GetSize> getSize = new ArrayList<>();
 				getSize.add(new GetSize(filteredList.size()));
@@ -127,7 +129,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 				List<ComputerUnits> filteredList = new LinkedList<>();
 				HttpSession filteredSession = request.getSession();
-				filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
+				filteredList = (List<ComputerUnits>) filteredSession.getAttribute("filteredList") == null
+						? new LinkedList<>() : (List<ComputerUnits>) filteredSession.getAttribute("filteredList");
 
 				int page = Integer.parseInt(request.getParameter("page"));
 				String json = "";
