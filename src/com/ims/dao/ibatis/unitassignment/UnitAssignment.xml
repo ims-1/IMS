@@ -10,15 +10,15 @@
 	<resultMap id="getUnitAssignmentMap" class="UnitAssignmentClass">
 
 		<!-- unit assignment table -->
-		<result column="unit_no" property="unitNo" />
-		<result column="assignee_no" property="assigneeNo" />
-		<result column="location" property="location" />
-		<result column="status" property="status" />
-		<result column="ip_address" property="ipAddress" />
-		<result column="assigned_by" property="assignedBy" />
-		<result column="assigned_date" property="assignedDate" />
-		<result column="user_id" property="userId" />
-		<result column="last_update" property="lastUpdate" />
+		<result column="unit_no" 		property="unitNo" />
+		<result column="assignee_no" 	property="assigneeNo" />
+		<result column="location" 		property="location" />
+		<result column="status" 		property="status" />
+		<result column="ip_address" 	property="ipAddress" />
+		<result column="assigned_by" 	property="assignedBy" />
+		<result column="assigned_date" 	property="assignedDate" />
+		<result column="user_id" 		property="userId" />
+		<result column="last_update" 	property="lastUpdate" />
 
 	</resultMap>
 
@@ -27,16 +27,16 @@
 	<resultMap id="getAssigneeMap" class="AssigneeClass">
 		<!--assignee table -->
 
-		<result column="assignee_no" property="assigneeNo" />
-		<result column="assignee_name" property="assigneeName" />
-		<result column="department" property="department" />
-		<result column="location" property="location" />
-		<result column="email" property="email" />
-		<result column="active_tag" property="activeTag" />
-		<result column="entry_date" property="entryDate" />
-		<result column="remarks" property="remarks" />
-		<result column="user_id" property="userId" />
-		<result column="last_update" property="lastUpdate" />
+		<result column="assignee_no" 	property="assigneeNo" />
+		<result column="assignee_name" 	property="assigneeName" />
+		<result column="department" 	property="department" />
+		<result column="location" 		property="location" />
+		<result column="email" 			property="email" />
+		<result column="active_tag" 	property="activeTag" />
+		<result column="entry_date" 	property="entryDate" />
+		<result column="remarks" 		property="remarks" />
+		<result column="user_id" 		property="userId" />
+		<result column="last_update" 	property="lastUpdate" />
 
 	</resultMap>
 

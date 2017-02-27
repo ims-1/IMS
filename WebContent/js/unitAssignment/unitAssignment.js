@@ -1,3 +1,4 @@
+//Populate Computer Units textfields in Unit Assignment page
 function populateCompUnits() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
@@ -20,6 +21,7 @@ function populateCompUnits() {
 	});
 }
 
+// Display the history of the Selected Computer Unit
 function getUnitHist() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
@@ -32,7 +34,6 @@ function getUnitHist() {
 			var u = response.responseText.evalJSON();
 			var parent = $('body');
 
-			alert("fetching");
 			$$('.record').each(function(record) {
 				$(record).remove();
 			});
@@ -62,37 +63,39 @@ function getUnitHist() {
 	});
 }
 
-if($F("txtUnitNo") != "") {
+// Condition if the User came from the Computer Unit Inventory PAge
+if ($F("txtUnitNo") != "") {
 	populateCompUnits();
 	getUnitHist();
-	
+
 	$("btnAssigneeSearch").observe('click', function() {
 		fetchAssignees();
 	})
-	
+
 	$("btnYes").observe('click', function() {
-		alert("Assign");
-		var json = addRecord();
-		alert(json);
-		new Ajax.Request(context + "/UnitAssignmentController", {
-			method : "post",
-			parameters : {
-				action : "assignToDatabase",
-				actionTwo : "assignToHistData",
-				unitassignment : json,
-				unitassignmenthist : json,
-				unitId : $F("txtUnitNo")
-			},
-			onComplete : function(response) {
-				//$("mainContents").update(response.responseText);
-			}
-		});
+		if(validate())
+		{
+			var json = addRecord();
+			new Ajax.Request(context + "/UnitAssignmentController", {
+				method : "post",
+				parameters : {
+					action : "assignToDatabase",
+					actionTwo : "assignToHistData",
+					unitassignment : json,
+					unitassignmenthist : json,
+					unitId : $F("txtUnitNo")
+				},
+				onComplete : function(response) {
+					// $("mainContents").update(response.responseText);
+				}
+			});
+		}
 	})
 
 }
-
+// Fetching the computer units data from the computer units database
 function fetchCompUnits() {
-	alert("fetch");
+
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
@@ -122,10 +125,11 @@ function fetchCompUnits() {
 					bottom : newTr
 				});
 			});
-			// recordEvents();
 		}
 	});
 }
+
+// Function for selecting computer unit through the LOV
 function getUnit(compUnitNo) {
 	$("txtUnitNo").value = compUnitNo.down(0).innerHTML;
 	populateCompUnits();
@@ -141,7 +145,7 @@ function getUnit(compUnitNo) {
 			var u = response.responseText.evalJSON();
 			var parent = $('body');
 
-			alert("hello");
+
 			$$('.record').each(function(record) {
 				$(record).remove();
 			});
@@ -171,15 +175,18 @@ function getUnit(compUnitNo) {
 	});
 }
 
+// FUNCTION if the search button is clicked
 $("btnUnitSearch").observe('click', function() {
 	fetchCompUnits();
 
 })
 
+// FUNCTION if the search button is clicked
 $("btnAssigneeSearch").observe('click', function() {
 	fetchAssignees();
 })
 
+// Fetching the datas from the ims_assignee_1 table
 function fetchAssignees() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
@@ -209,17 +216,12 @@ function fetchAssignees() {
 					bottom : newTr
 				});
 			});
-			alert("wew");
+
 		}
 	});
 }
 
-function getAssigneeName(fetchName) {
-	$("hiddenAssignNo").value = fetchName.down(0).innerHTML;
-	$("txtAssignee").value = fetchName.down(1).innerHTML;
-	populateTxtAssignee();
-}
-
+// Function to populate the Assignee TextField
 function populateTxtAssignee() {
 
 	new Ajax.Request(context + "/UnitAssignmentController", {
@@ -237,6 +239,7 @@ function populateTxtAssignee() {
 	});
 }
 
+// Function to get the records from the Unit Assignment Page
 function addRecord() {
 	delete Array.prototype.toJSON;
 	var obj = [];
@@ -255,25 +258,40 @@ function addRecord() {
 	return json;
 }
 
+/*
+ * In the Modal. if the 'Yes' Button is Clicked, it will save all the Records
+ * from the UNit assignment Page to the ims_unit_assignment_1 and
+ * ims_assignment_hist_1 tables
+ */
 $("btnYes").observe('click', function() {
-	alert("Assign");
-	var json = addRecord();
-	alert(json);
-	new Ajax.Request(context + "/UnitAssignmentController", {
-		method : "post",
-		parameters : {
-			action : "assignToDatabase",
-			actionTwo : "assignToHistData",
-			unitassignment : json,
-			unitassignmenthist : json,
-			unitId : $F("txtUnitNo")
-		},
-		onComplete : function(response) {
-			//$("mainContents").update(response.responseText);
-		}
-	});
+	if(validate())
+	{
+		var json = addRecord();
+
+		new Ajax.Request(context + "/UnitAssignmentController", {
+			method : "post",
+			parameters : {
+				action : "assignToDatabase",
+				actionTwo : "assignToHistData",
+				unitassignment : json,
+				unitassignmenthist : json,
+				unitId : $F("txtUnitNo")
+			},
+			onComplete : function(response) {
+				// $("mainContents").update(response.responseText);
+			}
+		});
+	}
 })
 
+// Function to get the values of the selected row from the Assignee LOV
+function getAssigneeName(fetchName) {
+	$("hiddenAssignNo").value = fetchName.down(0).innerHTML;
+	$("txtAssignee").value = fetchName.down(1).innerHTML;
+	populateTxtAssignee();
+}
+
+// Function to display all the Unit assignment History
 function getUnitAssignmentHist() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
@@ -310,8 +328,12 @@ function getUnitAssignmentHist() {
 	});
 
 }
+
+// Function to get the size of all rows in the ims_assignment_hist_1 table. This
+// is for Pagination
 function getSize() {
-	new Ajax.Request(context + "/UnitAssignmentController",
+	new Ajax.Request(
+			context + "/UnitAssignmentController",
 			{
 				method : "get",
 				parameters : {
@@ -341,6 +363,8 @@ function getSize() {
 				}
 			});
 }
+
+// Fetching and Displaying of Records from the ims_assignment_hist_1 table
 function getRecordPage(a) {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
@@ -379,9 +403,12 @@ function getRecordPage(a) {
 		}
 	});
 }
+
+// getUnitAssignmentHist() function is called. It will Display all the
+// assignment history.
 getUnitAssignmentHist();
 
-function filteredUnitAssignmentsHist(){
+function filteredUnitAssignmentsHist() {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",
 		parameters : {
@@ -391,10 +418,10 @@ function filteredUnitAssignmentsHist(){
 		onSuccess : function(response) {
 			var u = response.responseText.evalJSON();
 			var parent = $('body');
-			
+
 			$$('.record').each(function(record) {
 				$(record).remove();
-			});			
+			});
 			u.each(function(unit) {
 				var content = "";
 				content += "<td>" + unit.unitNo + "</td>";
@@ -422,38 +449,39 @@ function filteredUnitAssignmentsHist(){
 	});
 }
 
+// For the search box. It will get the size of all searched rows
 function getFilteredUnitAssignmentSize() {
-	new Ajax.Request(context + "/UnitAssignmentController",
-			{
-				method : "get",
-				parameters : {
-					action : "getFilteredUnitAssignmentSize"
-				},
-				onSuccess : function(response) {
-					var u = response.responseText.evalJSON();
-					var parent = $('pagination');
+	new Ajax.Request(context + "/UnitAssignmentController", {
+		method : "get",
+		parameters : {
+			action : "getFilteredUnitAssignmentSize"
+		},
+		onSuccess : function(response) {
+			var u = response.responseText.evalJSON();
+			var parent = $('pagination');
 
-					u.each(function(sizes) {
-						pageSize = sizes.listSize;
-					});
-					var btnCount = parseInt(pageSize / 5);
-					if (pageSize % 5 != 0) {
-						btnCount += 1;
-					}
-					for (var a = 1; a <= btnCount; a++) {
-						var newBtn = new Element('button');
-						newBtn.setAttribute("class", "btn-nav");
-						newBtn.update(a);
-						newBtn.setAttribute("onclick",
-								"getFilteredUnitAssignmentPage(this.innerHTML)");
-						parent.insert({
-							bottom : newBtn
-						});
-					}
-				}
+			u.each(function(sizes) {
+				pageSize = sizes.listSize;
 			});
+			var btnCount = parseInt(pageSize / 5);
+			if (pageSize % 5 != 0) {
+				btnCount += 1;
+			}
+			for (var a = 1; a <= btnCount; a++) {
+				var newBtn = new Element('button');
+				newBtn.setAttribute("class", "btn-nav");
+				newBtn.update(a);
+				newBtn.setAttribute("onclick",
+						"getFilteredUnitAssignmentPage(this.innerHTML)");
+				parent.insert({
+					bottom : newBtn
+				});
+			}
+		}
+	});
 }
 
+// Function to display all the searched rows from the search textbox
 function getFilteredUnitAssignmentPage(a) {
 	new Ajax.Request(context + "/UnitAssignmentController", {
 		method : "get",

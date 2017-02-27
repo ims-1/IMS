@@ -27,23 +27,25 @@
 											<span class="glyphicon glyphicon-search"></span>
 										</button>
 									</span>
-								</div> --> <%
- 	String unitNo = request.getParameter("unitNo");
-
- 	if (unitNo == null || unitNo == "") {
- 		out.print("<div class=input-group>");
- 		out.print("<input type=text class=form-control id=txtUnitNo readonly='readonly'>");
- 		out.print("<span class=\"input-group-btn\">");
- 		out.print("	<button class=\"btn btn-secondary\" type=button");
- 		out.print("		data-toggle=modal data-target=#myUnitModal");
- 		out.print("		id=btnUnitSearch onclick=\"fetchCompUnits()\">");
- 		out.print("		<span class=\"glyphicon glyphicon-search\"></span>");
- 		out.print("	</button>");
- 		out.print("</span></div>");
- 	} else {
- 		out.print("<input type=text class=form-control id=txtUnitNo value=" + unitNo + " readonly='readonly'>");
- 	}
- %>
+								</div> --> 
+								
+								
+								<% 
+									String unitNo = request.getParameter("unitNo");
+									 	if (unitNo == null || unitNo == "") {
+									 		out.print("<div class=input-group>");
+									 		out.print("<input type=text class=form-control id=txtUnitNo readonly='readonly'>");
+									 		out.print("<span class=\"input-group-btn\">");
+									 		out.print("	<button class=\"btn btn-secondary\" type=button");
+									 		out.print("		data-toggle=modal data-target=#myUnitModal");
+									 		out.print("		id=btnUnitSearch onclick=\"fetchCompUnits()\">");
+									 		out.print("		<span class=\"glyphicon glyphicon-search\"></span>");
+									 		out.print("	</button>");
+									 		out.print("</span></div>");
+									 	} else {
+									 		out.print("<input type=text class=form-control id=txtUnitNo value=" + unitNo + " readonly='readonly'>");
+									 	}
+								 %>
 
 				</td>
 				<td class="label-right" > SERIAL NO.</td>
@@ -111,11 +113,15 @@
 					class="form-control" readonly="readonly" /></td>
 			</tr>
 		</table>
-		<input type="text" id="searchBox"
-			onkeyup="filteredUnitAssignmentsHist()" placeholder="Enter Keyword to search.." class="form-control"/><br> <br>
+		
+		<button style="margin-left: 5.5in;" class="btn btn-secondary" type="button" data-toggle="modal"
+			data-target="#modalReturnDate" id="btnAssign">Assign Unit</button><br><br>
+			
+		<input type="text" id="searchBox" onkeyup="filteredUnitAssignmentsHist()" 
+			placeholder="Enter Keyword to search.." class="form-control"/>
+			<br><br>
 
-		<button class="btn btn-secondary" type="button" data-toggle="modal"
-			data-target="#modalReturnDate" id="btnAssign">Assign Unit</button>
+	
 	</div>
 
 	<table class="table table-striped table-bordered">
