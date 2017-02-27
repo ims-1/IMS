@@ -285,7 +285,7 @@ function getSize() {
 					}
 					for (var a = 1; a <= btnCount; a++) {
 						var newBtn = new Element('button');
-						newBtn.setAttribute("class", "btn-nav");
+						newBtn.setAttribute("class", "btn-nav btn btn-primary");
 						newBtn.update(a);
 						newBtn.setAttribute("onclick",
 								"getRecordPage(this.innerHTML)");
@@ -440,7 +440,7 @@ function getFilteredSize() {
 					btnCount += 1;
 					for (var a = 1; a <= btnCount; a++) {
 						var newBtn = new Element('button');
-						newBtn.setAttribute("class", "btn-nav");
+						newBtn.setAttribute("class", "btn-nav btn btn-primary");
 						newBtn.update(a);
 						newBtn.setAttribute("onclick",
 								"getFilteredRecordPage(this.innerHTML)");

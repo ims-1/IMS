@@ -55,7 +55,7 @@
 				</tr> --%>
 			</tbody>
 		</table>
-		<div id="pagination" align="right"></div>
+		<div id="pagination" align="center"></div>
 		<table id="inputFields" class="table borderless">
 			<tr>
 				<td class="label-right">UNIT NO.</td>
