@@ -5,7 +5,8 @@ $('btnSubmit').observe("click", function() {
 			method : "post",
 			parameters : {
 				username : $F('txtUserName'),
-				password : $F('txtPassword')
+				password : $F('txtPassword'),
+				action : ""
 			},
 			onSuccess : function(response) {
 				if (response.status == 200) {
@@ -25,13 +26,18 @@ $('btnSubmit').observe("click", function() {
 	}
 });
 
-//onLoad();
-//function onLoad() {
-//	new Ajax.Request(context + "/login", {
-//		method : "get",
-//		parameters : {
-//			
-//		}
-//
-//	});
-//}
+onLoad();
+function onLoad() {
+	new Ajax.Request(context + "/login", {
+		method : "post",
+		parameters : {
+			action : "auth"
+		},
+		onSuccess : function(response) {
+			if (response.status == 204) {
+				window.location.href = context + "/home";
+			}
+		}
+
+	});
+}

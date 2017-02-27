@@ -72,7 +72,15 @@ td.label-right {
 }
 
 .error-integer {
-	border-color: blue;
+	border-color: red;
+}
+
+.error-date {
+	border-color: red;
+}
+
+.error-email {
+	border-color: red;
 }
 
 .table-striped>tbody>tr:nth-of-type(odd) {
@@ -99,4 +107,8 @@ td.label-right {
 
 .table-striped>tbody>tr.hoverRow:nth-of-type(even) {
 	background-color: #59594C;
+}
+
+.modalRecord{
+	
 }

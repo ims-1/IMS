@@ -29,14 +29,15 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
 		//
-//		String user = (String) session.getAttribute("user_auth");
-//		if (user != null) {
+		String user = (String) session.getAttribute("user_auth");
+		if (user != null) {
 			chain.doFilter(request, response);
-//		} else {
-//			SystemStatus status = SystemStatus.unauthenticated;
-//			res.sendError(401);
-//			return;
-//		}
+		} else {
+			SystemStatus status = SystemStatus.unauthenticated;
+		    
+			res.sendError(401);
+			return;
+		}
 	}
 
 	/**

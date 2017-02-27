@@ -6,5 +6,6 @@
 		<a href="${pageContext.request.contextPath }/inventory">Computer Unit Inventory |</a>
 		<a href="${pageContext.request.contextPath }/unitassignment">Unit Assignment |</a>
 		<a href="${pageContext.request.contextPath }/peripherals">Peripherals</a>
+		<a href="${pageContext.request.contextPath }/logout">Logout</a>
 	</div>
 </div>

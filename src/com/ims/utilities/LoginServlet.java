@@ -26,12 +26,12 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String user_auth = (String) session.getAttribute("user_auth");
-		if(user_auth != null || user_auth != ""){
+		if (user_auth != null || user_auth != "") {
 			response.sendRedirect("/home");
 			return;
 		}
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -41,6 +41,22 @@ public class LoginServlet extends HttpServlet {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		UserMaintenanceService service = (UserMaintenanceService) context.getBean("serviceUsersBean");
+
+		String action = request.getParameter("action");
+		if (action.equals("auth")) {
+			HttpSession session = request.getSession();
+
+			String user = ((String) session.getAttribute("user_auth")) == null ? ""
+					: ((String) session.getAttribute("user_auth"));
+			if (user != "") {
+				response.setStatus(204);
+				return;
+			} else {
+				response.setStatus(200);
+				return;
+			}
+
+		}
 
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -58,8 +74,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendError(201);
 					return;
 				}
-			}
-			else{
+			} else {
 				response.setStatus(202);
 				return;
 			}

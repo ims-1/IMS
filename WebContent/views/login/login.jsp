@@ -13,6 +13,13 @@
 	type="text/css" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/prototype.js"></script>
+<script type="text/javascript">
+	var context = "${pageContext.request.contextPath}"
+</script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/validation.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/login/login.js"></script>
 </head>
 <body>
 	<jsp:include page="/views/header.jsp"></jsp:include>
@@ -34,13 +41,6 @@
 		</tr>
 	</table>
 </body>
-<script type="text/javascript">
-	var context = "${pageContext.request.contextPath}"
-</script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/validation.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/login/login.js"></script>
 <script type="text/javascript" src="js/require.js"></script>
 <script type="text/javascript" src="js/resolveConflict.js"></script>
 </html>

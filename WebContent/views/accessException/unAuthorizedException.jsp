@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<jsp:include page="/views/header.jsp"></jsp:include>
+User is not authorized to access the screen
 </body>
 </html>

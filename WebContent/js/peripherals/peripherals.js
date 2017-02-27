@@ -438,10 +438,12 @@ function insertPeripherals() {
 		onSuccess : function(response) {
 			if (response.status == 200) {
 				alert('All records are successfully saved!');
+			} else if (response.status == 201) {
+				alert('An exception occured while saving record!');
 			}
 		},
-		onFailed : function(response) {
-
+		onFailure : function(response) {
+			alert("There is something wrong with saving the records.")
 		}
 	});
 }
@@ -518,6 +520,9 @@ function deleteRecord() {
 						alert("There was an exception while deleteng the record");
 					}
 
+				},
+				onFailure: function(response){
+					alert("There is some error while deleting record.");
 				}
 			});
 }

@@ -19,6 +19,5 @@ to {
 	border-right-color: transparent;
 	border-radius: 100%;
 	animation: spin 600ms linear infinite;
-	display: none;
 }
 </style>

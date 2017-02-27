@@ -60,7 +60,8 @@ public class PeripheralsController extends HttpServlet {
 						response.setCharacterEncoding("UTF-8");
 
 						System.out.println("here2");
-						peripherals = service.getPeripherals(request);
+						peripherals = service.getPeripherals(request) == null ? new LinkedList<>()
+								: service.getPeripherals(request);
 
 						// --printing
 						System.out.println("printing units");
@@ -72,20 +73,17 @@ public class PeripheralsController extends HttpServlet {
 						if (!peripherals.isEmpty()) {
 							System.out.println("here4");
 
-							session.setAttribute("list", peripherals);
 							// fetch sessionPeripherals
-							// List<Peripherals> sessionPeripherals = new
-							// LinkedList<>();
-							// sessionPeripherals = (List<Peripherals>)
-							// session.getAttribute("sessionPeripheral");
-							// if (!sessionPeripherals.isEmpty() ||
-							// sessionPeripherals != null) {
-							// for (Peripherals p : sessionPeripherals) {
-							// peripherals.add(0, p);
-							// }
-							//
-							// System.out.println("here5");
-							// }
+							List<Peripherals> sessionPeripherals = (List<Peripherals>) session
+									.getAttribute("sessionPeripheral") == null ? new LinkedList<>()
+											: (List<Peripherals>) session.getAttribute("sessionPeripheral");
+
+							for (Peripherals p : sessionPeripherals) {
+								peripherals.add(0, p);
+							}
+
+							session.setAttribute("list", peripherals);
+							System.out.println("here5");
 
 							System.out.println("here6");
 							String json = PaginationHelper.getPagePeripherals(peripherals, 0, pageLimit,
@@ -161,7 +159,11 @@ public class PeripheralsController extends HttpServlet {
 					response.getWriter().write(units);
 				}
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e)
+
+		{
 			e.printStackTrace();
 			response.sendError(410);
 			return;
@@ -210,27 +212,7 @@ public class PeripheralsController extends HttpServlet {
 				stat = service.savePeripheral(toSave);
 
 				if (stat == SystemStatus.committed) {
-					if (unitNo != null || unitNo == "") {
-
-						try {
-							peripherals = service.getPeripherals(request);
-							if (!peripherals.isEmpty()) {
-								session.setAttribute("list", peripherals);
-								String json = PaginationHelper.getPagePeripherals(peripherals, 0, 5,
-										peripherals.size());
-								System.out.println(json);
-
-								response.getWriter().write(json);
-								return;
-							} else {
-								session.setAttribute("list", new LinkedList<>());
-								response.setStatus(201);
-							}
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
+					session.setAttribute("sessionPeripheral", new LinkedList<>());
 					response.setStatus(200);
 					return;
 				} else if (stat == SystemStatus.exception) {
@@ -240,6 +222,8 @@ public class PeripheralsController extends HttpServlet {
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				response.sendError(400);
+				return;
 			}
 
 		} else if (action.equals("add")) {
@@ -247,9 +231,6 @@ public class PeripheralsController extends HttpServlet {
 				List<Peripherals> sessionPeripheral = (List<Peripherals>) session
 						.getAttribute("sessionPeripheral") == null ? new LinkedList<>()
 								: (List<Peripherals>) session.getAttribute("sessionPeripheral");
-				if (sessionPeripheral == null) {
-					sessionPeripheral = new LinkedList<>();
-				}
 
 				Gson gson = new GsonBuilder().setDateFormat("mm/dd/yyyy").serializeNulls().create();
 				String json = request.getParameter("content");
@@ -271,14 +252,13 @@ public class PeripheralsController extends HttpServlet {
 					// add the record to the list session
 					List<Peripherals> onSession = (List<Peripherals>) session.getAttribute("list") == null
 							? new LinkedList<>() : (List<Peripherals>) session.getAttribute("list");
-					if (!onSession.isEmpty() || onSession != null) {
 
-						onSession.add(0, p);
-						System.out.println(p.getPeripheralNo() + " was inserted to list");
-						session.setAttribute("list", onSession);
+					onSession.add(0, p);
+					System.out.println(p.getPeripheralNo() + " was inserted to list");
+					session.setAttribute("list", onSession);
 
-						responseJson = PaginationHelper.getPagePeripherals(onSession, 0, 5, onSession.size());
-					}
+					responseJson = PaginationHelper.getPagePeripherals(onSession, 0, 5, onSession.size());
+
 				}
 				response.getWriter().write(responseJson);
 
@@ -369,13 +349,15 @@ public class PeripheralsController extends HttpServlet {
 				if (stat == SystemStatus.committed) {
 					List<Peripherals> p = new LinkedList<>();
 					if (unitNo != "" || unitNo != null) {
-						p = service.getPeripherals(request);
+						p = service.getPeripherals(request) == null ? new LinkedList<>()
+								: service.getPeripherals(request);
 					} else {
-						p = service.getPeripherals();
+						p = service.getPeripherals() == null ? new LinkedList<>() : service.getPeripherals(request);
 					}
 					List<Peripherals> sessionList = (List<Peripherals>) session
 							.getAttribute("sessionPeripheral") == null ? new LinkedList<>()
 									: (List<Peripherals>) session.getAttribute("sessionPeripheral");
+							
 					System.out.println(sessionList.size());
 					for (Peripherals pe : sessionList) {
 						p.add(0, pe);
