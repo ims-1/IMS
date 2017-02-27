@@ -132,7 +132,8 @@ public class PeripheralsController extends HttpServlet {
 			} else if (action.equals("getSize")) {
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				int size = ((List<Peripherals>) session.getAttribute("list")).size();
+				int size = ((List<Peripherals>) session.getAttribute("list")).size() == 0 ? new LinkedList<>().size()
+						: ((List<Peripherals>) session.getAttribute("list")).size();
 
 				System.out.println("size" + size);
 				List<GetSize> getSize = new ArrayList<>();
@@ -201,24 +202,85 @@ public class PeripheralsController extends HttpServlet {
 			List<Peripherals> toSave = new LinkedList<>();
 			String user = (String) session.getAttribute("user_auth") == null ? ""
 					: (String) session.getAttribute("user_auth");
-			String unitNo = request.getParameter("unitNo");
+			String unitNo = request.getParameter("num");
 			for (Peripherals p : sessionPeripheral) {
 				p.setUserId(user);
 				toSave.add(p);
 			}
-
+			System.err.println("after null here");
 			SystemStatus stat;
 			try {
-				stat = service.savePeripheral(toSave);
-
-				if (stat == SystemStatus.committed) {
-					session.setAttribute("sessionPeripheral", new LinkedList<>());
-					response.setStatus(200);
-					return;
-				} else if (stat == SystemStatus.exception) {
-					response.setStatus(201);
-					return;
+				// stat = service.savePeripheral(toSave);
+				for (Peripherals p : toSave) {
+					System.out.println(p.getPeripheralType() + " ptype");
+					if (p.getStatus().equals("Add")) {
+						System.out.println("before insert");
+						stat = service.insertNewPeripherals(p);
+						System.out.println("After insert");
+						if (stat == SystemStatus.committed) {
+							for (int a = 0; a < sessionPeripheral.size(); a++) {
+								if (p.getPeripheralNo() == sessionPeripheral.get(a).getPeripheralNo()) {
+									sessionPeripheral.remove(a);
+									break;
+								}
+							}
+						} else {
+							for (int a = 0; a < sessionPeripheral.size(); a++) {
+								if (p.getPeripheralNo() == sessionPeripheral.get(a).getPeripheralNo()) {
+									sessionPeripheral.get(a).setSaved("not");
+									break;
+								}
+							}
+						}
+					} else {
+						System.out.println("before update");
+						stat = service.updatePeripheral(p);
+						System.out.println("After update");
+						if (stat == SystemStatus.committed) {
+							for (int a = 0; a < sessionPeripheral.size(); a++) {
+								if (p.getPeripheralNo() == sessionPeripheral.get(a).getPeripheralNo()) {
+									sessionPeripheral.remove(a);
+									break;
+								}
+							}
+						} else {
+							for (int a = 0; a < sessionPeripheral.size(); a++) {
+								if (p.getPeripheralNo() == sessionPeripheral.get(a).getPeripheralNo()) {
+									sessionPeripheral.get(a).setSaved("not");
+									break;
+								}
+							}
+						}
+					}
 				}
+
+				System.out.println("here error2");
+
+				System.out.println("unitNo " + unitNo);
+				List<Peripherals> peripherals = null;
+				if (unitNo != "") {
+					peripherals = service.getPeripherals(request);
+				} else {
+					peripherals = service.getPeripherals();
+				}
+
+				System.out.println("here error3");
+
+				for (Peripherals ps : sessionPeripheral) {
+					peripherals.add(ps);
+				}
+
+				System.out.println("here error4");
+				session.setAttribute("list", peripherals);
+
+				System.out.println("size " + peripherals.size());
+				System.out.println("here error5");
+
+				//Gson gson = new GsonBuilder().serializeNulls().setDateFormat("MM/dd/YYYY").create();
+				String json = PaginationHelper.getPagePeripherals(peripherals, 0, 5, peripherals.size());
+				response.getWriter().write(json);
+				return;
+
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -348,20 +410,23 @@ public class PeripheralsController extends HttpServlet {
 				SystemStatus stat = service.deletePeripheral(no);
 				if (stat == SystemStatus.committed) {
 					List<Peripherals> p = new LinkedList<>();
-					if (unitNo != "" || unitNo != null) {
-						p = service.getPeripherals(request) == null ? new LinkedList<>()
-								: service.getPeripherals(request);
+					if (unitNo != "" && unitNo != null) {
+						System.out.println("with unit");
+						System.out.println(unitNo); 					
+						p = service.getPeripherals(request);
 					} else {
-						p = service.getPeripherals() == null ? new LinkedList<>() : service.getPeripherals(request);
+						System.out.println("without");						
+						p = service.getPeripherals();
 					}
 					List<Peripherals> sessionList = (List<Peripherals>) session
 							.getAttribute("sessionPeripheral") == null ? new LinkedList<>()
 									: (List<Peripherals>) session.getAttribute("sessionPeripheral");
-							
+
 					System.out.println(sessionList.size());
 					for (Peripherals pe : sessionList) {
 						p.add(0, pe);
 					}
+					System.out.println(p.size());
 					session.setAttribute("list", p);
 					String json = PaginationHelper.getPagePeripherals(p, 0, 5, p.size());
 

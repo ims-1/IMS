@@ -123,10 +123,10 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 
 		SystemStatus status = SystemStatus.ok;
 		try {
-			this.getSqlMapClient().startTransaction();
-			this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
-			this.getSqlMapClient().startBatch();
 			for (Peripherals p : sessionPeripherals) {
+				this.getSqlMapClient().startTransaction();
+				this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+				this.getSqlMapClient().startBatch();
 				if (p.getStatus().equals("Add")) {
 					Map<String, Object> params = new HashMap<>();
 					params.put("unitNo", p.getUnitNo());
@@ -142,8 +142,13 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 					params.put("userId", p.getUserId());
 					params.put("remarks", p.getRemarks());
 					this.insertNewPeripherals(params);
-				}
-				else{
+					this.getSqlMapClient().executeBatch();
+					this.getSqlMapClient().getCurrentConnection().commit();
+					status = SystemStatus.committed;
+				} else {
+					this.getSqlMapClient().startTransaction();
+					this.getSqlMapClient().getCurrentConnection().setAutoCommit(false);
+					this.getSqlMapClient().startBatch();
 					Map<String, Object> params = new HashMap<>();
 					params.put("peripheralNo", p.getPeripheralNo());
 					params.put("peripheralType", p.getPeripheralType());
@@ -157,9 +162,9 @@ public class DaoPeripheralsImpl implements DaoPeripherals {
 					params.put("remarks", p.getRemarks());
 					params.put("userId", p.getUserId());
 					this.updatePeripheral(params);
+					this.getSqlMapClient().executeBatch();
 				}
 			}
-			this.getSqlMapClient().executeBatch();
 			this.getSqlMapClient().getCurrentConnection().commit();
 			status = SystemStatus.committed;
 		} catch (SQLException e) {

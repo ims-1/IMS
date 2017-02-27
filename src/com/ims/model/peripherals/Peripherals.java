@@ -19,6 +19,7 @@ public class Peripherals implements Serializable{
 	private String userId; 
 	private Date lastUpdate;
 	private String status;	
+	private String saved;
 	
 	public String getStatus() {
 		return status;
@@ -103,6 +104,12 @@ public class Peripherals implements Serializable{
 	}
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+	public String getSaved() {
+		return saved;
+	}
+	public void setSaved(String saved) {
+		this.saved = saved;
 	}
 	
 }

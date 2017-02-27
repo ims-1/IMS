@@ -29,6 +29,9 @@ function searchUnit() {
 						});
 					});
 				}
+			},
+			onFailure : function(response) {
+				alert("There is something wrong!");
 			}
 		});
 	}
@@ -37,8 +40,10 @@ function searchUnit() {
 function getUnitRecord(record) {
 	if (unitNo != $(record).down('td', 0).innerHTML) {
 		unitNo = $(record).down('td', 0).innerHTML;
+		$('txtUnitNo').value = $(record).down('td', 0).innerHTML;
 	} else {
 		unitNo = "";
+		$('txtUnitNo').value = "";
 	}
 }
 
@@ -71,6 +76,9 @@ function getComputerUnitRecord() {
 			unitNo : $F('txtUnitNo'),
 			status : '',
 			action : "getComputerAssignee"
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		},
 		onSuccess : function(response) {
 			if (response.status == 200) {
@@ -113,7 +121,7 @@ function addPeripherals() {
 
 		var content = [];
 		var object = {};
-		object.unitNo = $F('txtUnitNo');
+		object.unitNo = $F('txtUnitNo') == '' ? null : $F('txtUnitNo');
 		object.peripheralNo = $F('ptxtPeripheralNo') == '' ? null
 				: $F('ptxtPeripheralNo');
 		object.serialNo = $F('ptxtSerialNo') == '' ? null : $F('ptxtSerialNo');
@@ -141,6 +149,9 @@ function addPeripherals() {
 						content : json,
 						action : "add",
 						status : $F(btnAdd)
+					},
+					onFailure : function(response) {
+						alert("There is something wrong!");
 					},
 					onSuccess : function(response) {
 						var p = response.responseText.evalJSON();
@@ -297,37 +308,42 @@ function getPeripherals() {
 					$('spinner').style.display = "none";
 				}
 			});
-	function getSize() {
-		new Ajax.Request(context + "/PeripheralsController", {
-			method : "get",
-			contentType : "application/json",
-			parameters : {
-				action : "getSize"
-			},
-			onSuccess : function(response) {
-				var p = response.responseText.evalJSON();
-				var parent = $('pagination');
-				$('pagination').innerHTML = '';
 
-				p.each(function(sizes) {
-					pageSize = sizes.listSize;
-				});
-				var btnCount = (pageSize / 5);
-				btnCount = pageSize % 5 === 0 ? btnCount : btnCount + 1;
-				for (var a = 1; a <= btnCount; a++) {
-					var newBtn = new Element('button');
-					newBtn.setAttribute("class", "btn-nav btn btn-primary");
-					newBtn.update(a);
-					newBtn.setAttribute("onclick",
-							"getRecordPage(this.innerHTML)");
-					parent.insert({
-						bottom : newBtn
+}
+function getSize() {
+	new Ajax.Request(
+			context + "/PeripheralsController",
+			{
+				method : "get",
+				contentType : "application/json",
+				parameters : {
+					action : "getSize"
+				},
+				onFailure : function(response) {
+					alert("There is something wrong!");
+				},
+				onSuccess : function(response) {
+					var p = response.responseText.evalJSON();
+					var parent = $('pagination');
+					$('pagination').innerHTML = '';
+
+					p.each(function(sizes) {
+						pageSize = sizes.listSize;
 					});
+					var btnCount = (pageSize / 5);
+					btnCount = pageSize % 5 === 0 ? btnCount : btnCount + 1;
+					for (var a = 1; a <= btnCount; a++) {
+						var newBtn = new Element('button');
+						newBtn.setAttribute("class", "btn-nav btn btn-primary");
+						newBtn.update(a);
+						newBtn.setAttribute("onclick",
+								"getRecordPage(this.innerHTML)");
+						parent.insert({
+							bottom : newBtn
+						});
+					}
 				}
-			}
-		});
-	}
-
+			});
 }
 
 function getRecordPage(a) {
@@ -336,6 +352,9 @@ function getRecordPage(a) {
 		parameters : {
 			action : "getRecordPage",
 			page : a
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		},
 		onSuccess : function(response) {
 			var p = response.responseText.evalJSON();
@@ -422,25 +441,68 @@ function getRecord(record) {
 				alert('The record has been just recently added. Need to save');
 			}
 		},
-		onFailed : function(response) {
-
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
 
 function insertPeripherals() {
+	alert($F('txtUnitNo'));
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "post",
 		parameters : {
 			action : "saveRecord",
-			unitNo : $('txtUnitNo')
+			num : $F('txtUnitNo')
 		},
 		onSuccess : function(response) {
-			if (response.status == 200) {
-				alert('All records are successfully saved!');
-			} else if (response.status == 201) {
-				alert('An exception occured while saving record!');
-			}
+			alert("Record saved!");
+			var p = response.responseText.evalJSON();
+			var parent = $('body');
+
+			$$('.record').each(function(record) {
+				$(record).remove();
+			});
+
+			$('body').hide();
+
+			p.each(function(peripheral) {
+				var content = "";
+				content += "<td>"
+						+ (peripheral.peripheralNo == null ? ''
+								: peripheral.peripheralNo) + "</td>";
+				content += "<td>"
+						+ (peripheral.peripheralType == null ? ''
+								: peripheral.peripheralType) + "</td>";
+				content += "<td>"
+						+ (peripheral.tagNumber == null ? ''
+								: peripheral.tagNumber)
+				"</td>";
+				content += "<td>"
+						+ (peripheral.brand == null ? '' : peripheral.brand)
+						+ " "
+						+ (peripheral.model == null ? '' : peripheral.model)
+						+ " </td>";
+				content += "<td>"
+						+ (peripheral.serialNo == null ? ''
+								: peripheral.serialNo) + "</td>";
+				content += "<td>"
+						+ (peripheral.acquiredDate == null ? ''
+								: peripheral.acquiredDate) + "</td>";
+				content += "<td>"
+						+ (peripheral.description == null ? ''
+								: peripheral.description) + "</td>";
+
+				var newTr = new Element('tr');
+				newTr.setAttribute("class", "record");
+				newTr.update(content);
+				parent.insert({
+					bottom : newTr
+				});
+			});
+			$('body').show();
+			getSize();
+			recordEvents();
 		},
 		onFailure : function(response) {
 			alert("There is something wrong with saving the records.")
@@ -450,6 +512,7 @@ function insertPeripherals() {
 
 function deleteRecord() {
 	alert("delete");
+	alert($F('txtUnitNo').trim());
 	new Ajax.Request(
 			context + "/PeripheralsController",
 			{
@@ -457,7 +520,7 @@ function deleteRecord() {
 				parameters : {
 					action : "deleteRecord",
 					no : $F('ptxtPeripheralNo'),
-					num : $F('txtUnitNo')
+					num : $F('txtUnitNo').trim()
 				},
 				onSuccess : function(response) {
 					if (response.status == 200) {
@@ -506,6 +569,9 @@ function deleteRecord() {
 
 									var newTr = new Element('tr');
 									newTr.setAttribute("class", "record");
+									if (peripheral.saved == "not") {
+										newTr.setAttribute("class", "notsaved");
+									}
 									newTr.update(content);
 									parent.insert({
 										bottom : newTr
@@ -513,6 +579,7 @@ function deleteRecord() {
 								});
 						getSize();
 						recordEvents();
+						clearFields();
 
 					} else if (response.status == 204) {
 						alert("The record you are trying to delete was a pending record. Please save the record first.");
@@ -521,7 +588,7 @@ function deleteRecord() {
 					}
 
 				},
-				onFailure: function(response){
+				onFailure : function(response) {
 					alert("There is some error while deleting record.");
 				}
 			});
@@ -545,4 +612,46 @@ function clearFields(record) {
 	$('ptxtUserId').value = '';
 	$('ptxtRemarks').value = '';
 	$('pdtLastUpdate').value = '';
+}
+
+function clearFields() {
+	alert("here");
+	$('btnAdd').value = "Add";
+	$('btnDelete').disabled = true;
+	if ($('txtUnitNo').value.trim() == '') {
+		$('btnAdd').disabled = true;
+	}
+	$('ptxtPeripheralNo').value = '';
+	$('ptxtSerialNo').value = '';
+	$('ptxtPeripheralType').value = '';
+	$('ptxtBrand').value = '';
+	$('ptxtTagNumber').value = '';
+	$('ptxtModel').value = '';
+	$('pdtAcquiredDate').value = '';
+	$('ptxtColor').value = '';
+	$('ptxtDescription').value = '';
+	$('ptxtUserId').value = '';
+	$('ptxtRemarks').value = '';
+	$('pdtLastUpdate').value = '';
+}
+
+function recordEvents() { // call on your own js file
+	$$('.record').each(function(record) {
+		$(record).observe("click", function() {
+			// assign class to selected row
+			if ($(record).hasClassName("hoverRow")) {
+				$(record).toggleClassName("hoverRow");
+				clearFields($(record));
+				// clear fields
+			} else {
+				// clear selected row - remove class
+				$$('.record').each(function(record) {
+					$(record).removeClassName("hoverRow");
+				});
+
+				$(record).toggleClassName("hoverRow");
+				getRecord($(record));// populate fields
+			}
+		});
+	});
 }
