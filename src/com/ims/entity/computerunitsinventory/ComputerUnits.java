@@ -1,8 +1,9 @@
 package com.ims.entity.computerunitsinventory;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ComputerUnits {
+public class ComputerUnits implements Serializable{
 	private Integer unitNo;
 	private String unitName;
 	private String tagNumber;
