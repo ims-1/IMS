@@ -94,8 +94,10 @@
 
 			<tr>
 				<td class="label-right">TYPE</td>
-				<td><div id="divSelectType"><input type="text" id="txtType" class="form-control"
-					maxlength="100"></div></td>
+				<td><div id="divSelectType">
+						<input type="text" id="txtType" class="form-control"
+							maxlength="100">
+					</div></td>
 				<td class="label-right">USER ID</td>
 				<td><input type="text" id="txtUserId"
 					class=" required form-control" maxlength="100" disabled="disabled"></td>
@@ -118,27 +120,33 @@
 					maxlength="1000"></td>
 			</tr>
 		</table>
-		<table class="tblButtons">
-			<tr>
-				<td><input type="button" id="btnAddUpdate" value="ADD"
-					class="btn btn-primary ADD"></td>
-				<td><input type="button" id="btnDelete" value="DELETE"
-					class="btn btn-primary"></td>
-			</tr>
-			<tr>
-				<td><input type="button" id="btnUnitAssignment"
-					value="UNIT ASSIGNMENT" class="btn btn-primary"></td>
-				<td><input type="button" id="btnOSandSI"
-					value="Operating System and Software Installed"
-					class="btn btn-primary"></td>
-				<td><input type="button" id="btnPeripherals"
-					value="PERIPHERALS" class="btn btn-primary"></td>
-				<td><input type="button" id="btnSave" value="SAVE"
-					class="btn btn-primary"></td>
-				<td><input type="button" id="btnCancel" value="CANCEL"
-					class="btn btn-primary"></td>
-			</tr>
-		</table>
+		<div align="center">
+
+			<table class="tblButtons">
+				<tr>
+					<td><input type="button" id="btnAddUpdate" value="ADD"
+						class="btn btn-primary ADD"></td>
+					<td></td>
+					<td><input type="button" id="btnDelete" value="DELETE"
+						class="btn btn-primary"></td>
+					<td></td>
+					<td><input type="button" id="btnSave" value="SAVE"
+						class="btn btn-primary"></td>
+					<td></td>
+					<td><input type="button" id="btnCancel" value="CANCEL"
+						class="btn btn-primary"><br></td>
+					<td></td>
+					<td><input type="button" id="btnUnitAssignment"
+						value="UNIT ASSIGNMENT" class="btn btn-primary"></td>
+					<td></td>
+					<td><input type="button" id="btnPeripherals"
+						value="PERIPHERALS" class="btn btn-primary"></td>
+					<td></td>
+					<td><input type="button" id="btnOSandSI"
+						value="OS and Software Installed" class="btn btn-primary"></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 </body>
 <script type="text/javascript">

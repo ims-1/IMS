@@ -18,7 +18,7 @@ function getUserAuth() {
 			$('txtUserId').value = response.responseText;
 		},
 		onError : function(response) {
-			$('txtUserId').innerHTML = "ssds";
+			alert("User error! Reload page.");
 		}
 	})
 }
@@ -135,8 +135,9 @@ function addUnitsToDatabase() {
 
 function updateComputerUnit() {
 	getUserAuth();
+	var userAuth = $('txtUserId').value;
+	alert(userAuth);
 	if (validate()) {
-
 		new Ajax.Request(
 				context + "/ComputerUnitsInventoryController",
 				{
@@ -159,26 +160,32 @@ function updateComputerUnit() {
 						remarks : $F('txtRemarks')
 					},
 					onComplete : function(response) {
-						var p = response.responseText.evalJSON();
-						$$('.record')
-								.each(
-										function(record) {
+						if (response.status == 200) {
 
-											if (p.unitNo == record.down(0).innerHTML) {
-												record.down(1).innerHTML = p.unitName;
-												record.down(2).innerHTML = p.tagNumber;
-												record.down(3).innerHTML = p.ipAddress;
-												record.down(4).innerHTML = p.type == "DT" ? "Desktop"
-														: "Laptop";
-												record.down(5).innerHTML = p.brand
-														+ " " + p.model;
-												record.down(6).innerHTML = p.serialNo;
-												record.down(7).innerHTML = p.acquiredDate;
-											}
+							var p = response.responseText.evalJSON();
 
-										});
+							$$('.record')
+									.each(
+											function(record) {
+
+												if (p.unitNo == record.down(0).innerHTML) {
+													record.down(1).innerHTML = p.unitName;
+													record.down(2).innerHTML = p.tagNumber;
+													record.down(3).innerHTML = p.ipAddress;
+													record.down(4).innerHTML = p.type == "DT" ? "Desktop"
+															: "Laptop";
+													record.down(5).innerHTML = p.brand
+															+ " " + p.model;
+													record.down(6).innerHTML = p.serialNo;
+													record.down(7).innerHTML = p.acquiredDate;
+												}
+
+											});
+						} else if (response.status == 210) {
+							alert("No changes to update.");
+						}
 					}
-				})
+				});
 	} else {
 		alert("Please check fields. Red fields are required while blue fields only accepts integer.");
 	}
@@ -191,54 +198,63 @@ function populateTable() {
 			action : "pagination"
 		},
 		onComplete : function(response) {
-			// if (response.status == 200) {
+			if (response.status == 200) {
 
-			var p = response.responseText.evalJSON();
-			var parent = $('body');
-			$$('.record').each(function(record) {
-				$(record).remove();
-			});
+				var p = response.responseText.evalJSON();
+				var parent = $('body');
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
 
-			p.each(function(computerUnits) {
-				var content = "";
-				content += "<td>" + computerUnits.unitNo + "</td>";
-				content += "<td>" + computerUnits.unitName + "</td>";
-				content += "<td>" + computerUnits.tagNumber + "</td>";
-				content += "<td>" + computerUnits.ipAddress + "</td>";
-				content += "<td>" + computerUnits.type + "</td>";
-				content += "<td>" + computerUnits.brand + " "
-						+ computerUnits.model
-				"</td>";
-				content += "<td>" + computerUnits.serialNo + "</td>";
-				content += "<td>" + computerUnits.acquiredDate + "</td>";
+				p.each(function(computerUnits) {
+					var content = "";
+					content += "<td>" + computerUnits.unitNo + "</td>";
+					content += "<td>" + computerUnits.unitName + "</td>";
+					content += "<td>" + computerUnits.tagNumber + "</td>";
+					content += "<td>" + computerUnits.ipAddress + "</td>";
+					content += "<td>" + computerUnits.type + "</td>";
+					content += "<td>" + computerUnits.brand + " "
+							+ computerUnits.model
+					"</td>";
+					content += "<td>" + computerUnits.serialNo + "</td>";
+					content += "<td>" + computerUnits.acquiredDate + "</td>";
+					var newTr = new Element('tr');
+					newTr.setAttribute("class", "record");
+					newTr.update(content);
+					parent.insert({
+						bottom : newTr
+					});
+
+				});
+
+				recordEvents();
+				getSize();
+
+			} else {
+				$$('.record').each(function(record) {
+					$(record).remove();
+				});
+
+				var parent = $('body');
+
+				var content = "<td colspan=7>No record found.</td>";
+
 				var newTr = new Element('tr');
-				newTr.setAttribute("class", "record");
+				newTr.setAttribute("class", "no-record record");
+				newTr.setAttribute("align", "center");
 				newTr.update(content);
 				parent.insert({
 					bottom : newTr
 				});
 
-			});
-
-			recordEvents();
-			getSize();
-			/*
-			 * } else { $$('.record').each(function(record) {
-			 * $(record).remove(); });
-			 * 
-			 * var parent = $('body');
-			 * 
-			 * var content = "<td colspan=7>No record found.</td>";
-			 * 
-			 * var newTr = new Element('tr'); newTr.setAttribute("class",
-			 * "no-record record"); newTr.setAttribute("align", "center");
-			 * newTr.update(content); parent.insert({ bottom : newTr });
-			 * 
-			 * $('pagination').innerHTML = ''; alert("There is no Computer Units
-			 * record fetched"); } }, onFailure : function(response) {
-			 * console.log("There is something wrong. Please check connection");
-			 * alert("There is something wrong. Please check connection");
-			 */}
+				$('pagination').innerHTML = '';
+				alert("There is no Computer Units record fetched");
+			}
+		},
+		onFailure : function(response) {
+			console.log("There is something wrong. Please check connection");
+			alert("There is something wrong. Please check connection");
+		}
 	})
 }
 
@@ -259,7 +275,7 @@ function getSize() {
 						pageSize = sizes.listSize;
 					});
 					var btnCount = parseInt(pageSize / 10);
-					if (pageSize % 10 != 0) {
+					if (pageSize % 10 != 0 && pageSize > 10) {
 						btnCount += 1;
 					}
 					for (var a = 1; a <= btnCount; a++) {
