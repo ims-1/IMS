@@ -31,6 +31,7 @@
 		last_update
 		FROM
 		ims_peripherals_1
+		order by last_update desc
 	</select>
 
 	<select id="getPeripheralForUnit" resultMap="getPeripheralsMap"
@@ -52,6 +53,7 @@
 		ims_comp_units_1 b
 		where a.unit_no = b.unit_no
 		and b.unit_no = #no#
+		order by a.last_update desc
 	</select>
 
 	<select id="getPeripheralRecord" resultMap="getPeripheralsMap"
@@ -69,6 +71,7 @@
 		ims_peripherals_1
 		WHERE peripheral_no =
 		#id#
+		order by last_update desc
 	</select>
 
 	<select id="getPeripheralNo" resultClass="java.lang.Integer">

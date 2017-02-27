@@ -60,6 +60,7 @@ public class PeripheralsServiceImpl implements PeripheralsService {
 	@Override
 	public List<Peripherals> getPeripherals(HttpServletRequest request) throws SQLException {
 		String no = (request.getParameter("num"));
+		System.out.println(no);
 		return this.getDao().getPeripherals(no);
 	}
 

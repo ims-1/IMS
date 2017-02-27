@@ -116,3 +116,7 @@ td.label-right {
 .error-message{
 	color: white;
 }
+
+.notsaved{
+	background-color: red;
+}
