@@ -5,6 +5,22 @@
     <welcome-file>/views/login/login.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
+    <servlet-name>unauthentic</servlet-name>
+    <jsp-file>/views/accessException/unAuthenticatedException.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>unauthentic</servlet-name>
+    <url-pattern>/unauthenticated</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>unauthorized</servlet-name>
+    <jsp-file>/views/accessException/unAuthorizedException.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>unauthorized</servlet-name>
+    <url-pattern>/unauthenticated</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>cui</servlet-name>
     <jsp-file>/views/computerUnitsInventory/computerUnitsInventory.jsp</jsp-file>
   </servlet>

@@ -26,20 +26,21 @@ public class UserMaintenanceAuthorizationFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-	
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		
+
 		HttpSession session = req.getSession();
 		String userAccess = (String) session.getAttribute("user_access");
-		if(userAccess.equals("A")){
-			//clear sessions used
-			
+		if (userAccess.equals("A")) {
+			// clear sessions used
+
 			chain.doFilter(request, response);
 		} else {
 			SystemStatus status = SystemStatus.unauthorized;
-			res.sendError(403);
+			res.sendRedirect(req.getContextPath() + "/unauthorized");
 			return;
 		}
 	}

@@ -34,8 +34,8 @@ public class AuthenticationFilter implements Filter {
 			chain.doFilter(request, response);
 		} else {
 			SystemStatus status = SystemStatus.unauthenticated;
-		    
-			res.sendError(401);
+		    res.sendRedirect(req.getContextPath() + "/unauthentic");
+			//res.sendError(401);
 			return;
 		}
 	}
