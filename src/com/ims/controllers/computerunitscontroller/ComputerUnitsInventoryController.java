@@ -148,7 +148,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 
 			} else if (action.equals("getUserAuth")) {
 				HttpSession userSession = request.getSession();
-				String userAuth = (String) userSession.getAttribute("user_auth");
+				String userAuth = (String) userSession.getAttribute("user_auth") == null ? ""
+						: (String) userSession.getAttribute("user_auth");
 				response.getWriter().write(userAuth);
 			}
 		} catch (SQLException e) {
@@ -174,14 +175,17 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				// Add comp units
 				HttpSession session = request.getSession();
 				session.setAttribute("currentAction", "NONE");
-				currentAction = (String) session.getAttribute("currentAction");
+				currentAction = (String) session.getAttribute("currentAction") == null ? ""
+						: (String) session.getAttribute("currentAction");
 				System.out.println(currentAction);
 				if (currentAction.equals("UPDATE")) {
 					String warningMsg = "Your current changes were not yet saved.";
 					response.getWriter().write(warningMsg);
 				} else {
 					session.setAttribute("currentAction", "ADD");
-					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session
+							.getAttribute("sessionCompList") == null ? new LinkedList<>()
+									: (List<ComputerUnits>) session.getAttribute("sessionCompList");
 					if (sessionCompList == null) {
 						sessionCompList = new LinkedList<>();
 					}
@@ -191,7 +195,8 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 					session.setAttribute("sessionCompList", sessionCompList);
 
 					List<ComputerUnits> computerUnits = null;
-					computerUnits = (List<ComputerUnits>) session.getAttribute("list");
+					computerUnits = (List<ComputerUnits>) session.getAttribute("list") == null ? new LinkedList<>()
+							: (List<ComputerUnits>) session.getAttribute("list");
 					computerUnits.add(0, newUnitAdded);
 					String json = "";
 					if (!computerUnits.isEmpty()) {
@@ -202,19 +207,28 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				}
 			} else if (action.equals("deleteComputerUnit")) {
 				// Delete Comp Units
-				PeripheralsService peripheral = (PeripheralsService) context.getBean("servicePeripheralsBean");
-				List<Peripherals> periList = new LinkedList<>();
-				periList = peripheral.getPeripherals(request);
-				String warningMsg = "";
-				if (!periList.isEmpty()) {
-					warningMsg = "Cannot delete record.";
+
+				HttpSession session = request.getSession();
+				currentAction = (String) session.getAttribute("currentAction") == null ? ""
+						: (String) session.getAttribute("currentAction");
+				if (currentAction.equals("ADD") || currentAction.equals("UPDATE")) {
+					String warningMsg = "Your current changes were not yet saved.";
 					response.getWriter().write(warningMsg);
 				} else {
-					computerUnitService.deleteComputerUnit(request);
-					warningMsg = "Record deleted!";
-					response.getWriter().write(warningMsg);
+					PeripheralsService peripheral = (PeripheralsService) context.getBean("servicePeripheralsBean");
+					List<Peripherals> periList = new LinkedList<>();
+					periList = peripheral.getPeripherals(request) == null ? new LinkedList<>()
+							: peripheral.getPeripherals(request);
+					String warningMsg = "";
+					if (!periList.isEmpty()) {
+						warningMsg = "Cannot delete record.";
+						response.getWriter().write(warningMsg);
+					} else {
+						computerUnitService.deleteComputerUnit(request);
+						warningMsg = "Record deleted!";
+						response.getWriter().write(warningMsg);
+					}
 				}
-
 			} else if (action.equals("updateComputerUnit")) {
 				// Update comp units
 				if (currentAction.equals("ADD")) {
@@ -223,24 +237,47 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				} else {
 					HttpSession session = request.getSession();
 					session.setAttribute("currentAction", "UPDATE");
-					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+
+					List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session
+							.getAttribute("sessionCompList") == null ? new LinkedList<>()
+									: (List<ComputerUnits>) session.getAttribute("sessionCompList");
+
 					if (sessionCompList == null) {
 						sessionCompList = new LinkedList<>();
 					}
-					sessionCompList.add(computerUnitService.returnComputerUnits(request));
-					session.setAttribute("sessionCompList", sessionCompList);
 
-					// to update frontend table
-					ComputerUnits updatedUnits = new ComputerUnits();
-					updatedUnits = computerUnitService.returnComputerUnits(request);
-					Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").serializeNulls().create();
-					String json = gson.toJson(updatedUnits);
-					response.getWriter().write(json);
+					ComputerUnits toUpdateList = computerUnitService.returnComputerUnits(request);
+
+					if (compareUpdate(toUpdateList, request, computerUnitService)) {
+						System.out.println("no changes");
+						response.setStatus(210);
+
+					} else {
+						String userAuth = (String) session.getAttribute("user_auth");
+						System.out.println("changed");
+
+						toUpdateList.setUserId(userAuth);
+						sessionCompList.add(toUpdateList);
+
+						session.setAttribute("sessionCompList", sessionCompList);
+
+						// to update frontend table
+						ComputerUnits updatedUnits = new ComputerUnits();
+						updatedUnits = computerUnitService.returnComputerUnits(request);
+						Gson gson = new GsonBuilder().setDateFormat("MM/dd/yyyy").serializeNulls().create();
+						String json = gson.toJson(updatedUnits);
+						response.getWriter().write(json);
+
+					}
+
 				}
 			} else if (action.equals("save")) {
 				HttpSession session = request.getSession();
-				currentAction = (String) session.getAttribute("currentAction");
-				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+				currentAction = (String) session.getAttribute("currentAction") == null ? ""
+						: (String) session.getAttribute("currentAction");
+				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session
+						.getAttribute("sessionCompList") == null ? new LinkedList<>()
+								: (List<ComputerUnits>) session.getAttribute("sessionCompList");
 
 				if (currentAction.equals("ADD")) {
 					if (sessionCompList != null) {
@@ -251,6 +288,7 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				} else if (currentAction.equals("UPDATE")) {
 					for (ComputerUnits x : sessionCompList) {
 						computerUnitService.updateComputerUnit(x);
+						System.out.println(x.getUserId());
 					}
 				}
 				// remove session records
@@ -261,7 +299,9 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 				}
 			} else if (action.equals("cancel")) {
 				HttpSession session = request.getSession();
-				List<ComputerUnits> sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList");
+				List<ComputerUnits> sessionCompList = new LinkedList<>();
+				sessionCompList = (List<ComputerUnits>) session.getAttribute("sessionCompList") == null
+						? new LinkedList<>() : (List<ComputerUnits>) session.getAttribute("sessionCompList");
 				if (!sessionCompList.isEmpty()) {
 					sessionCompList.clear();
 					session.setAttribute("sessionCompList", sessionCompList);
@@ -280,5 +320,41 @@ public class ComputerUnitsInventoryController extends HttpServlet {
 		public GetSize(int listSize) {
 			this.listSize = listSize;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Boolean compareUpdate(ComputerUnits toUpdateList, HttpServletRequest request,
+			ComputerUnitsInventoryService computerUnitService) {
+		List<ComputerUnits> computerUnits = null;
+		HttpSession sessionList = request.getSession();
+
+		computerUnits = (List<ComputerUnits>) sessionList.getAttribute("list") == null ? new LinkedList<>()
+				: (List<ComputerUnits>) sessionList.getAttribute("list");
+
+		if (!computerUnits.isEmpty()) {
+			System.out.println("not empty");
+			for (ComputerUnits x : computerUnits) {
+				if (x.getUnitNo().equals(toUpdateList.getUnitNo())) {
+					String type = x.getType().equals("Desktop") ? "DT" : "LT";
+					if (x.getUnitName().equals(toUpdateList.getUnitName())
+							&& x.getAcquiredDate().equals(toUpdateList.getAcquiredDate())
+							&& x.getBrand().equals(toUpdateList.getBrand())
+							&& x.getColor().equals(toUpdateList.getColor())
+							&& x.getDescription().equals(toUpdateList.getDescription())
+							&& x.getIpAddress().equals(toUpdateList.getIpAddress())
+							&& x.getModel().equals(toUpdateList.getModel())
+							&& x.getRemarks().equals(toUpdateList.getRemarks())
+							&& x.getSerialNo().equals(toUpdateList.getSerialNo())
+							&& x.getTagNumber().equals(toUpdateList.getTagNumber())
+							&& type.equals(toUpdateList.getType())) {
+						System.out.println(type);
+						System.out.println(toUpdateList.getType());
+						return true;
+					}
+				}
+			}
+
+		}
+		return false;
 	}
 }

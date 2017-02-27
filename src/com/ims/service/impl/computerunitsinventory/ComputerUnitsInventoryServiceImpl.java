@@ -167,10 +167,12 @@ public class ComputerUnitsInventoryServiceImpl implements ComputerUnitsInventory
 		params.put("brand", brand);
 		params.put("model", model);
 		params.put("color", color);
+		
+		System.out.println(userId);
+		
 		params.put("userId", userId);
 		params.put("lastUpdate", lastUpdate);
 		params.put("remarks", remarks);
-
 		this.getDao().updateComputerUnit(params);
 
 	}
