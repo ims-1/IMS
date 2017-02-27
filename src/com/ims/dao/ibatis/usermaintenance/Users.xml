@@ -91,9 +91,18 @@
 		,last_user_id
 		,last_update
 		,remarks)
-		VALUES (#userId#, #firstName#, #middleInitial#, #lastName#, #email#,
-		#activeTag#, #password#, #userAccess#, SYSDATE, SYSDATE, SYSDATE,
-		#remarks#);
+		VALUES (#userId#
+			,#firstName#
+			,#middleInitial#
+			,#lastName#
+			,#email#
+			,#activeTag#
+			,#password#
+			,#userAccess#
+			,SYSDATE
+			,#lastUserId#
+			,SYSDATE
+			,#remarks#);
 		END;
 	</insert>
 
@@ -101,7 +110,7 @@
 		UPDATE ims_users_1
 		SET first_name = #firstName#, middle_initial = #middleInitial#, last_name
 		= #lastName#, email = #email#, active_tag = #activeTag#, remarks =
-		#remarks#, last_user_id=#lastUserId#, last_update=sysdate
+		#remarks#, user_access=#userAccess#, last_user_id=#lastUserId#, last_update=sysdate
 		WHERE #userId# = user_id
 	</update>
 
@@ -112,6 +121,5 @@
 		last_update=sysdate
 		WHERE #userId# = user_id
 	</update>
-
 
 </sqlMap>

@@ -6,8 +6,6 @@
 				<table class="table  borderless">
 					<thead>
 						<tr>
-<!-- 							<th>Unit No</th> -->
-<!-- 							<th>Unit Name</th> -->
 						</tr>
 					</thead>
 					<tbody>
@@ -75,8 +73,8 @@
 				</table>
 			</div>
 			<div class="modal-footer">
-				<input id="btnBackToUserListingPage" type="button" value="BACK"
-					class="btn btn-primary" data-dismiss="modal"/> 
+				<input id="btnBack" type="button" value="BACK"
+					class="btn btn-primary" onclick="backToUserListingPage()"/> 
 				<input id="btnSaveUser" type="button" value="SAVE" class="btn btn-primary"
 					onclick="saveUserEdit()" /> 
 				<input id="btnUserChangePassword"

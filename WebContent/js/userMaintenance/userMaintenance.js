@@ -28,7 +28,7 @@ function saveUserAdd() {
 				remarks : $F("txtRemarks"),
 			},
 			onComplete : function(response) {
-//				$("mainContents").update(response.responseText);
+				// $("mainContents").update(response.responseText);
 			},
 			onSuccess : function(response) {
 				if (response.status == 203) {
@@ -40,7 +40,6 @@ function saveUserAdd() {
 		});
 	}
 }
-
 
 function saveUserEdit() {
 	if (validate()) {
@@ -66,7 +65,7 @@ function saveUserEdit() {
 				remarks : $F("txtRemarks"),
 			},
 			onComplete : function(response) {
-//				$("mainContents").update(response.responseText);
+				// $("mainContents").update(response.responseText);
 			},
 			onSuccess : function(response) {
 				if (response.status == 203) {
