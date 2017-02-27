@@ -142,7 +142,6 @@ function addUnitsToDatabase() {
 function updateComputerUnit() {
 	getUserAuth();
 	var userAuth = $('txtUserId').value;
-	alert(userAuth);
 	if (validate()) {
 		new Ajax.Request(
 				context + "/ComputerUnitsInventoryController",
