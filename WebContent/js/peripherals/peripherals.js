@@ -68,7 +68,6 @@ var pageSize = 0;
 // });
 
 function getComputerUnitRecord() {
-	alert("getting users");
 	$('btnDelete').disabled = true;
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "post",
@@ -116,7 +115,7 @@ function getComputerUnitRecord() {
 
 function addPeripherals() {
 	if (validate()) {
-		alert("hey");
+		//alert("hey");
 		delete Array.prototype.toJSON;
 
 		var content = [];
@@ -160,7 +159,7 @@ function addPeripherals() {
 						$$('.record').each(function(record) {
 							$(record).remove();
 						});
-						alert("here");
+						//alert("here");
 						p
 								.each(function(peripheral) {
 									var content = "";
@@ -409,7 +408,7 @@ if ($F('txtUnitNo') == '') {
 }
 
 function getRecord(record) {
-	alert("here");
+	//alert("here");
 	new Ajax.Request(context + "/PeripheralsController", {
 		method : "post",
 		parameters : {
@@ -511,7 +510,7 @@ function insertPeripherals() {
 }
 
 function deleteRecord() {
-	alert("delete");
+	//alert("delete");
 	alert($F('txtUnitNo').trim());
 	new Ajax.Request(
 			context + "/PeripheralsController",
@@ -531,7 +530,7 @@ function deleteRecord() {
 						$$('.record').each(function(record) {
 							$(record).remove();
 						});
-						alert("here");
+						//alert("here");
 						p
 								.each(function(peripheral) {
 									var content = "";
@@ -594,7 +593,7 @@ function deleteRecord() {
 			});
 }
 function clearFields(record) {
-	alert("here");
+	//alert("here");
 	$('btnAdd').value = "Add";
 	$('btnDelete').disabled = true;
 	if ($('txtUnitNo').value.trim() == '') {
@@ -615,7 +614,7 @@ function clearFields(record) {
 }
 
 function clearFields() {
-	alert("here");
+	//alert("here");
 	$('btnAdd').value = "Add";
 	$('btnDelete').disabled = true;
 	if ($('txtUnitNo').value.trim() == '') {

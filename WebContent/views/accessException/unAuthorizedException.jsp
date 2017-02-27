@@ -11,5 +11,11 @@
 <body>
 <jsp:include page="/views/header.jsp"></jsp:include>
 <p class="error-message">User is not authorized to access the screen<p>
+		<button class="btn btn-primary" id="btnHome">Home</button>
 </body>
+<script>
+	$('btnHome').observe("click", function() {
+		window.location.href = "${pageContext.request.contextPath}/home";
+	});
+</script>
 </html>
