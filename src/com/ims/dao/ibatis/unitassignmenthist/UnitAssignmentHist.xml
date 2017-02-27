@@ -70,18 +70,27 @@
 		END;
 	</insert>
 
-	<update id="updateUnitHist" parameterClass="java.util.Map">
-		DECLARE
-			var_hist_no number(6);	
-		BEGIN	
-		SELECT unit_hist_seq_1.nextval - 1
-		INTO var_hist_no 
-		FROM dual;
-		UPDATE ims_assignment_hist_1
-		SET ASSIGN_TAG = 'N'
-		WHERE hist_no = var_hist_no AND unit_no = #unitNo#;
-		END;
 
-	</update>
+<update id="updateUnitHist" parameterClass="java.util.Map">
+        DECLARE
+        var_hist_no number(6);
+        BEGIN
+        SELECT hist_no
+        INTO var_hist_no
+        FROM ims_assignment_hist_1
+        where unit_no=#unitNo#
+        and assign_tag = 'Y';
 
+
+        UPDATE ims_assignment_hist_1
+        SET ASSIGN_TAG = 'N'
+        WHERE hist_no =
+        var_hist_no AND unit_no = #unitNo#;
+
+        exception
+        when no_data_found then
+            var_hist_no := 0;
+        END;
+
+    </update>
 </sqlMap>

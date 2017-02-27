@@ -17,6 +17,9 @@ function populateCompUnits() {
 				$("txtUnitType").value = unit.type;
 				$("txtUnitColor").value = unit.color;
 			});
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -59,6 +62,9 @@ function getUnitHist() {
 			});
 			getSize();
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -90,7 +96,8 @@ if ($F("txtUnitNo") != "") {
 				}
 			});
 		}
-	})
+	}
+	)
 
 }
 // Fetching the computer units data from the computer units database
@@ -125,6 +132,9 @@ function fetchCompUnits() {
 					bottom : newTr
 				});
 			});
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -171,6 +181,9 @@ function getUnit(compUnitNo) {
 			});
 			getSize();
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -217,6 +230,9 @@ function fetchAssignees() {
 				});
 			});
 
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -279,6 +295,9 @@ $("btnYes").observe('click', function() {
 			},
 			onComplete : function(response) {
 				// $("mainContents").update(response.responseText);
+			},
+			onFailure : function(response) {
+				alert("There is something wrong!");
 			}
 		});
 	}
@@ -324,6 +343,9 @@ function getUnitAssignmentHist() {
 			});
 			getSize();
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 
@@ -360,6 +382,9 @@ function getSize() {
 							bottom : newBtn
 						});
 					}
+				},
+				onFailure : function(response) {
+					alert("There is something wrong!");
 				}
 			});
 }
@@ -400,6 +425,9 @@ function getRecordPage(a) {
 				});
 			});
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -445,6 +473,9 @@ function filteredUnitAssignmentsHist() {
 			});
 			getFilteredUnitAssignmentSize();
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -477,6 +508,9 @@ function getFilteredUnitAssignmentSize() {
 					bottom : newBtn
 				});
 			}
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }
@@ -518,6 +552,9 @@ function getFilteredUnitAssignmentPage(a) {
 				});
 			});
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	});
 }

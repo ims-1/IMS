@@ -27,10 +27,7 @@
 											<span class="glyphicon glyphicon-search"></span>
 										</button>
 									</span>
-								</div> --> 
-								
-								
-								<% 
+								</div> --> <% 
 									String unitNo = request.getParameter("unitNo");
 									 	if (unitNo == null || unitNo == "") {
 									 		out.print("<div class=input-group>");
@@ -48,8 +45,9 @@
 								 %>
 
 				</td>
-				<td class="label-right" > SERIAL NO.</td>
-				<td><input type="text" id="txtSerialNo" class="form-control" readonly="readonly"/></td>
+				<td class="label-right">SERIAL NO.</td>
+				<td><input type="text" id="txtSerialNo" class="form-control"
+					readonly="readonly" /></td>
 			</tr>
 			<tr>
 				<td class="label-right">UNIT NAME</td>
@@ -63,14 +61,15 @@
 				<td class="label-right">TAG NUMBER</td>
 				<td><input type="text" id="txtTagNumber" readonly="readonly"
 					class="form-control" /></td>
-				<td class="label-right">MODEL </td>
-				<td><input type="text" id="txtUnitModel" class="form-control" readonly="readonly"/></td>
+				<td class="label-right">MODEL</td>
+				<td><input type="text" id="txtUnitModel" class="form-control"
+					readonly="readonly" /></td>
 			</tr>
 			<tr>
-				<td class="label-right">TYPE </td>
+				<td class="label-right">TYPE</td>
 				<td><input type="text" id="txtUnitType" readonly="readonly"
 					class="form-control" /></td>
-				<td class="label-right">COLOR </td>
+				<td class="label-right">COLOR</td>
 				<td><input type="text" id="txtUnitColor" readonly="readonly"
 					class="form-control" /></td>
 			</tr>
@@ -80,8 +79,8 @@
 				<td class="label-right">ASSIGNEE</td>
 				<td>
 					<div class="input-group">
-						<input type="text" class="form-control" id="txtAssignee" readonly="readonly">
-						<span class="input-group-btn">
+						<input type="text" class="form-control" id="txtAssignee"
+							readonly="readonly"> <span class="input-group-btn">
 							<button class="btn btn-secondary" type="button"
 								data-toggle="modal" data-target="#myAssigneeModal"
 								id="btnAssigneeSearch">
@@ -90,42 +89,44 @@
 						</span>
 					</div> <input type="hidden" id="hiddenAssignNo">
 				</td>
-				<td class="label-right">STATUS </td>
+				<td class="label-right">STATUS</td>
 				<td><select id="txtAssigneeStatus" class="form-control">
 						<option value="P">PERMANENT</option>
 						<option value="T">TEMPORARY</option>
 						<option value="V">VACANT</option>
-					</select>
-				</td>
+				</select></td>
 			</tr>
 			<tr>
-				<td class="label-right">LOCATION </td>
+				<td class="label-right">LOCATION</td>
 				<td><input type="text" id="txtAssigneeLocation"
 					class="form-control" /></td>
-				<td class="label-right">ASSIGNED BY </td>
-				<td><input type="text" id="txtAssignedBy" class="form-control" readonly="readonly" /></td>
+				<td class="label-right">ASSIGNED BY</td>
+				<td><input type="text" id="txtAssignedBy" class="form-control"
+					readonly="readonly" /></td>
 			</tr>
 			<tr>
-				<td class="label-right">IP ADDRESS </td>
+				<td class="label-right">IP ADDRESS</td>
 				<td><input type="text" id="txtIpAdd" class="form-control" /></td>
-				<td class="label-right">DATE ASSIGNED </td>
+				<td class="label-right">DATE ASSIGNED</td>
 				<td><input type="text" id="txtDateAssigned"
 					class="form-control" readonly="readonly" /></td>
 			</tr>
 		</table>
-		
-		<button style="margin-left: 5.5in;" class="btn btn-secondary" type="button" data-toggle="modal"
-			data-target="#modalReturnDate" id="btnAssign">Assign Unit</button><br><br>
-			
-		<input type="text" id="searchBox" onkeyup="filteredUnitAssignmentsHist()" 
-			placeholder="Enter Keyword to search.." class="form-control"/>
-			<br><br>
 
-	
+		<button style="margin-left: 5.5in;" class="btn btn-secondary"
+			type="button" data-toggle="modal" data-target="#modalReturnDate"
+			id="btnAssign">Assign Unit</button>
+		<br>
+		<br> <input type="text" id="searchBox"
+			onkeyup="filteredUnitAssignmentsHist()"
+			placeholder="Enter Keyword to search.." class="form-control" /> <br>
+		<br>
+
+
 	</div>
 
 	<table class="table table-striped table-bordered">
-		<thead>	
+		<thead>
 			<tr>
 				<th>NO.</th>
 				<th>Unit Name</th>

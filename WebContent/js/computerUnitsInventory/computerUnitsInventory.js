@@ -43,6 +43,9 @@ $('btnDelete').observe('click', function() {
 			populateTable();
 			clearFields();
 			alert(response.responseText);
+		},
+		onFailure : function(response){
+			alert("Failed to load page!")
 		}
 	})
 });
@@ -126,6 +129,9 @@ function addUnitsToDatabase() {
 
 				recordEvents();
 				getSize();
+			},
+			onFailure: function(response){
+				alert("Failed to load page!")
 			}
 		})
 	} else {
@@ -288,6 +294,9 @@ function getSize() {
 							bottom : newBtn
 						});
 					}
+				},
+				onFailure : function(response) {
+					alert("There is something wrong!");
 				}
 			})
 }
@@ -328,6 +337,9 @@ function getRecordPage(x) {
 			});
 
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 
@@ -439,6 +451,9 @@ function getFilteredSize() {
 					}
 				}
 			}
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 }
@@ -479,6 +494,9 @@ function getFilteredRecordPage(x) {
 			});
 
 			recordEvents();
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 }
@@ -506,6 +524,9 @@ function getComputerType() {
 			parent.insert({
 				bottom : newSelect
 			})
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 }
@@ -519,8 +540,8 @@ $('btnSave').observe('click', function() {
 		onSuccess : function(response) {
 			alert("Changes Saved!");
 		},
-		onError : function(response) {
-			alert("Error saving changes.");
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 	populateTable();
@@ -534,6 +555,9 @@ $('btnCancel').observe('click', function() {
 		},
 		onSuccess : function(response) {
 			alert("Changes cancelled!");
+		},
+		onFailure : function(response) {
+			alert("There is something wrong!");
 		}
 	})
 	clearFields();
