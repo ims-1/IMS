@@ -16,8 +16,8 @@
 <body>
 	<jsp:include page="/views/header.jsp"></jsp:include>
 	<h1 align="center" style="color: yellow;">User Maintenance Screen</h1>
-	<div>
-		<table class="table borderless">
+	<div align="center">
+		<table class="table borderless" id = "tableInput">
 			<tr class="record">
 				<td class="label-right">USER ID</td>
 				<td><input id="txtUserId" type="text"

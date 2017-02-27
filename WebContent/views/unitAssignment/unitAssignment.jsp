@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Unit Assignment</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/bootstrap.css"
 	type="text/css">
@@ -14,7 +14,7 @@
 </head>
 <body>
 	<jsp:include page="/views/header.jsp"></jsp:include>
-	<div id="mainContents">
+	<div id="mainContents" align="center">
 		<table class="table borderless" id="tableInput">
 			<tr>
 				<td class="label-right">UNIT NO.</td>

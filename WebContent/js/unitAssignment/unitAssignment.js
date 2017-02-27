@@ -9,7 +9,7 @@ function populateCompUnits() {
 		onSuccess : function(response) {
 			var compUnit = response.responseText.evalJSON();
 			compUnit.each(function(unit) {
-				$("txtSerialNo").value = unit.unitNo;
+				$("txtSerialNo").value = unit.serialNo;
 				$("txtUnitName").value = unit.unitName;
 				$("txtBrand").value = unit.brand;
 				$("txtTagNumber").value = unit.tagNumber;
