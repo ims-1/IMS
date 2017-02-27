@@ -35,8 +35,6 @@
 						<option value="A">ADMIN</option>
 						<option value="U">REGULAR USER</option>
 				</select></td>
-					
-				
 			</tr>
 			<tr class="record">
 				<td class="label-right">MIDDLE INITIAL</td>
@@ -75,7 +73,6 @@
 				id="btnSaveUser" type="button" value="SAVE" class="btn btn-primary"
 				onclick="saveUserAdd()" />
 		</div>
-		<input type="hidden" id="txtHidden" />
 	</div>
 </body>
 <script type="text/javascript">

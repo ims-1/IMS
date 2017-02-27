@@ -53,6 +53,7 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		String email = request.getParameter("email");
 		String remarks = request.getParameter("remarks");
 		String activeTag = request.getParameter("activeTag");
+		String userAccess = request.getParameter("userAccess");
 		
 		Map<String, Object> params = new HashMap<>();
 		params.put("userId", userId);
@@ -62,6 +63,7 @@ public class UserMaintenanceServiceImpl implements UserMaintenanceService{
 		params.put("email", email);
 		params.put("activeTag", activeTag);
 		params.put("remarks", remarks);
+		params.put("userAccess", userAccess);
 		params.put("lastUserId", loggedInId);
 		
 		return this.getDao().updateUser(params);

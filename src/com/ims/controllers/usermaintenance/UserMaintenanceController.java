@@ -32,6 +32,7 @@ public class UserMaintenanceController extends HttpServlet {
 			throws ServletException, IOException {
 
 		@SuppressWarnings("resource")
+		
 		ApplicationContext context = new ClassPathXmlApplicationContext("/com/ims/resource/beans.xml");
 		UserMaintenanceService service = (UserMaintenanceService) context.getBean("serviceUsersBean");
 

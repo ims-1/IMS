@@ -176,7 +176,6 @@ function getRecordPage(a) {
 // add new user
 
 function addUser() {
-	alert("here");
 	window.location.href = contextPath + "/usermaintenance";
 }
 
