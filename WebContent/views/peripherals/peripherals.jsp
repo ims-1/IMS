@@ -1,22 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Peripherals</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/bootstrap.css"
-	type="text/css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/ims-css.css"
-	type="text/css" />
-</head>
-<body>
-
-	<jsp:include page="/views/header.jsp"></jsp:include>
 	<div align=center>
 		<table class="table borderless" id="tableCompUnit">
 			<tr>
@@ -163,16 +147,3 @@
 			</tr>
 		</table>
 	</div>
-</body>
-<script>
-	var context = "${pageContext.request.contextPath}";
-</script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/prototype.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/validation.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/peripherals/peripherals.js"></script>
-<script type="text/javascript" src="js/require.js"></script>
-<script type="text/javascript" src="js/resolveConflict.js"></script>
-</html>
